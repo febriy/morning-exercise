@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-23T08:18:43.556917+00:00",
+  "title": "Design System: On the Way",
+  "extensions": {
+    "colorMeta": {
+      "energy": {
+        "role": "primary",
+        "displayName": "Morning Lime"
+      },
+      "green": {
+        "role": "primary",
+        "displayName": "Forest Action"
+      },
+      "canvas": {
+        "role": "neutral",
+        "displayName": "Morning Canvas"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Forest Ink"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "White Surface"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Workout display",
+        "purpose": "Existing workout heading; 44px normally, 36px on compact phones and 32px on narrow, short phones."
+      },
+      "headline": {
+        "displayName": "Page headline",
+        "purpose": "Setup, feedback and completion."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Readable paragraph copy."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "morning-sun",
+        "value": "22s ease-in-out infinite alternate",
+        "purpose": "Filled circle; transform from translate(-35px, -22px) scale(.96) to translate(35px, 34px) scale(1.04)."
+      },
+      {
+        "name": "morning-orbit",
+        "value": "28s ease-in-out infinite alternate",
+        "purpose": "Ring; transform from translate(-16px, 14px) rotate(-8deg) to translate(24px, -12px) rotate(10deg)."
+      },
+      {
+        "name": "morning-ground",
+        "value": "26s ease-in-out infinite alternate",
+        "purpose": "Low ellipse; transform from translate(-18px, 0) rotate(-7deg) to translate(28px, -24px) rotate(5deg)."
+      },
+      {
+        "name": "button-response",
+        "value": "background-color 160ms ease-out, transform 160ms ease-out",
+        "purpose": "Primary control response; transitions disabled for Reduce Motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "desktop-min-width",
+        "value": "700px"
+      },
+      {
+        "name": "narrow-max-width",
+        "value": "359px"
+      },
+      {
+        "name": "compact-max-height",
+        "value": "720px"
+      },
+      {
+        "name": "short-max-height",
+        "value": "620px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Full-width forest action with lime inline SVG and visible focus.",
+      "html": "<button class=\"ds-primary\">Start workout <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-5-5 5 5-5 5\"/></svg></button>",
+      "css": ".ds-primary { --ink: #153d28; --muted: #405c35; --green: #173f29; --green-hover: #0e3020; --surface: #fff; --line: #d7e3ce; --soft: #e2efc3; --focus: #245c35; --energy: #d4f458; --canvas: #edf5d5; }.ds-primary { font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif; cursor: pointer;width: 100%; min-height: 58px; border: 0; border-radius: 16px; background: var(--green); color: #fff;\n  padding: 16px 22px; display: flex; justify-content: center; align-items: center; gap: 12px;\n  font-size: 1rem; line-height: 1.5; font-weight: 600; transition: background-color 160ms ease-out, transform 160ms ease-out; }.ds-primary svg { width: 20px; height: 20px; color: var(--energy); }.ds-primary:active { transform: scale(.985); background: var(--green-hover); }.ds-primary:focus-visible { outline: 3px solid var(--focus, #245c35); outline-offset: 4px; }@media (hover: hover) { .ds-primary:hover { background: var(--green-hover); } } @media (prefers-reduced-motion: reduce) { .ds-primary { transition: none; } }"
+    },
+    {
+      "name": "Text action",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Quiet secondary action with a generous target.",
+      "html": "<button class=\"ds-text\">Just one minute today</button>",
+      "css": ".ds-text { --ink: #153d28; --muted: #405c35; --green: #173f29; --green-hover: #0e3020; --surface: #fff; --line: #d7e3ce; --soft: #e2efc3; --focus: #245c35; --energy: #d4f458; --canvas: #edf5d5; }.ds-text { font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif; cursor: pointer;display: block; border: 0; background: transparent; color: var(--muted); padding: 12px; min-height: 48px; font-size: .875rem; line-height: 1.5; border-radius: 10px; margin: 4px auto; }.ds-text:focus-visible { outline: 3px solid var(--focus, #245c35); outline-offset: 4px; }@media (hover: hover) { .ds-text:hover { background: var(--soft); } }"
+    },
+    {
+      "name": "Background motion control",
+      "kind": "button",
+      "refersTo": "button-icon",
+      "description": "Accessible pause control; the app changes its label and SVG to Play when manually paused and hides it for Reduce Motion.",
+      "html": "<button class=\"ds-icon\" aria-label=\"Pause background motion\" title=\"Pause background motion\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9 6v12m6-12v12\"/></svg></button>",
+      "css": ".ds-icon { --ink: #153d28; --muted: #405c35; --green: #173f29; --green-hover: #0e3020; --surface: #fff; --line: #d7e3ce; --soft: #e2efc3; --focus: #245c35; --energy: #d4f458; --canvas: #edf5d5; }.ds-icon { font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif; cursor: pointer;border: 0; background: transparent; border-radius: 12px; color: var(--ink); min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 12px; }.ds-icon svg { width: 20px; height: 20px; }.ds-icon:focus-visible { outline: 3px solid var(--focus, #245c35); outline-offset: 4px; }@media (hover: hover) { .ds-icon:hover { background: var(--soft); } }"
+    },
+    {
+      "name": "Time radio choice",
+      "kind": "input",
+      "refersTo": "time-option",
+      "description": "Native radio selection in a visible rounded label.",
+      "html": "<label class=\"ds-time\"><input type=\"radio\" name=\"ds-time-budget\" value=\"120\" checked><span>2 min</span></label>",
+      "css": ".ds-time { --ink: #153d28; --muted: #405c35; --green: #173f29; --green-hover: #0e3020; --surface: #fff; --line: #d7e3ce; --soft: #e2efc3; --focus: #245c35; --energy: #d4f458; --canvas: #edf5d5; }.ds-time { font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif; cursor: pointer;display: block; position: relative; cursor: pointer; }.ds-time input { position: absolute; opacity: 0; width: 1px; height: 1px; }.ds-time span { display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); font-size: .9375rem; color: var(--muted); }.ds-time input:checked + span { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }.ds-time:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: 12px; }"
+    },
+    {
+      "name": "Routine group",
+      "kind": "card",
+      "refersTo": "routine-group",
+      "description": "Opaque white grouped list with station labels and right-aligned quantities.",
+      "html": "<ol class=\"ds-routine\" aria-label=\"Today’s movements\"><li class=\"ds-row\"><span class=\"ds-info\"><span class=\"ds-name\">Platform push-ups</span><span class=\"ds-station\">Platform</span></span><span class=\"ds-quantity\"><strong>3</strong><span>reps</span></span></li></ol>",
+      "css": ".ds-routine { --ink: #153d28; --muted: #405c35; --green: #173f29; --green-hover: #0e3020; --surface: #fff; --line: #d7e3ce; --soft: #e2efc3; --focus: #245c35; --energy: #d4f458; --canvas: #edf5d5; }.ds-routine { font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif; color: var(--ink);list-style: none; margin: 0; padding: 0 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }.ds-row { display: flex; align-items: center; gap: 14px; min-height: 84px; padding: 16px 0; border-bottom: 1px solid var(--line); }.ds-row:last-child { border-bottom: 0; }.ds-info { display: flex; flex-direction: column; gap: 5px; min-width: 0; }.ds-name { font-size: .9375rem; line-height: 1.35; font-weight: 600; }.ds-station { font-size: .8125rem; color: var(--muted); line-height: 1.4; }.ds-quantity { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; font-variant-numeric: tabular-nums; }.ds-quantity strong { font-size: 1.5rem; font-weight: 750; line-height: 1.1; }.ds-quantity > span { font-size: .75rem; color: var(--muted); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Bright morning energy",
+    "overview": "The existing phone-first exercise interface has an energetic lime morning atmosphere. Deep forest text and controls keep the screen legible outdoors; the solid white routine group provides a stable reading surface. Preserve the familiar single-column composition, direct language, workout content and immediate path from opening the app to starting a workout.\n\nThree large, cropped CSS shapes move slowly behind the interface. Their motion is peripheral and settles as soon as a workout begins, including while that workout is paused. This amplifies the existing app without adding a new illustration system or raster assets.",
+    "keyCharacteristics": [
+      "Bright lime atmosphere with forest-green functional contrast.",
+      "One solid white routine group and one clear primary action.",
+      "Familiar system typography with a heavier workout heading.",
+      "Slow geometric background motion that yields to exercising and user preferences."
+    ],
+    "rules": [
+      {
+        "name": "The Readable Foreground Rule",
+        "body": "Keep routine content on its opaque white surface and functional text in the forest palette; the moving scene stays behind the interface.",
+        "section": "colors"
+      },
+      {
+        "name": "The Immediate Start Rule",
+        "body": "The default screen remains the workout overview with its Start action. Background controls must not add an introductory step.",
+        "section": "layout"
+      },
+      {
+        "name": "The Exercise Stillness Rule",
+        "body": "Start settles the decorative background for the entire active workout; pausing the workout never restarts the background.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** keep lime energy behind a solid, legible routine group.",
+      "**Do** preserve the existing content, system typography, single-column structure and direct Start path.",
+      "**Do** keep background motion slow, bounded and transform-only.",
+      "**Do** honor manual pause, hidden tabs and live Reduce Motion changes.",
+      "**Do** retain visible keyboard focus, generous tap targets and readable safety instructions."
+    ],
+    "donts": [
+      "**Don't** run decorative background motion during an active or paused workout.",
+      "**Don't** add onboarding or another step before the workout overview.",
+      "**Don't** replace the CSS geometry with raster assets or extra animated layers.",
+      "**Don't** turn the routine into separate floating movement cards or add shadows to the flat surface system."
+    ]
+  }
+}

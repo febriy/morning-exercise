@@ -7,6 +7,15 @@ let state,storageProblem=false;
 try { state=load(localStorage.getItem(KEY)); }
 catch { state=structuredClone(EMPTY); storageProblem=true; }
 let active=null,interval=null,pending=null,editing=false,audio=null;
+const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+let backgroundPaused=false;
+function syncBackground(){
+  const paused=backgroundPaused||reducedMotion.matches||document.hidden||!!active;
+  document.documentElement.dataset.background=paused?'still':'moving';
+  const control=root.querySelector('#background-motion');
+  if(control){control.hidden=reducedMotion.matches;control.setAttribute('aria-label',backgroundPaused?'Play background motion':'Pause background motion');control.title=backgroundPaused?'Play background motion':'Pause background motion';control.innerHTML=icon(backgroundPaused?'play':'pause');}
+}
+reducedMotion.addEventListener('change',syncBackground);
 try {
   const draft=JSON.parse(localStorage.getItem(PENDING));
   if(draft&&typeof draft.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(draft.date)&&draft.date<=day()&&Number.isInteger(draft.seconds)&&draft.seconds>=0&&draft.seconds<=600&&Number.isInteger(draft.level)&&draft.level>=0&&draft.level<=7&&['normal','tiny','recovery','restart'].includes(draft.mode)&&typeof draft.full==='boolean'&&typeof draft.strength==='boolean')pending=draft;
@@ -26,15 +35,18 @@ function save(){
   catch { storageProblem=true; }
 }
 function todayDone(){return state.sessions.find(s=>s.date===day());}
-function header({back=false}={}){return `<header class="header">${back?`<button class="icon-button" id="back" aria-label="Back to workout">${icon('back')}</button>`:'<span class="wordmark">On the Way</span>'}${state.setupComplete&&!back?`<button class="time-button" id="edit" aria-label="Change time">${icon('edit')}<span>Time</span></button>`:''}</header>`;}
+function backgroundControl(){return `<button class="icon-button background-control" id="background-motion" aria-label="${backgroundPaused?'Play':'Pause'} background motion" title="${backgroundPaused?'Play':'Pause'} background motion" ${reducedMotion.matches?'hidden':''}>${icon(backgroundPaused?'play':'pause')}</button>`;}
+function header({back=false}={}){return `<header class="header">${back?`<button class="icon-button" id="back" aria-label="Back to workout">${icon('back')}</button>`:'<span class="wordmark">On the Way</span>'}<div class="header-actions">${backgroundControl()}${state.setupComplete&&!back?`<button class="time-button" id="edit" aria-label="Change time">${icon('edit')}<span>Time</span></button>`:''}</div></header>`;}
 function render(){
+  syncBackground();
   document.querySelector('#overlay').innerHTML='';
   if(active){renderPlayer();return;}
   if(editing){renderSetup();return;}
   if(pending){renderFeedback();return;}
   renderToday();
 }
-function bindEdit(){root.querySelector('#edit')?.addEventListener('click',()=>{editing=true;render();});}
+function bindBackground(){root.querySelector('#background-motion')?.addEventListener('click',()=>{backgroundPaused=!backgroundPaused;syncBackground();});syncBackground();}
+function bindEdit(){root.querySelector('#edit')?.addEventListener('click',()=>{editing=true;render();});bindBackground();}
 function storageNote(){return storageProblem?'<p class="notice" role="status">This browser cannot save progress. Your setup may be needed again next time.</p>':'';}
 function renderSetup(){
   const selectedTime=state.setupComplete?state.timeBudget:120;
@@ -45,6 +57,7 @@ function renderSetup(){
     state.goal='habit';state.timeBudget=timeBudget;state.setupComplete=true;editing=false;save();render();window.scrollTo(0,0);
   };
   root.querySelector('#back')?.addEventListener('click',()=>{editing=false;render();});
+  bindBackground();
 }
 function planGroups(plan){
   const actions=plan.steps.filter(step=>step.kind==='hold'||step.kind==='move');
@@ -54,7 +67,7 @@ function planGroups(plan){
 }
 function renderToday(){
   const completed=todayDone();const plan=recipe(state);
-  root.innerHTML=`<div class="app-shell">${header()}<main id="main" class="today-main">${completed?`<div class="done-hero"><div class="done-symbol">${icon('check')}</div><h1>Done for today.</h1><p>${completed.seconds?`${duration(completed.seconds)} for yourself.`:'You listened to your body.'}<br>See you on the next coffee walk.</p></div>${completed.effort==='pain'?'<div class="notice">Rest before resuming. Seek advice for concerning symptoms; call 995 for a medical emergency.</div>':''}`:`<div class="workout-heading"><h1>${plan.mode==='recovery'?'An easy day.':plan.mode==='restart'?'A gentle return.':plan.mode==='tiny'?'Your small version.':'Your corner routine.'}</h1><p>${plan.mode==='recovery'?'Let your arms recover. Keep today’s visit easy.':'Three small movements. Plenty of rest.'}</p></div><div class="workout-meta"><span class="duration">${duration(plan.seconds)}</span><span>Rest included</span></div><ol class="workout-card" aria-label="Today’s movements">${planGroups(plan).map(step=>`<li class="movement-row"><span class="movement-icon">${icon(step.id==='hanging-knee-raise'?'hang':step.id==='platform-pushup'?'push':step.id==='support-hold'?'support':'rest')}</span><span class="movement-info"><span class="movement-name">${escape(step.title)}</span><span class="movement-station">${escape(step.station)}</span></span><span class="movement-time">${step.count>1?`${step.count} × `:''}<strong>${step.reps||step.seconds}</strong><span>${step.reps?(step.reps===1?'rep':'reps'):'sec'}</span></span></li>`).join('')}</ol><p class="routine-note">${plan.mode==='recovery'?'Feet stay down today.':'Do the reps, then rest. All within your time.'}</p>${storageNote()}<div class="start-area"><button class="primary" id="start">Start workout ${icon('play')}</button>${plan.seconds>60?'<button class="text-button" id="tiny">Just one minute today</button>':''}<p class="safety-line">Use only a dry, stable station that fits the instructions. Stop for pain or feeling unwell. Get advice first if a condition or injury limits exercise.</p>${state.sessions.at(-1)?.effort==='pain'?'<p class="notice">Last time you felt unwell. Resume only once symptoms have resolved, with advice where needed.</p>':''}</div>`}</main></div>`;
+  root.innerHTML=`<div class="app-shell">${header()}<main id="main" class="today-main">${completed?`<div class="done-hero"><div class="done-symbol">${icon('check')}</div><h1>Done for today.</h1><p>${completed.seconds?`${duration(completed.seconds)} for yourself.`:'You listened to your body.'}<br>See you on the next coffee walk.</p></div>${completed.effort==='pain'?'<div class="notice">Rest before resuming. Seek advice for concerning symptoms; call 995 for a medical emergency.</div>':''}`:`<div class="workout-heading"><h1>${plan.mode==='recovery'?'An easy day.':plan.mode==='restart'?'A gentle return.':plan.mode==='tiny'?'Your small version.':'Your corner<br>routine.'}</h1><p>${plan.mode==='recovery'?'Let your arms recover. Keep today’s visit easy.':'Three small movements. Plenty of rest.'}</p></div><div class="workout-meta"><span class="duration">${duration(plan.seconds)}</span><span>Rest included</span></div><ol class="workout-card" aria-label="Today’s movements">${planGroups(plan).map(step=>`<li class="movement-row"><span class="movement-icon">${icon(step.id==='hanging-knee-raise'?'hang':step.id==='platform-pushup'?'push':step.id==='support-hold'?'support':'rest')}</span><span class="movement-info"><span class="movement-name">${escape(step.title)}</span><span class="movement-station">${escape(step.station)}</span></span><span class="movement-time">${step.count>1?`${step.count} × `:''}<strong>${step.reps||step.seconds}</strong><span>${step.reps?(step.reps===1?'rep':'reps'):'sec'}</span></span></li>`).join('')}</ol><p class="routine-note">${plan.mode==='recovery'?'Feet stay down today.':'Do the reps, then rest. All within your time.'}</p>${storageNote()}<div class="start-area"><button class="primary" id="start">Start workout ${icon('play')}</button>${plan.seconds>60?'<button class="text-button" id="tiny">Just one minute today</button>':''}<p class="safety-line">Use only a dry, stable station that fits the instructions. Stop for pain or feeling unwell. Get advice first if a condition or injury limits exercise.</p>${state.sessions.at(-1)?.effort==='pain'?'<p class="notice">Last time you felt unwell. Resume only once symptoms have resolved, with advice where needed.</p>':''}</div>`}</main></div>`;
   bindEdit();
   root.querySelector('#start')?.addEventListener('click',()=>start(plan));
   root.querySelector('#tiny')?.addEventListener('click',()=>start(recipe(state,{tiny:true})));
@@ -88,6 +101,7 @@ function updateClock(){
 }
 function pause(){if(!active)return;active.paused=true;renderPlayer();}
 function renderPlayer(){
+  syncBackground();
   const step=active.steps[active.index],next=active.steps[active.index+1];
   root.innerHTML=`<div class="app-shell player-shell"><header class="header"><span class="wordmark">On the Way</span><span class="step-count">${active.index+1} of ${active.steps.length}</span></header><main id="main"><div class="player-heading"><h1>${escape(step.title)}</h1><p class="player-station">${escape(step.station)}</p></div><div class="timer-ring" id="ring"><div><span id="clock" class="clock" role="timer" aria-label="Time remaining in this movement"></span><span class="player-status" role="status">${active.paused?'Paused':'Keep it easy'}</span></div></div><p class="cue">${active.paused?'Feet down. Rest, and resume only when ready.':escape(step.cue)}</p><details class="form-cue"><summary>A little guidance</summary><p>${escape(step.tip)}</p></details><p class="next-step">${next?`Next: ${escape(next.title)}`:'Then you’re done.'}</p><div class="player-controls"><button class="primary" id="pause">${active.paused?'Resume':'Pause'} ${icon(active.paused?'play':'pause')}</button><button class="text-button" id="stop">End workout</button><p id="remaining" class="remaining"></p></div></main></div>`;
   root.querySelector('#pause').onclick=()=>{active.paused=!active.paused;active.tick=Date.now();renderPlayer();};
@@ -99,7 +113,7 @@ function finish(full){
   if(!active)return;
   clearInterval(interval);interval=null;
   pending={date:active.date,level:active.level,seconds:Math.min(600,Math.floor(full?active.seconds:active.spent)),mode:active.mode,strength:active.strength&&active.spent>0,full};
-  active=null;
+  active=null;syncBackground();
   try{localStorage.setItem(PENDING,JSON.stringify(pending));}catch{storageProblem=true;}
   renderFeedback();window.scrollTo(0,0);
 }
@@ -115,7 +129,7 @@ function complete(effort){
   if(!storageProblem){try{localStorage.removeItem(PENDING);}catch{}}
   pending=null;render();window.scrollTo(0,0);
 }
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&active&&!active.paused)pause();else if(!document.hidden&&!active&&!pending&&!editing)render();});
+document.addEventListener('visibilitychange',()=>{syncBackground();if(document.hidden&&active&&!active.paused)pause();else if(!document.hidden&&!active&&!pending&&!editing)render();});
 window.addEventListener('beforeunload',e=>{if(active){e.preventDefault();e.returnValue='';}});
 window.addEventListener('storage',e=>{if(e.key!==KEY)return;state=load(e.newValue);if(active){if(todayDone()){clearInterval(interval);interval=null;active=null;render();}else pause();}else if(!pending)render();});
 window.addEventListener('pageshow',()=>{if(!active&&!pending&&!editing)render();});

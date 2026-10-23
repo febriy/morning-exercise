@@ -10,14 +10,14 @@ The default is now two minutes. The first session has 20 seconds of preparation,
 
 One-tap feedback guides the next visit. Strength days have a rest calendar day between them, at most three in seven days. Recovery days stay feet-down at the parallel bars, with no loaded holds, push-ups or knee raises. Three easy full visits over at least seven calendar days can advance a stage. Progression alternates a single additional push-up (maximum six) with a single additional second of support (maximum six). The knee raise stays at one attempt, with no automatic progression to straight-leg raises. Normal and recovery sessions use the selected time; the optional small session and the return after a week away last one minute. The time ceiling is never expanded.
 
-Existing `personal-bars-v1` profiles migrate once to `personal-corner-v2`, resetting the dose and setting two minutes while preserving visit history. Current-program time preferences persist on subsequent loads. Browser-local storage does not sync between devices. The timer pauses when backgrounded or interrupted. Quiet tones mark hold transitions when browser audio is available; visual cues remain available. Keep the app visible while exercising.
+Existing `personal-bars-v1` profiles migrate once to `personal-corner-v2`, resetting the dose and setting two minutes while preserving visit history. Current-program time preferences persist on subsequent loads. Browser-local storage does not sync between devices. The timer pauses when backgrounded or interrupted. Quiet tones mark hold transitions when browser audio is available; visual cues remain available. Keep the app visible while exercising. The lime-green morning background moves gently between workouts. Use its header pause control to stop it; it also stays still during a workout, in a hidden tab, or when Reduce Motion is enabled.
 
 These low repetition counts, short hold durations and progression thresholds are personal app heuristics, not a validated clinical prescription. Movement references: [NASM incline push-up](https://www.nasm.org/resource-center/exercise-library/incline-push-up) and [Catalyst Athletics hanging leg raise and scaling options](https://www.catalystathletics.com/exercise/45/Hanging-Leg-Raise/). Concerning pain or unusual symptoms mean stop; professional guidance is appropriate where needed.
 
 ## Development
 
 ```sh
-node --test tests/model.test.mjs
+node --test tests/*.test.mjs
 node --check dist/app.mjs
 python3 -m http.server 8791 --bind 127.0.0.1 --directory dist
 ```
