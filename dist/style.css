@@ -109,6 +109,17 @@ legend { font-size: 1rem; font-weight: 600; padding: 0; }
 .step-count { font-size: .875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .timer-ring { width: 220px; height: 220px; flex-shrink: 0; border-radius: 50%; background: conic-gradient(var(--green) var(--progress), var(--line) var(--progress)); display: grid; place-items: center; margin: 32px auto 28px; }
 .timer-ring > div { width: calc(100% - 10px); height: calc(100% - 10px); border-radius: 50%; background: #edf5d5; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.movement-stage { display: flex; align-items: center; justify-content: center; }
+.movement-stage.has-demo { gap: 8px; margin: 32px 0 28px; }
+.movement-sprite { display: block; position: relative; width: 184px; height: 184px; flex-shrink: 0; overflow: hidden; }
+.movement-sprite img { display: block; width: 400%; max-width: none; height: 100%; image-rendering: pixelated; }
+.movement-sprite[data-frame="1"] img { transform: translateX(-25%); }
+.movement-sprite[data-frame="2"] img { transform: translateX(-50%); }
+.movement-sprite[data-frame="3"] img { transform: translateX(-75%); }
+.sprite-preview { width: 48px; height: 48px; }
+.has-demo .timer-ring { width: 156px; height: 156px; margin: 0; }
+.has-demo .clock { font-size: 3rem; }
+.has-demo .player-status { font-size: .8125rem; }
 .clock { font-size: 4rem; line-height: 1.15; font-weight: 500; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
 .player-status { font-size: .875rem; color: var(--muted); margin-top: 6px; }
 .cue { color: var(--ink); font-size: 1rem; line-height: 1.6; max-width: 360px; margin: 0 auto; }
@@ -152,6 +163,16 @@ legend { font-size: 1rem; font-weight: 600; padding: 0; }
 
 @media (max-height: 720px) and (min-width: 360px) and (max-width: 699px) { .workout-heading h1 { font-size: 2.25rem; } .workout-meta { margin-top: 16px; } .movement-row { min-height: 76px; padding-top: 12px; padding-bottom: 12px; } .routine-note { margin: 12px 0; } .start-area { padding-top: 8px; } }
 @media (prefers-reduced-motion: reduce) { .morning-scene > div { animation: none !important; } }
+@media (max-width: 399px) { .has-demo .movement-sprite { width: 156px; height: 156px; } }
+@media (max-width: 374px) {
+  .has-demo .movement-sprite { width: 140px; height: 140px; }
+  .has-demo .timer-ring { width: 132px; height: 132px; }
+  .has-demo .clock { font-size: 2.625rem; }
+  .movement-stage.has-demo { gap: 0; }
+  .sprite-preview { width: 40px; height: 40px; }
+  .movement-row:has(.sprite-preview) { gap: 10px; }
+}
+@media (max-height: 720px) and (max-width: 699px) { .movement-stage.has-demo { margin: 20px 0; } }
 @media (max-height: 620px) and (max-width: 359px) {
   .workout-heading h1 { font-size: 2rem; }
   .workout-meta { margin-top: 12px; }

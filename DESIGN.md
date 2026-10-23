@@ -86,7 +86,7 @@ components:
 
 The existing phone-first exercise interface has an energetic lime morning atmosphere. Deep forest text and controls keep the screen legible outdoors; the solid white routine group provides a stable reading surface. Preserve the familiar single-column composition, direct language, workout content and immediate path from opening the app to starting a workout.
 
-Three large, cropped CSS shapes move slowly behind the interface. Their motion is peripheral and settles as soon as a workout begins, including while that workout is paused. This amplifies the existing app without adding a new illustration system or raster assets.
+Three large, cropped CSS shapes move slowly behind the interface. Their motion is peripheral and settles as soon as a workout begins, including while that workout is paused. The backdrop remains CSS geometry. Small pixel-art movement demos supply practical guidance in the foreground.
 
 **Key Characteristics:**
 - Bright lime atmosphere with forest-green functional contrast.
@@ -161,7 +161,7 @@ Secondary text actions remain transparent and at least 48px high. Icon and Time 
 
 ### Routine Group
 
-One opaque white list contains the movements. Each row pairs a small movement SVG and station label with a right-aligned quantity. Borders separate rows; the final row has no divider.
+One opaque white list contains the movements. Each strength row pairs a static 48px pixel-art movement preview and station label with a right-aligned quantity. Previews reduce to 40px below 375px wide. Recovery rows retain the small line icon. Borders separate rows; the final row has no divider.
 
 ### Time Choices
 
@@ -172,6 +172,14 @@ Native radio inputs sit inside visible labels. Unselected choices are white with
 The centered player uses a functional circular countdown (220px diameter, 172px in compact phone layouts) with a 10px total difference between outer and inner diameter. Forest progress and the leaf track surround a solid canvas interior. One cue, optional guidance, next movement and Pause follow the countdown. Guidance expands into a soft-leaf panel and pauses the active workout.
 
 Feedback choices are opaque white, bordered, rounded rows with at least 66px height. Hover-capable pointers get the shipped subtle border/background change. Warm notices carry storage and safety messages; preserve readable safety copy and every existing option.
+
+### Movement Sprites
+
+The same friendly pixel-art man wears a forest shirt, lime shorts and white trainers. Grey-green equipment clearly distinguishes a high push-up platform, overhead pull-up bar and parallel bars. Transparent four-frame PNG strips live in `dist/sprites/`; source and prompt live in `assets/sprites/`. Use pixelated image rendering and preserve the square frame aspect ratio.
+
+Strength steps show one demo beside a 156px timer; preparation, rest and recovery retain the centered timer. The demo is 184px normally, 156px below 400px wide and 140px below 375px. On the narrow layout, the timer becomes 132px. Countdown type is 48px beside a demo and 42px below 375px wide; status type is 13px. No new controls or introductory screen accompany the demos. Text cues, quantities and guidance remain the authority.
+
+Demo frames derive from elapsed workout time rather than independent animation loops. Platform push-ups take five seconds per cycle; the knee raise plays once over 2.4 seconds and settles into the hang pose; parallel-bar support stays still with straight arms. Pause, expanded guidance, a hidden tab and interrupted timing freeze the pose with the workout. Resume continues the same demonstration rather than restarting an attempt. Reduce Motion shows the first static pose, including live preference changes.
 
 ### Background Motion and Control
 

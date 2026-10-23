@@ -60,6 +60,11 @@
         "name": "button-response",
         "value": "background-color 160ms ease-out, transform 160ms ease-out",
         "purpose": "Primary control response; transitions disabled for Reduce Motion."
+      },
+      {
+        "name": "movement-demo",
+        "value": "workout-clock frames",
+        "purpose": "Five-second push-up cycle; one 2.4-second knee raise; static parallel-bar support. Freezes with the workout; Reduce Motion uses frame zero."
       }
     ],
     "breakpoints": [
@@ -125,7 +130,7 @@
   ],
   "narrative": {
     "northStar": "Bright morning energy",
-    "overview": "The existing phone-first exercise interface has an energetic lime morning atmosphere. Deep forest text and controls keep the screen legible outdoors; the solid white routine group provides a stable reading surface. Preserve the familiar single-column composition, direct language, workout content and immediate path from opening the app to starting a workout.\n\nThree large, cropped CSS shapes move slowly behind the interface. Their motion is peripheral and settles as soon as a workout begins, including while that workout is paused. This amplifies the existing app without adding a new illustration system or raster assets.",
+    "overview": "The existing phone-first exercise interface has an energetic lime morning atmosphere. Deep forest text and controls keep the screen legible outdoors; the solid white routine group provides a stable reading surface. Preserve the familiar single-column composition, direct language, workout content and immediate path from opening the app to starting a workout.\n\nThree large, cropped CSS shapes move slowly behind the interface. Their motion is peripheral and settles as soon as a workout begins, including while that workout is paused. The backdrop remains CSS geometry. Small pixel-art movement demos supply practical guidance in the foreground.",
     "keyCharacteristics": [
       "Bright lime atmosphere with forest-green functional contrast.",
       "One solid white routine group and one clear primary action.",
