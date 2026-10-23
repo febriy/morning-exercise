@@ -3,24 +3,78 @@ import assert from 'node:assert/strict';
 import {createTrainer} from '../dist/trainer.mjs';
 import {mount} from './helpers/app.mjs';
 
-function soundBrowser({suspended=false,clips=false,deferred=false}={}) {
-  const spoken=[],tones=[],played=[],sources=[],requests=[];let cancelled=0,resumeAudio,releaseFiles;
+function soundBrowser({suspended=false,clips=false,deferred=false,silentPhone=false}={}) {
+  const spoken=[],tones=[],played=[],sources=[],requests=[],audible=[];let cancelled=0,resumeAudio,releaseFiles;
+  // WebKit's default ambient Web Audio route obeys the iPhone Silent switch.
+  // Playback routing is selected through navigator.audioSession before unlocking.
+  const audioSession={type:'auto'};
+  const output=value=>{if(!silentPhone||audioSession.type==='playback')audible.push(value);};
   const fileGate=deferred?new Promise(resolve=>releaseFiles=resolve):Promise.resolve();
   const contexts=[];
   class AudioContext {
-    constructor(){this.state=suspended?'suspended':'running';this.currentTime=0;this.destination={};contexts.push(this);}
+    constructor(){this.state=suspended?'suspended':'running';this.currentTime=0;this.destination={};this.sessionAtCreation=audioSession.type;contexts.push(this);}
     resume(){if(!suspended)return Promise.resolve();return new Promise(resolve=>{resumeAudio=()=>{this.state='running';resolve();};});}
     decodeAudioData(bytes){return Promise.resolve({id:new Uint8Array(bytes)[0]});}
-    createBufferSource(){const source={buffer:null,connect(){},disconnect(){},start(){played.push(this.buffer.id);},stop(){this.stopped=true;}};sources.push(source);return source;}
-    createOscillator(){const tone={frequency:{value:0},started:false,stops:[],connect(){},disconnect(){},start(){this.started=true;},stop(at){this.stops.push(at);}};tones.push(tone);return tone;}
+    createBufferSource(){const source={buffer:null,connect(){},disconnect(){},start(){played.push(this.buffer.id);output(this.buffer.id);},stop(){this.stopped=true;}};sources.push(source);return source;}
+    createOscillator(){const tone={frequency:{value:0},started:false,stops:[],connect(){},disconnect(){},start(){this.started=true;output(this.frequency.value);},stop(at){this.stops.push(at);}};tones.push(tone);return tone;}
     createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){},disconnect(){}};}
   }
   const host={AudioContext,SpeechSynthesisUtterance:class{constructor(text){this.text=text;}},speechSynthesis:{
     cancel(){cancelled++;},getVoices(){return [{lang:'en-SG',localService:true,name:'English'}];},speak(u){spoken.push(u.text);}
   }};
+  if(silentPhone)host.navigator={audioSession};
   if(clips)host.fetch=async url=>{requests.push(String(url));await fileGate;const file=String(url).split('/').at(-1).replace('.m4a','');const id=['ready','start','rest','complete','5','4','3','2','1'].indexOf(file);return {ok:true,arrayBuffer:async()=>new Uint8Array([id]).buffer};};
-  return {host,spoken,tones,contexts,played,sources,requests,release(){releaseFiles?.();},get cancelled(){return cancelled;},resume(){resumeAudio?.();}};
+  return {host,spoken,tones,contexts,played,sources,requests,audible,audioSession,release(){releaseFiles?.();},get cancelled(){return cancelled;},resume(){resumeAudio?.();}};
 }
+
+test('iPhone Silent Mode uses a playback session so the actual Start tap produces audible bells and voice',async()=>{
+  const browser=soundBrowser({silentPhone:true,clips:true}),app=await mount({host:browser.host});try{
+    assert.equal(browser.audioSession.type,'auto','visiting the page must not take over audio');
+    app.click('#start');
+    await new Promise(resolve=>setImmediate(resolve));
+    assert.ok(browser.audible.includes(880),'opening bell reaches the playback route in Silent Mode');
+    assert.ok(browser.audible.includes(0),'Get ready voice reaches the playback route in Silent Mode');
+    assert.equal(browser.contexts[0].sessionAtCreation,'playback','select route before opening audio');
+    app.click('#pause');
+    assert.equal(browser.audioSession.type,'auto','pausing releases the playback session');
+    app.click('#pause');
+    assert.equal(browser.audioSession.type,'playback','resuming selects playback again');
+    app.visibility(true);
+    assert.equal(browser.audioSession.type,'auto','backgrounding releases the playback session');
+  }finally{app.restore();}
+});
+
+test('completion releases the iPhone playback session after both bell and voice finish',async()=>{
+  const browser=soundBrowser({silentPhone:true,clips:true}),coach=createTrainer(browser.host);
+  coach.unlock();coach.begin({kind:'prepare',seconds:20});
+  await new Promise(resolve=>setImmediate(resolve));
+  coach.complete();
+  const lastVoice=browser.sources.at(-1),lastBell=browser.tones.slice(-3);
+  assert.equal(browser.audioSession.type,'playback');
+  lastVoice.onended();
+  assert.equal(browser.audioSession.type,'playback','do not mute the ringing completion bell');
+  for(const tone of lastBell)tone.onended();
+  assert.equal(browser.audioSession.type,'auto');
+});
+
+test('slow completion clips keep playback routing until the voice finishes',async()=>{
+  const browser=soundBrowser({silentPhone:true,clips:true,deferred:true}),coach=createTrainer(browser.host);
+  coach.unlock();coach.complete();
+  for(const tone of browser.tones)tone.onended();
+  assert.equal(browser.audioSession.type,'playback','pending voice still needs playback routing');
+  browser.release();await new Promise(resolve=>setImmediate(resolve));
+  assert.deepEqual(browser.played,[3]);
+  browser.sources.at(-1).onended();
+  assert.equal(browser.audioSession.type,'auto');
+});
+
+test('an unavailable or read-only Audio Session API does not prevent ordinary playback',()=>{
+  const browser=soundBrowser();
+  browser.host.navigator={audioSession:{get type(){return 'auto';},set type(_){throw Error('unsupported');}}};
+  const coach=createTrainer(browser.host);
+  assert.doesNotThrow(()=>{coach.unlock();coach.begin({kind:'move',seconds:15});coach.stop();});
+  assert.ok(browser.tones.some(x=>x.started));
+});
 
 test('bell and short trainer cues accompany preparation, exercise, rest and completion',()=>{
   const browser=soundBrowser(),coach=createTrainer(browser.host);

@@ -1,5 +1,5 @@
 import {EMPTY,day,load,recipe,record,duration} from './model.mjs?v=personal-corner-2';
-import {createTrainer} from './trainer.mjs?v=trainer-2';
+import {createTrainer} from './trainer.mjs?v=safari-audio-1';
 import {movementSprite,movementFrame} from './movements.mjs?v=sprites-1';
 const trainer=createTrainer(window);
 

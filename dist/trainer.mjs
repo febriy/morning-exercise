@@ -3,6 +3,7 @@ export function createTrainer(host=window) {
   let context=null, ready=Promise.resolve(), generation=0, enabled=false;
   let lastSecond=null, utterance=null, voice=null, cue=0, decoded=null;
   let prepared=Promise.resolve();
+  let session=null, previousSessionType=null, finishing=false, pendingVoice=false, pendingBell=false;
   const tones=new Set();
   const speech=host.speechSynthesis;
   const clips=new Map([['Get ready','ready'],['Start','start'],['Rest','rest'],['Workout complete','complete'],...['5','4','3','2','1'].map(n=>[n,n])]);
@@ -11,8 +12,25 @@ export function createTrainer(host=window) {
   const downloads=host.fetch?Promise.all([...clips].map(async([text,file])=>{
     try{const response=await host.fetch(new URL(`./audio/${file}.m4a`,import.meta.url));if(response.ok)files.set(text,await response.arrayBuffer());}catch{}
   })):Promise.resolve();
+  function playbackSession(){
+    try{
+      const available=host.navigator?.audioSession;
+      if(!available)return;
+      if(!session){session=available;previousSessionType=session.type;}
+      // Safari otherwise treats Web Audio as ambient sound, muted by Silent Mode.
+      session.type='playback';
+    }catch{} // Other browsers and older iOS versions can omit or reject this API.
+  }
+  function releaseSession(){
+    try{if(session?.type==='playback')session.type=previousSessionType??'auto';}catch{}
+    session=null;previousSessionType=null;
+  }
+  function releaseWhenFinished(){
+    if(finishing&&!pendingVoice&&!pendingBell&&!voice&&!utterance&&!tones.size){finishing=false;releaseSession();}
+  }
   function stopVoice(){
     cue++;
+    pendingVoice=false;
     try{speech?.cancel();}catch{}
     utterance=null;
     if(voice){try{voice.source.stop();voice.source.disconnect();voice.gain.disconnect();}catch{}voice=null;}
@@ -20,12 +38,14 @@ export function createTrainer(host=window) {
 
   function silence(){
     generation++;
+    finishing=false;pendingBell=false;
     stopVoice();
     for(const tone of tones){try{tone.stop();tone.disconnect();}catch{}}
     tones.clear();
   }
   function unlock(){
     enabled=true;
+    playbackSession();
     try{
       const Audio=host.AudioContext||host.webkitAudioContext;
       if(Audio){
@@ -48,34 +68,42 @@ export function createTrainer(host=window) {
       const voices=speech.getVoices().filter(v=>/^en\b/i.test(v.lang)&&v.localService!==false);
       const selected=voices.find(v=>/^en-SG$/i.test(v.lang))||voices.find(v=>/^en-(GB|US)$/i.test(v.lang))||voices[0];
       if(selected)utterance.voice=selected;
+      const current=utterance;
+      current.onend=current.onerror=()=>{if(utterance===current)utterance=null;releaseWhenFinished();};
       speech.speak(utterance);
-    }catch{}
+    }catch{utterance=null;}
   }
   function say(text){
     if(!enabled)return;
     stopVoice();
     const expected=cue;
+    pendingVoice=true;
     const play=()=>{
       if(!enabled||expected!==cue)return;
+      pendingVoice=false;
       const buffer=buffers.get(String(text));
       if(buffer&&context?.state==='running'){
         try{
           const source=context.createBufferSource(),gain=context.createGain();
           source.buffer=buffer;gain.gain.value=.95;source.connect(gain);gain.connect(context.destination);
           const current={source,gain};voice=current;
-          source.onended=()=>{source.disconnect();gain.disconnect();if(voice===current)voice=null;};
+          source.onended=()=>{source.disconnect();gain.disconnect();if(voice===current)voice=null;releaseWhenFinished();};
           source.start();return;
         }catch{}
       }
       browserVoice(text);
+      releaseWhenFinished();
     };
     if(buffers.has(String(text))||!host.fetch||!context)play();
     else void Promise.all([ready,prepared]).then(play);
   }
   function ring(ending=false){
     const expected=generation;
+    pendingBell=true;
     const play=()=>{
-      if(!enabled||expected!==generation||context?.state!=='running')return;
+      if(!enabled||expected!==generation)return;
+      pendingBell=false;
+      if(context?.state!=='running'){releaseWhenFinished();return;}
       try{
         const at=context.currentTime,base=ending?660:880;
         // A quick strike and differently decaying partials give a soft bell, not a beep.
@@ -87,10 +115,11 @@ export function createTrainer(host=window) {
           gain.gain.exponentialRampToValueAtTime(.0001,at+decay);
           tone.connect(gain);gain.connect(context.destination);
           tones.add(tone);
-          tone.onended=()=>{tones.delete(tone);tone.disconnect();gain.disconnect();};
+          tone.onended=()=>{tones.delete(tone);tone.disconnect();gain.disconnect();releaseWhenFinished();};
           tone.start(at);tone.stop(at+decay+.02);
         }
       }catch{}
+      releaseWhenFinished();
     };
     if(context?.state==='running')play();else void ready.then(play);
   }
@@ -109,11 +138,12 @@ export function createTrainer(host=window) {
     // Never queue missed numbers, zero, or a countdown over the opening cue.
     if(second>=1&&second<=5)say(String(second));
   }
-  function stop(){enabled=false;lastSecond=null;silence();}
+  function stop(){enabled=false;lastSecond=null;silence();releaseSession();}
   function complete(){
     if(!enabled)return;
     silence();lastSecond=null;
     ring(true);say('Workout complete');
+    finishing=true;releaseWhenFinished();
   }
   return {unlock,begin,countdown,stop,complete};
 }
