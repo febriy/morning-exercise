@@ -1,4 +1,6 @@
 import {EMPTY,day,load,recipe,record,duration} from './model.mjs?v=personal-corner-2';
+import {createTrainer} from './trainer.mjs?v=trainer-2';
+const trainer=createTrainer(window);
 
 const KEY='on-the-way.v1';
 const PENDING='on-the-way.pending.v1';
@@ -6,7 +8,7 @@ const root=document.querySelector('#app');
 let state,storageProblem=false;
 try { state=load(localStorage.getItem(KEY)); }
 catch { state=structuredClone(EMPTY); storageProblem=true; }
-let active=null,interval=null,pending=null,editing=false,audio=null;
+let active=null,interval=null,pending=null,editing=false;
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 let backgroundPaused=false;
 function syncBackground(){
@@ -72,14 +74,12 @@ function renderToday(){
   root.querySelector('#start')?.addEventListener('click',()=>start(plan));
   root.querySelector('#tiny')?.addEventListener('click',()=>start(recipe(state,{tiny:true})));
 }
-function sound(){
-  try { if(!audio||audio.state!=='running')return;const tone=audio.createOscillator(),gain=audio.createGain();tone.type='sine';tone.frequency.value=660;gain.gain.setValueAtTime(0.06,audio.currentTime);gain.gain.exponentialRampToValueAtTime(0.001,audio.currentTime+0.12);tone.connect(gain);gain.connect(audio.destination);tone.start();tone.stop(audio.currentTime+0.12); } catch {}
-}
+
 function start(plan){
   if(todayDone())return;
-  try { const Audio=window.AudioContext||window.webkitAudioContext;if(Audio){audio??=new Audio();audio.resume().catch(()=>{});} } catch {}
+  trainer.unlock();
   active={...plan,date:day(),index:0,spent:0,stepSpent:0,tick:Date.now(),paused:false};
-  renderPlayer();interval=setInterval(tick,200);window.scrollTo(0,0);
+  renderPlayer();trainer.begin(active.steps[0]);interval=setInterval(tick,200);window.scrollTo(0,0);
 }
 function tick(){
   if(!active||active.paused)return;
@@ -88,30 +88,32 @@ function tick(){
   while(active&&remaining>0){
     const step=active.steps[active.index];const used=Math.min(remaining,step.seconds-active.stepSpent);
     active.stepSpent+=used;active.spent+=used;remaining-=used;
-    if(active.stepSpent>=step.seconds-.001){active.index++;active.stepSpent=0;if(active.index===active.steps.length){sound();finish(true);return;}if(['hold','move'].includes(active.steps[active.index].kind)||['hold','move'].includes(step.kind))sound();renderPlayer();}
+    if(active.stepSpent>=step.seconds-.001){active.index++;active.stepSpent=0;if(active.index===active.steps.length){finish(true);return;}trainer.begin(active.steps[active.index]);renderPlayer();}
   }
+  if(active)trainer.countdown(active.steps[active.index].seconds-active.stepSpent);
   updateClock();
 }
 function updateClock(){
   if(!active)return;
-  const step=active.steps[active.index];const left=Math.max(0,Math.ceil(step.seconds-active.stepSpent));
+  const step=active.steps[active.index];const left=Math.max(0,Math.ceil(step.seconds-active.stepSpent-.001));
   const clock=root.querySelector('#clock');if(clock)clock.textContent=`${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`;
   root.querySelector('#ring')?.style.setProperty('--progress',`${Math.min(100,active.stepSpent/step.seconds*100)}%`);
   const remaining=root.querySelector('#remaining');if(remaining)remaining.textContent=`${duration(Math.ceil(Math.max(0,active.seconds-active.spent)))} remaining`;
 }
-function pause(){if(!active)return;active.paused=true;renderPlayer();}
+function pause(){if(!active)return;active.paused=true;trainer.stop();renderPlayer();}
 function renderPlayer(){
   syncBackground();
   const step=active.steps[active.index],next=active.steps[active.index+1];
   root.innerHTML=`<div class="app-shell player-shell"><header class="header"><span class="wordmark">On the Way</span><span class="step-count">${active.index+1} of ${active.steps.length}</span></header><main id="main"><div class="player-heading"><h1>${escape(step.title)}</h1><p class="player-station">${escape(step.station)}</p></div><div class="timer-ring" id="ring"><div><span id="clock" class="clock" role="timer" aria-label="Time remaining in this movement"></span><span class="player-status" role="status">${active.paused?'Paused':'Keep it easy'}</span></div></div><p class="cue">${active.paused?'Feet down. Rest, and resume only when ready.':escape(step.cue)}</p><details class="form-cue"><summary>A little guidance</summary><p>${escape(step.tip)}</p></details><p class="next-step">${next?`Next: ${escape(next.title)}`:'Then you’re done.'}</p><div class="player-controls"><button class="primary" id="pause">${active.paused?'Resume':'Pause'} ${icon(active.paused?'play':'pause')}</button><button class="text-button" id="stop">End workout</button><p id="remaining" class="remaining"></p></div></main></div>`;
-  root.querySelector('#pause').onclick=()=>{active.paused=!active.paused;active.tick=Date.now();renderPlayer();};
+  root.querySelector('#pause').onclick=()=>{if(!active.paused){pause();return;}trainer.unlock();active.paused=false;active.tick=Date.now();trainer.begin(active.steps[active.index],active.steps[active.index].seconds-active.stepSpent);renderPlayer();};
   root.querySelector('#stop').onclick=()=>finish(false);
-  root.querySelector('details').ontoggle=e=>{if(e.currentTarget.open&&active&&!active.paused){active.paused=true;root.querySelector('#pause').innerHTML=`Resume ${icon('play')}`;root.querySelector('.player-status').textContent='Paused';root.querySelector('.cue').textContent='Feet down. Rest, and resume only when ready.';}};
+  root.querySelector('details').ontoggle=e=>{if(e.currentTarget.open&&active&&!active.paused){active.paused=true;trainer.stop();root.querySelector('#pause').innerHTML=`Resume ${icon('play')}`;root.querySelector('.player-status').textContent='Paused';root.querySelector('.cue').textContent='Feet down. Rest, and resume only when ready.';}};
   updateClock();
 }
 function finish(full){
   if(!active)return;
   clearInterval(interval);interval=null;
+  if(full)trainer.complete();else trainer.stop();
   pending={date:active.date,level:active.level,seconds:Math.min(600,Math.floor(full?active.seconds:active.spent)),mode:active.mode,strength:active.strength&&active.spent>0,full};
   active=null;syncBackground();
   try{localStorage.setItem(PENDING,JSON.stringify(pending));}catch{storageProblem=true;}
@@ -129,8 +131,9 @@ function complete(effort){
   if(!storageProblem){try{localStorage.removeItem(PENDING);}catch{}}
   pending=null;render();window.scrollTo(0,0);
 }
-document.addEventListener('visibilitychange',()=>{syncBackground();if(document.hidden&&active&&!active.paused)pause();else if(!document.hidden&&!active&&!pending&&!editing)render();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)trainer.stop();syncBackground();if(document.hidden&&active&&!active.paused)pause();else if(!document.hidden&&!active&&!pending&&!editing)render();});
 window.addEventListener('beforeunload',e=>{if(active){e.preventDefault();e.returnValue='';}});
-window.addEventListener('storage',e=>{if(e.key!==KEY)return;state=load(e.newValue);if(active){if(todayDone()){clearInterval(interval);interval=null;active=null;render();}else pause();}else if(!pending)render();});
+window.addEventListener('pagehide',()=>{trainer.stop();if(active&&!active.paused){active.paused=true;renderPlayer();}});
+window.addEventListener('storage',e=>{if(e.key!==KEY)return;state=load(e.newValue);if(active){if(todayDone()){clearInterval(interval);interval=null;trainer.stop();active=null;render();}else pause();}else if(!pending)render();});
 window.addEventListener('pageshow',()=>{if(!active&&!pending&&!editing)render();});
 render();
