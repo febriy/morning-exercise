@@ -120,18 +120,18 @@ test('missing or blocked audio and speech APIs never block a session',()=>{
 test('the real two-minute workout speaks countdowns and cues at boundaries without replaying on every tick',async()=>{
   const browser=soundBrowser(),app=await mount({host:browser.host});try{
     app.click('#start');assert.deepEqual(browser.spoken,['Get ready']);
-    app.elapse(20);assert.deepEqual(browser.spoken,['Get ready','5','4','3','2','1','Start']);
-    app.elapse(15);assert.equal(browser.spoken.at(-1),'Rest');
-    app.elapse(85);assert.equal(browser.spoken.at(-1),'Workout complete');
+    app.elapse(8);assert.deepEqual(browser.spoken,['Get ready','5','4','3','2','1','Start']);
+    app.elapse(24);assert.equal(browser.spoken.at(-1),'Rest');
+    app.elapse(88);assert.equal(browser.spoken.at(-1),'Workout complete');
     assert.match(app.root.innerHTML,/That’s your/);
     assert.equal(browser.spoken.filter(x=>x==='Workout complete').length,1);
-    assert.equal(browser.tones.length,24); // Start, six boundaries and completion: one bell each.
+    assert.equal(browser.tones.length,33); // Start, nine boundaries and completion: one bell each.
   }finally{app.restore();}
 });
 
 test('pause, guidance, hiding the page and ending stop cues; resume speaks only the current phase',async()=>{
   const browser=soundBrowser(),app=await mount({host:browser.host});try{
-    app.click('#start');app.elapse(15);assert.equal(browser.spoken.at(-1),'5');
+    app.click('#start');app.elapse(3);assert.equal(browser.spoken.at(-1),'5');
     app.click('#pause');const paused=browser.spoken.length;app.elapse(10);assert.equal(browser.spoken.length,paused);
     app.click('#pause');assert.equal(browser.spoken.at(-1),'Get ready');
     app.elapse(1);assert.equal(browser.spoken.at(-1),'4');

@@ -7,8 +7,8 @@ A personal web app for building an exercise habit at a Singapore fitness corner 
 - Phone first, often outdoors. Make instructions readable in daylight and controls easy to tap.
 - No onboarding, account, goal picker, dashboard or history screen. The sole goal is building the habit.
 - Finishing must offer a clear return to the main workout. Feedback is optional. The routine remains visible after today’s visit, and Start again resets the timer without deleting history or awarding duplicate daily progression credit.
-- Default two-minute routine includes preparation, three platform push-ups, one small hanging knee raise, a short parallel-bar support and generous rests.
-- Preserve the existing plain-hang fallback, recovery policy, feedback, progression, time choices and locally saved history.
+- The normal two-minute routine has exactly five movements in order: 8 platform push-ups, 8 knee raises, a 10-second pull-up bar hang, a 10-second parallel-bar hold and 8 squats. It includes preparation and four short station rests. The one-minute version reduces reps and holds.
+- Preserve recovery handling, feedback, time choices and locally saved history. Repetition and hold targets remain at the user’s requested counts; stages must not silently increase them.
 - No floor exercises, pull-ups, dips, jumps or drops.
 - Tone: calm, direct, encouraging without pressure or invented fitness claims.
 - Familiar, Apple-like simplicity; one primary action per screen.

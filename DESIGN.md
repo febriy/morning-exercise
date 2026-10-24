@@ -163,6 +163,10 @@ Secondary text actions remain transparent and at least 48px high. Icon and Time 
 
 One opaque white list contains the movements. Each strength row pairs a static 48px pixel-art movement preview and station label with a right-aligned quantity. Previews reduce to 40px below 375px wide. Recovery rows retain the small line icon. Borders separate rows; the final row has no divider.
 
+### Five-Movement Overview
+
+Normal and small routines retain one white grouped list for all five movements, with 64px minimum rows, 10px vertical padding, 40px static pixel previews, 14px movement names and 12px station text. The existing right-aligned counts remain prominent. The heading uses the existing 32px size; metadata begins 16px below its supporting copy. Routine notes use 12px vertical spacing and Start retains its 58px target. Recovery lists keep their existing two-movement layout. Keep the five-movement order and user-specified 8/8/10 seconds/10 seconds/8 targets in the normal view; counts do not change with stage.
+
 ### Time Choices
 
 Native radio inputs sit inside visible labels. Unselected choices are white with leaf borders; selection fills the choice with forest green, white text and weight 600. Each choice is at least 56px high. Keyboard focus outlines the entire label.
@@ -181,11 +185,11 @@ Returning without feedback saves an unrated visit. Selecting a rating also retur
 
 ### Movement Sprites
 
-The same friendly pixel-art man wears a forest shirt, lime shorts and white trainers. Grey-green equipment clearly distinguishes a high push-up platform, overhead pull-up bar and parallel bars. Transparent four-frame PNG strips live in `dist/sprites/`; source and prompt live in `assets/sprites/`. Use pixelated image rendering and preserve the square frame aspect ratio.
+The same friendly pixel-art man wears a forest shirt, lime shorts and white trainers. Grey-green equipment clearly distinguishes a high push-up platform, overhead pull-up bar and parallel bars. The five movements are platform push-ups, knee raises, a pull-up bar hang, parallel-bar support and squats. Transparent four-frame PNG strips live in `dist/sprites/`; source and prompt live in `assets/sprites/`. Use pixelated image rendering and preserve the square frame aspect ratio.
 
 Strength steps show one demo beside a 156px timer; preparation, rest and recovery retain the centered timer. The demo is 184px normally, 156px below 400px wide and 140px below 375px. On the narrow layout, the timer becomes 132px. Countdown type is 48px beside a demo and 42px below 375px wide; status type is 13px. No new controls or introductory screen accompany the demos. Text cues, quantities and guidance remain the authority.
 
-Demo frames derive from elapsed workout time rather than independent animation loops. Platform push-ups take five seconds per cycle; the knee raise plays once over 2.4 seconds and settles into the hang pose; parallel-bar support stays still with straight arms. Pause, expanded guidance, a hidden tab and interrupted timing freeze the pose with the workout. Resume continues the same demonstration rather than restarting an attempt. Reduce Motion shows the first static pose, including live preference changes.
+Demo frames derive from elapsed workout time rather than independent animation loops. Platform push-ups, knee raises and squats use three-second cycles that match eight demonstrations in a 24-second rep window. Both holds remain static with straight arms. The hang reuses the initial hanging pose from the knee-raise atlas. Pause, expanded guidance, a hidden tab and interrupted timing freeze the pose with the workout. Resume continues the same demonstration rather than restarting an attempt. Reduce Motion shows the first static pose, including live preference changes.
 
 ### Background Motion and Control
 

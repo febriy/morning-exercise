@@ -28,8 +28,8 @@ export function recipe(s,{today=day(),tiny=false,sore=false}={}){
  const mode=sore||r.pain||r.rest?'recovery':r.restart?'restart':tiny||r.last?.again==='no'?'tiny':'normal';
  const seconds=mode==='tiny'||mode==='restart'?60:(s.timeBudget??120);
  const strength=mode!=='recovery';
- const hold=mode==='normal'?[3,3,4,4,5,5,6,6][level]:3;
- const reps=seconds===60?2:mode==='normal'?[3,4,4,5,5,6,6,6][level]:2;
+ const hold=seconds===60?5:10;
+ const reps=seconds===60?3:8;
  const steps=[];
  const add=(id,title,seconds,cue,tip,kind,station,reps)=>steps.push({id,title,seconds,cue,tip,kind,station,...(reps?{reps}:{})});
  const supportTip='Hold the top position only, with arms straight but not forced into a hard lock. Keep shoulders steady. Let your feet take some weight if the setup allows. Don’t bend your elbows into a dip. Only start if you can get into and out of the position in control.';
@@ -38,18 +38,21 @@ export function recipe(s,{today=day(),tiny=false,sore=false}={}){
   add('bar-mobility','Loosen hands and shoulders',20,'Stay standing, feet down. Gently open and close your hands, and relax your shoulders.','Small comfortable movements only. If pain or unusual symptoms remain, stop and get advice rather than completing the timer.','move','Parallel bars');
   add('rest','Done. Keep it easy.',seconds-40,'Relax. Continue your coffee walk when ready.','Today keeps the habit without loaded holds, push-ups or knee raises.','rest','Parallel bars');
  }else{
-  const prepare=seconds===60?10:20,pressTime=reps*5,kneeTime=5;
-  const restBudget=seconds-prepare-pressTime-kneeTime-hold;
-  const rest=Math.floor(restBudget/3);
+  const prepare=seconds===60?7:8,repTime=reps*3;
+  const restBudget=seconds-prepare-repTime*3-hold*2;
+  const rest=Math.floor(restBudget/4);
   add('prepare','Get comfortable at the platform',prepare,'Loosen your hands and shoulders. Find a high, fixed push-up platform.','Arrive warm from your coffee walk. Pause for more preparation if needed. Use dry, fixed equipment and a clear place to put your feet down.','prepare','Push-up platform');
-  add('platform-pushup','Platform push-ups',pressTime,`Do up to ${reps} slow push-ups, then stand and rest. Hands on the platform, feet on the ground.`,'Use a high, stable platform intended for support. Keep your body in one line. Bend your elbows comfortably back, lower a little, and press away. A higher surface makes it easier. Stop before straining; no need to fill the timer or force the depth.','move','Push-up platform',reps);
-  add('rest','Stand up. Rest.',rest,'Relax your arms. Walk to the pull-up bar when ready.','Pause the timer if you need longer to rest or move between stations.','rest','Between stations');
-  add('hanging-knee-raise','Hanging knee raise',kneeTime,'One small knee raise: knees up gently, lower slowly, feet down. Too hard? Just hang for up to 3 seconds.','Only try this if you can hang steadily and get on and off the bar in control. Keep arms long, bend your knees and gently curl your pelvis towards your ribs. No swinging, pulling up, jumping or dropping. If it feels too hard, do your familiar plain hang for up to 3 seconds instead. Stop for pain or slipping grip. One attempt only; rest for the remaining time.','move','Pull-up bar',1);
-  add('rest','Feet down. Rest.',rest,'Relax your hands. Move to the parallel bars when ready.','Take your time. You do not need to stay hanging until the timer ends.','rest','Between stations');
+  add('platform-pushup','Platform push-ups',repTime,`Do up to ${reps} controlled push-ups. Hands on the platform, feet on the ground.`,'Use a high, stable platform intended for support. Keep your body in one line. Bend your elbows comfortably back, lower a little, and press away. A higher surface makes it easier. Stop before straining; no need to fill the timer or force the depth.','move','Push-up platform',reps);
+  add('rest','Stand up. Rest.',rest,'Relax your arms. Move to the pull-up bar when ready.','Pause if you need more rest or time to move between stations.','rest','Between stations');
+  add('hanging-knee-raise','Knee raises',repTime,`Up to ${reps} small knee raises. Lift gently, lower with control. Feet down when you need to rest.`,'Only try this if you can hang steadily and get on and off the bar in control. Keep arms long and raise bent knees without swinging or pulling up. You can stop before the target or skip the raises and rest. No jumping or dropping. Stop for pain or a slipping grip.','move','Pull-up bar',reps);
+  add('rest','Feet down. Rest.',rest,'Put your feet down and relax your hands before the hang.','Pause for longer if your grip needs more rest. Do not stay hanging during this break.','rest','Pull-up bar');
+  add('bar-hang','Pull-up bar hang',hold,`Hang steadily for up to ${hold} seconds. Keep your arms long. Feet down sooner if needed.`,'Grip a dry, fixed bar you can reach and leave in control. Keep your body still; no pull-up, swinging, jumping or dropping. Let your feet take weight if the station allows. Stop for pain or a slipping grip.','hold','Pull-up bar');
+  add('rest','Feet down. Rest.',rest,'Relax your hands. Move to the parallel bars when ready.','Pause the timer if you need longer to rest or reach the next station.','rest','Between stations');
   add('support-hold','Parallel-bar hold',hold,`Hold the top for up to ${hold} seconds. Feet down sooner if needed. No dip.`,supportTip,'hold','Parallel bars');
-  add('rest','Feet down. You’re done.',restBudget-rest*2,'Relax. That is enough for today.','Finish with plenty left. Continue your coffee walk when ready.','rest','Fitness corner');
+  add('rest','Stand and rest.',restBudget-rest*3,'Relax your arms. Find a clear, level place to stand.','Take more rest with Pause whenever you need it.','rest','Fitness corner');
+  add('squat','Squats',repTime,`Up to ${reps} controlled squats. Hips back, heels down, then stand tall.`,'Use a dry, level surface. Stand with feet about shoulder-width apart. Bend your knees and move your hips back only as far as comfortable, keeping heels down and knees in line with your toes. Stand back up without jumping. Stop early rather than rushing to finish the reps.','move','Beside the bars',reps);
  }
- return {mode,level,seconds,strength,holdSeconds:mode==='recovery'?0:hold,station:mode==='recovery'?'Parallel bars · Feet stay down':'Platform + pull-up bar + parallel bars',steps,title:mode==='recovery'?'An easy day at your bars':mode==='restart'?'A gentle return':'Your corner routine',reason:mode==='recovery'?'Let your arms recover. Keep the visit easy.':'Platform push-ups. One knee raise. One steady hold.'};
+ return {mode,level,seconds,strength,holdSeconds:mode==='recovery'?0:hold,station:mode==='recovery'?'Parallel bars · Feet stay down':'Platform + pull-up bar + parallel bars + standing',steps,title:mode==='recovery'?'An easy day at your bars':mode==='restart'?'A gentle return':'Your corner routine',reason:mode==='recovery'?'Let your arms recover. Keep the visit easy.':'Push-ups, knee raises, a hang, a bar hold and squats.'};
 }
 export function record(s,entry){
  const next=validate(s),existing=next.sessions.find(x=>x.date===entry.date);
