@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-24T12:17:09.625702+00:00",
-  "title": "Design System: On the Way — Ninja Arena",
+  "generatedAt": "2026-10-24T21:16:07.721055+00:00",
+  "title": "Design System: On the Way \u2014 Ninja Arena",
   "extensions": {
     "colorMeta": {
       "canvas": {
@@ -167,6 +167,36 @@
           "oklch(72% 0.0193 230.70)",
           "oklch(84% 0.0193 230.70)",
           "oklch(95% 0.0193 230.70)"
+        ]
+      },
+      "rest-canvas": {
+        "role": "secondary",
+        "displayName": "Rest Teal",
+        "canonical": "#103e47",
+        "tonalRamp": [
+          "oklch(15% 0.0506 213.35)",
+          "oklch(26% 0.0506 213.35)",
+          "oklch(38% 0.0506 213.35)",
+          "oklch(49% 0.0506 213.35)",
+          "oklch(61% 0.0506 213.35)",
+          "oklch(72% 0.0506 213.35)",
+          "oklch(84% 0.0506 213.35)",
+          "oklch(95% 0.0506 213.35)"
+        ]
+      },
+      "rest-surface": {
+        "role": "secondary",
+        "displayName": "Rest Surface",
+        "canonical": "#164d56",
+        "tonalRamp": [
+          "oklch(15% 0.0576 210.50)",
+          "oklch(26% 0.0576 210.50)",
+          "oklch(38% 0.0576 210.50)",
+          "oklch(49% 0.0576 210.50)",
+          "oklch(61% 0.0576 210.50)",
+          "oklch(72% 0.0576 210.50)",
+          "oklch(84% 0.0576 210.50)",
+          "oklch(95% 0.0576 210.50)"
         ]
       },
       "course-rail": {
@@ -388,11 +418,19 @@
       "description": "Native exercise select and numeric seconds field with a 48px touch target and cyan keyboard focus. Narrow phones stack the exercise above seconds/removal.",
       "html": "<label class=\"ds-editor-field\">Seconds<input type=\"number\" min=\"1\" max=\"600\" step=\"1\" value=\"20\"></label>",
       "css": ".ds-editor-field{display:flex;flex-direction:column;gap:7px;color:var(--muted,#b8cce1);font-size:.75rem}.ds-editor-field input{font:1rem -apple-system,BlinkMacSystemFont,sans-serif;height:48px;border:1px solid var(--line,#304862);border-radius:12px;padding:10px;color:var(--ink,#fff);background:var(--surface,#102742);font-variant-numeric:tabular-nums}.ds-editor-field input:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px}"
+    },
+    {
+      "name": "Preparation and rest",
+      "kind": "custom",
+      "refersTo": "countdown-panel-rest",
+      "description": "Teal break state with an explicit phase heading, next movement and station, and current-phase countdown. Production pairs this timer with the existing pixel demo when a next movement exists; final rest omits that preview.",
+      "html": "<section class=\"ds-break\"><h1>Rest</h1><div class=\"ds-upcoming\"><h2><span>Next:</span> Knee raises</h2><p>Pull-up bar</p></div><div class=\"ds-break-countdown\"><span class=\"ds-break-clock\" role=\"timer\" aria-label=\"Rest time remaining\">0:30</span><span class=\"ds-break-status\">Rest time left</span></div></section>",
+      "css": ".ds-break{font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;padding:24px;color:var(--ink,#fff);background:var(--rest-canvas,#103e47);text-align:center}.ds-break h1{margin:0;font:italic 900 3.5rem/.92 var(--display,\"Barlow Condensed\",\"Arial Narrow\",sans-serif);letter-spacing:-.02em;text-transform:uppercase}.ds-upcoming{margin-top:16px}.ds-upcoming h2{margin:0;font:800 2rem/1.1 var(--display,\"Barlow Condensed\",\"Arial Narrow\",sans-serif);text-transform:uppercase;text-wrap:balance}.ds-upcoming h2 span{font:600 .875rem/1.4 -apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;color:var(--muted,#b8cce1);text-transform:none}.ds-upcoming p{margin:6px 0 0;font-size:.875rem;line-height:1.5;color:var(--energy,#67dfff)}.ds-break-countdown{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:176px;margin-top:20px;overflow:hidden;border-radius:16px;background:var(--rest-surface,#164d56)}.ds-break-countdown:after{content:\"\";position:absolute;bottom:0;left:0;width:40%;height:6px;background:var(--muted,#b8cce1)}.ds-break-clock{font:800 4.5rem/.95 var(--display,\"Barlow Condensed\",\"Arial Narrow\",sans-serif);letter-spacing:-.02em;font-variant-numeric:tabular-nums}.ds-break-status{font-size:.8125rem;margin-top:8px;color:var(--muted,#b8cce1)}"
     }
   ],
   "narrative": {
     "northStar": "Ninja Arena",
-    "overview": "Ninja Arena gives a small morning workout the presence of an athlete’s arena entrance. Midnight navy, signal red, ice cyan and oversized condensed type carry the energy; clear instructions and familiar controls keep the operation calm and direct.\n\nCropped course rails move at the edge of the view. The foreground is a disciplined reading and action layer: aligned numbered stations, exact quantities, one primary action, and unchanged pixel-art movement demos. The identity is athletic without competition, scores or extra tasks.",
+    "overview": "Ninja Arena gives a small personal workout the presence of an athlete\u2019s arena entrance. Midnight navy, signal red, ice cyan and oversized condensed type carry the energy; clear instructions and familiar controls keep the operation calm and direct.\n\nCropped course rails move at the edge of the view. The foreground is a disciplined reading and action layer: aligned numbered stations, exact quantities, one primary action, and unchanged pixel-art movement demos. The identity is athletic without competition, scores or extra tasks.",
     "keyCharacteristics": [
       "Midnight navy with white reading text, red actions and cyan station markers.",
       "Black italic display type paired with upright condensed numerals and system body text.",

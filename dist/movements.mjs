@@ -7,10 +7,10 @@ const DESCRIPTIONS={
   'squat':'Controlled squat: hips back, heels down, then stand tall.'
 };
 
-export function movementSprite(id,{preview=false}={}){
+export function movementSprite(id,{preview=false,upNext=false}={}){
   if(!Object.hasOwn(DESCRIPTIONS,id))return '';
   const file=id==='bar-hang'?'hanging-knee-raise':id;
-  return `<span class="movement-sprite${preview?' sprite-preview':''}"${preview?' aria-hidden="true"':` id="movement-demo" role="img" aria-label="${DESCRIPTIONS[id]}"`} data-frame="0"><img src="sprites/${file}.png" width="800" height="200" alt="" decoding="async" draggable="false"></span>`;
+  return `<span class="movement-sprite${preview?' sprite-preview':''}"${preview?' aria-hidden="true"':` id="movement-demo" role="img" aria-label="${upNext?'Next exercise preview. ':''}${DESCRIPTIONS[id]}"`} data-frame="0"><img src="sprites/${file}.png" width="800" height="200" alt="" decoding="async" draggable="false"></span>`;
 }
 
 // Derive the pose from the workout clock, so pause/resume never restarts a rep.

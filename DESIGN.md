@@ -13,6 +13,8 @@ colors:
   "energy": "#67dfff"
   "focus": "#67dfff"
   "preview": "#dcebf3"
+  "rest-canvas": "#103e47"
+  "rest-surface": "#164d56"
   "course-rail": "#245b77"
   "course-red": "#8e2338"
   "course-ground": "#102a45"
@@ -134,6 +136,8 @@ components:
     rounded: "{rounded.panel}"
     height: "176px"
     width: "100%"
+  countdown-panel-rest:
+    backgroundColor: "{colors.rest-surface}"
   time-option:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.muted}"
@@ -176,6 +180,7 @@ The palette is a dark arena with high-contrast reading and deliberately separate
 
 ### Secondary
 - **Ice Cyan** (`energy`, `focus`): station numbers, metadata rule, selected session and time choices, active progress, selection, caret and keyboard focus.
+- **Rest Teal** (`rest-canvas`) and **Rest Surface** (`rest-surface`): the full preparation/rest background and its countdown panel, including paused breaks. Keep explicit phase labels alongside this state color.
 
 ### Neutral
 - **Midnight Navy** (`canvas`): page, background scene and dark text on cyan.
@@ -246,6 +251,8 @@ The editor inherits the narrow shell, Back header and arena colors. A fixed 3.5r
 A full-width secondary Add step follows the list. The live total, browser-storage explanation, red Save changes action and quiet Restore original routine action complete the flow. Empty drafts explain how to add a movement. Validation uses the existing warm notice colors, points to the invalid step, marks invalid numeric fields and focuses the error; controls retain the cyan focus ring. Back discards without writing. Restore only changes the draft until saved. Session editing never adds a completion or history screen.
 
 ### Countdown, Guidance and Sprites
+
+Preparation and rest use the teal `rest-canvas` across the background and `rest-surface` on the timer panel. Explicit Get ready / Rest headings and Prep time left / Rest time left labels distinguish the phase without relying on color. A 2rem upright condensed Next heading (1.75rem on compact-height phones) names the upcoming exercise; its station is cyan 0.875rem below. The Next prefix is a small inline system label, not a separate eyebrow. The existing 168px demo sits beside the current phase countdown; its animation follows the break clock, freezes on pause, and is static with Reduce Motion. Starting the actual movement resets its demonstration and retains its complete exercise time. Look ahead to the next movement/hold even across intervening prep/rest steps. Final rest shows All movements done, a full-width timer and no preview. Finishing or ending restores the original navy background.
 
 The timer is a surface-colored panel with centered upright countdown and supporting status. Its bottom cyan strip shows active progress; rest uses tinted secondary and paused status turns cyan. Demo steps place the existing square sprite beside it (168px, or 128px below 375px); narrow demo timers are at least 152px high, other panels at least 176px. Sprites remain pixelated and square, using transparent four-frame strips on a pale ground. Frame selection follows exercise time; it stops when the workout is paused.
 

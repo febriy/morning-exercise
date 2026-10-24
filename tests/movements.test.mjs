@@ -67,6 +67,7 @@ test('pausing knee raises preserves the current rep and resumes the demonstratio
   assert.equal(app.node('#movement-demo').attributes['data-frame'],'2');
   app.elapse(.8);assert.equal(app.node('#movement-demo').attributes['data-frame'],'3');
   app.elapse(.8);assert.equal(app.node('#movement-demo').attributes['data-frame'],'0');
-  app.elapse(20.8);assert.doesNotMatch(app.root.innerHTML,/id="movement-demo"/);
+  app.elapse(20.8);assert.match(app.root.innerHTML,/Next exercise preview\. Steady hang/);
+  assert.equal(app.node('#movement-demo').attributes['data-frame'],'0');
  }finally{app.restore();}
 });
