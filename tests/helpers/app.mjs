@@ -1,19 +1,19 @@
 import assert from 'node:assert/strict';
 let mounts=0;
 // Exercise the actual app's motion controls and lifecycle without a browser or timers.
-export async function mount({reduce=false,host={}}={}) {
+export async function mount({reduce=false,host={},saved={}}={}) {
   const previous = new Map(['document','window','localStorage','setInterval','clearInterval'].map(k=>[k,globalThis[k]]));
-  const events=new Map(), mediaEvents=new Map(), windowEvents=new Map(), nodes=new Map(), storage=new Map();
+  const events=new Map(), mediaEvents=new Map(), windowEvents=new Map(), nodes=new Map(), storage=new Map(Object.entries(saved));
   const realNow=Date.now;let now=realNow(),tick=null;Date.now=()=>now;
   const media={matches:reduce,addEventListener:(type,fn)=>mediaEvents.set(type,fn)};
   function node(selector){
-    if(!nodes.has(selector))nodes.set(selector,{hidden:false,style:{setProperty(){}},attributes:{},events:new Map(),addEventListener(type,fn){this.events.set(type,fn);},setAttribute(k,v){this.attributes[k]=v;}});
+    if(!nodes.has(selector))nodes.set(selector,{hidden:false,dataset:{effort:selector.match(/^\[data-effort="([^"]+)"\]$/)?.[1]},style:{setProperty(){}},attributes:{},events:new Map(),addEventListener(type,fn){this.events.set(type,fn);},setAttribute(k,v){this.attributes[k]=v;},focus(){this.focused=true;}});
     return nodes.get(selector);
   }
   const root={innerHTML:'',querySelector(selector){
     if(selector.startsWith('#')&&!this.innerHTML.includes(`id="${selector.slice(1)}"`))return null;
     return node(selector);
-  },querySelectorAll(){return [];}};
+  },querySelectorAll(selector){return selector==='[data-effort]'?[...this.innerHTML.matchAll(/data-effort="([^"]+)"/g)].map(match=>node(`[data-effort="${match[1]}"]`)):[];}};
   const document={hidden:false,documentElement:{dataset:{}},querySelector:s=>s==='#app'?root:node(s),addEventListener:(type,fn)=>events.set(type,fn)};
   globalThis.document=document;
   globalThis.window={matchMedia:()=>media,addEventListener:(type,fn)=>windowEvents.set(type,fn),scrollTo(){},...host};
@@ -22,7 +22,7 @@ export async function mount({reduce=false,host={}}={}) {
   globalThis.clearInterval=()=>{tick=null;};
   try {await import(`../../dist/app.mjs?app-test=${++mounts}`);}
   catch(error){Date.now=realNow;for(const [k,v] of previous){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}throw error;}
-  return {document,media,root,node,
+  return {document,media,root,node,storage,
     elapse(seconds){for(let ms=0;ms<seconds*1000;ms+=200){now+=200;tick?.();}},
     jump(seconds){now+=seconds*1000;tick?.();},
     pagehide(){windowEvents.get('pagehide')?.();},
@@ -32,4 +32,3 @@ export async function mount({reduce=false,host={}}={}) {
     restore(){Date.now=realNow;for(const [k,v] of previous){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}}
   };
 }
-

@@ -132,17 +132,15 @@ legend { font-size: 1rem; font-weight: 600; padding: 0; }
 .next-step { font-size: .8125rem; color: var(--muted); margin: 14px 0 24px; }
 .player-controls { margin-top: auto; padding-top: 8px; }
 .remaining { font-size: .8125rem; color: var(--muted); margin-top: 8px; }
-.feedback-shell main { padding-top: 40px; }
+.feedback-shell main { flex: 1; display: flex; flex-direction: column; padding-top: 24px; }
+.feedback-exit { margin-bottom: 28px; }
+.feedback-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .done-symbol { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--green); margin-bottom: 28px; }
 .done-symbol svg { width: 28px; height: 28px; }
-.feedback-duration { color: var(--muted); font-size: 1rem; margin: 16px 0 36px; }
+.feedback-duration { color: var(--muted); font-size: 1rem; margin: 16px 0 24px; }
 .feedback > p { color: var(--muted); font-size: .875rem; margin: 8px 0 20px; }
-.feedback-option { display: flex; flex-direction: column; align-items: flex-start; text-align: left; position: relative; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 18px 48px 18px 18px; width: 100%; min-height: 66px; margin-bottom: 10px; }
-.feedback-option > span { font-size: 1rem; font-weight: 600; line-height: 1.5; }
-.feedback-option small { font-size: .8125rem; color: var(--muted); line-height: 1.5; margin-top: 4px; }
-.feedback-option svg { position: absolute; width: 20px; height: 20px; right: 18px; top: calc(50% - 10px); color: var(--muted); }
-.done-hero { padding-top: 64px; }
-.done-hero > p:last-child { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-top: 18px; }
+.feedback-option { display: flex; align-items: center; justify-content: center; text-align: center; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 16px 8px; width: 100%; min-width: 0; min-height: 66px; }
+.feedback-option > span { font-size: .9375rem; font-weight: 600; line-height: 1.5; }
 #toast { display: none; }
 @media (hover: hover) { .primary:hover { background: var(--green-hover); } .time-button:hover, .icon-button:hover, .text-button:hover, summary:hover { background: var(--soft); } .feedback-option:hover { border-color: #91a58f; background: #f0f7e5; } }
 @media (min-width: 700px) { .app-shell { padding-top: 20px; } .today-main { padding-top: 24px; } .today-main .start-area { margin-top: 16px; } .player-shell main { padding-top: 24px; } }

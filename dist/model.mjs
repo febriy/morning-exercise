@@ -52,7 +52,19 @@ export function recipe(s,{today=day(),tiny=false,sore=false}={}){
  return {mode,level,seconds,strength,holdSeconds:mode==='recovery'?0:hold,station:mode==='recovery'?'Parallel bars · Feet stay down':'Platform + pull-up bar + parallel bars',steps,title:mode==='recovery'?'An easy day at your bars':mode==='restart'?'A gentle return':'Your corner routine',reason:mode==='recovery'?'Let your arms recover. Keep the visit easy.':'Platform push-ups. One knee raise. One steady hold.'};
 }
 export function record(s,entry){
- const next=validate(s);if(next.sessions.some(x=>x.date===entry.date))return {state:next,changed:false,promoted:false};
+ const next=validate(s),existing=next.sessions.find(x=>x.date===entry.date);
+ if(existing){
+  // A replay never adds daily credit. It can still report a new difficulty or pain.
+  const severity=effort=>effort==='pain'?2:effort==='hard'?1:0;
+  if(severity(entry.effort)>severity(existing.effort)){
+   const alreadyReduced=severity(existing.effort)>0;
+   existing.effort=entry.effort;existing.again='no';
+   if(!alreadyReduced)next.level=Math.max(0,next.level-1);
+   next.levelSince=entry.date;
+   return {state:validate(next),changed:true,promoted:false};
+  }
+  return {state:next,changed:false,promoted:false};
+ }
  next.sessions.push({...entry});next.levelSince??=entry.date;
  if(entry.mode==='restart'){next.level=0;next.levelSince=entry.date;}
  if(entry.effort==='hard'||entry.effort==='pain'){next.level=Math.max(0,next.level-1);next.levelSince=entry.date;}

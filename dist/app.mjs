@@ -1,4 +1,4 @@
-import {EMPTY,day,load,recipe,record,duration} from './model.mjs?v=personal-corner-2';
+import {EMPTY,day,load,recipe,record,duration} from './model.mjs?v=return-home-1';
 import {createTrainer} from './trainer.mjs?v=safari-audio-1';
 import {movementSprite,movementFrame} from './movements.mjs?v=sprites-1';
 const trainer=createTrainer(window);
@@ -37,6 +37,7 @@ function save(){
   try { localStorage.setItem(KEY,JSON.stringify(state)); storageProblem=false; }
   catch { storageProblem=true; }
 }
+function focusScreen(){window.scrollTo(0,0);root.querySelector('#main')?.focus({preventScroll:true});}
 function todayDone(){return state.sessions.find(s=>s.date===day());}
 function backgroundControl(){return `<button class="icon-button background-control" id="background-motion" aria-label="${backgroundPaused?'Play':'Pause'} background motion" title="${backgroundPaused?'Play':'Pause'} background motion" ${reducedMotion.matches?'hidden':''}>${icon(backgroundPaused?'play':'pause')}</button>`;}
 function header({back=false}={}){return `<header class="header">${back?`<button class="icon-button" id="back" aria-label="Back to workout">${icon('back')}</button>`:'<span class="wordmark">On the Way</span>'}<div class="header-actions">${backgroundControl()}${state.setupComplete&&!back?`<button class="time-button" id="edit" aria-label="Change time">${icon('edit')}<span>Time</span></button>`:''}</div></header>`;}
@@ -49,17 +50,17 @@ function render(){
   renderToday();
 }
 function bindBackground(){root.querySelector('#background-motion')?.addEventListener('click',()=>{backgroundPaused=!backgroundPaused;syncBackground();});syncBackground();}
-function bindEdit(){root.querySelector('#edit')?.addEventListener('click',()=>{editing=true;render();});bindBackground();}
+function bindEdit(){root.querySelector('#edit')?.addEventListener('click',()=>{editing=true;render();focusScreen();});bindBackground();}
 function storageNote(){return storageProblem?'<p class="notice" role="status">This browser cannot save progress. Your setup may be needed again next time.</p>':'';}
 function renderSetup(){
   const selectedTime=state.setupComplete?state.timeBudget:120;
-  root.innerHTML=`<div class="app-shell setup-shell">${header({back:editing})}<main id="main"><div class="intro"><h1>A little time<br>for yourself.</h1><p>Platform push-ups. A small knee raise.<br>A steady bar hold. Plenty of rest.</p></div><form id="setup"><fieldset class="time-field"><legend>How much time per visit?</legend><div class="time-options">${[60,120,300,600].map(value=>`<label class="time-option"><input type="radio" name="time" value="${value}" ${selectedTime===value?'checked':''}><span>${value/60} min</span></label>`).join('')}</div></fieldset>${storageNote()}<button class="primary" id="setup-done" type="submit">${editing?'Update my workout':'See my workout'} ${icon('arrow')}</button></form><p class="privacy">We’ll keep it easy and build gradually.</p></main></div>`;
+  root.innerHTML=`<div class="app-shell setup-shell">${header({back:editing})}<main id="main" tabindex="-1"><div class="intro"><h1>A little time<br>for yourself.</h1><p>Platform push-ups. A small knee raise.<br>A steady bar hold. Plenty of rest.</p></div><form id="setup"><fieldset class="time-field"><legend>How much time per visit?</legend><div class="time-options">${[60,120,300,600].map(value=>`<label class="time-option"><input type="radio" name="time" value="${value}" ${selectedTime===value?'checked':''}><span>${value/60} min</span></label>`).join('')}</div></fieldset>${storageNote()}<button class="primary" id="setup-done" type="submit">${editing?'Update my workout':'See my workout'} ${icon('arrow')}</button></form><p class="privacy">We’ll keep it easy and build gradually.</p></main></div>`;
   root.querySelector('#setup').onsubmit=e=>{
     e.preventDefault();const form=new FormData(e.currentTarget),timeBudget=Number(form.get('time'));
     if(!state.setupComplete||state.timeBudget!==timeBudget){state.level=0;state.levelSince=day();}
-    state.goal='habit';state.timeBudget=timeBudget;state.setupComplete=true;editing=false;save();render();window.scrollTo(0,0);
+    state.goal='habit';state.timeBudget=timeBudget;state.setupComplete=true;editing=false;save();render();focusScreen();
   };
-  root.querySelector('#back')?.addEventListener('click',()=>{editing=false;render();});
+  root.querySelector('#back')?.addEventListener('click',()=>{editing=false;render();focusScreen();});
   bindBackground();
 }
 function planGroups(plan){
@@ -70,17 +71,17 @@ function planGroups(plan){
 }
 function renderToday(){
   const completed=todayDone();const plan=recipe(state);
-  root.innerHTML=`<div class="app-shell">${header()}<main id="main" class="today-main">${completed?`<div class="done-hero"><div class="done-symbol">${icon('check')}</div><h1>Done for today.</h1><p>${completed.seconds?`${duration(completed.seconds)} for yourself.`:'You listened to your body.'}<br>See you on the next coffee walk.</p></div>${completed.effort==='pain'?'<div class="notice">Rest before resuming. Seek advice for concerning symptoms; call 995 for a medical emergency.</div>':''}`:`<div class="workout-heading"><h1>${plan.mode==='recovery'?'An easy day.':plan.mode==='restart'?'A gentle return.':plan.mode==='tiny'?'Your small version.':'Your corner<br>routine.'}</h1><p>${plan.mode==='recovery'?'Let your arms recover. Keep today’s visit easy.':'Three small movements. Plenty of rest.'}</p></div><div class="workout-meta"><span class="duration">${duration(plan.seconds)}</span><span>Rest included</span></div><ol class="workout-card" aria-label="Today’s movements">${planGroups(plan).map(step=>`<li class="movement-row">${movementSprite(step.id,{preview:true})||`<span class="movement-icon">${icon('rest')}</span>`}<span class="movement-info"><span class="movement-name">${escape(step.title)}</span><span class="movement-station">${escape(step.station)}</span></span><span class="movement-time">${step.count>1?`${step.count} × `:''}<strong>${step.reps||step.seconds}</strong><span>${step.reps?(step.reps===1?'rep':'reps'):'sec'}</span></span></li>`).join('')}</ol><p class="routine-note">${plan.mode==='recovery'?'Feet stay down today.':'Do the reps, then rest. All within your time.'}</p>${storageNote()}<div class="start-area"><button class="primary" id="start">Start workout ${icon('play')}</button>${plan.seconds>60?'<button class="text-button" id="tiny">Just one minute today</button>':''}<p class="safety-line">Use only a dry, stable station that fits the instructions. Stop for pain or feeling unwell. Get advice first if a condition or injury limits exercise.</p>${state.sessions.at(-1)?.effort==='pain'?'<p class="notice">Last time you felt unwell. Resume only once symptoms have resolved, with advice where needed.</p>':''}</div>`}</main></div>`;
+  root.innerHTML=`<div class="app-shell">${header()}<main id="main" tabindex="-1" class="today-main"><div class="workout-heading"><h1>${plan.mode==='recovery'?'An easy day.':plan.mode==='restart'?'A gentle return.':plan.mode==='tiny'?'Your small version.':'Your corner<br>routine.'}</h1><p>${completed?'Today’s visit is saved. '+(plan.mode==='recovery'?'Keep this round easy.':'You can start again.'):plan.mode==='recovery'?'Let your arms recover. Keep today’s visit easy.':'Three small movements. Plenty of rest.'}</p></div><div class="workout-meta"><span class="duration">${duration(plan.seconds)}</span><span>Rest included</span></div><ol class="workout-card" aria-label="Today’s movements">${planGroups(plan).map(step=>`<li class="movement-row">${movementSprite(step.id,{preview:true})||`<span class="movement-icon">${icon('rest')}</span>`}<span class="movement-info"><span class="movement-name">${escape(step.title)}</span><span class="movement-station">${escape(step.station)}</span></span><span class="movement-time">${step.count>1?`${step.count} × `:''}<strong>${step.reps||step.seconds}</strong><span>${step.reps?(step.reps===1?'rep':'reps'):'sec'}</span></span></li>`).join('')}</ol><p class="routine-note">${plan.mode==='recovery'?'Feet stay down today.':'Do the reps, then rest. All within your time.'}</p>${storageNote()}<div class="start-area"><button class="primary" id="start">${completed?'Start again':'Start workout'} ${icon('play')}</button>${plan.seconds>60&&!completed?'<button class="text-button" id="tiny">Just one minute today</button>':''}<p class="safety-line">Use only a dry, stable station that fits the instructions. Stop for pain or feeling unwell. Get advice first if a condition or injury limits exercise.</p>${state.sessions.at(-1)?.effort==='pain'?'<p class="notice">Last time you felt unwell. Resume only once symptoms have resolved, with advice where needed. Seek advice for concerning symptoms; call 995 for a medical emergency.</p>':''}</div></main></div>`;
   bindEdit();
   root.querySelector('#start')?.addEventListener('click',()=>start(plan));
   root.querySelector('#tiny')?.addEventListener('click',()=>start(recipe(state,{tiny:true})));
 }
 
 function start(plan){
-  if(todayDone())return;
+  if(active)return;
   trainer.unlock();
   active={...plan,date:day(),index:0,spent:0,stepSpent:0,tick:Date.now(),paused:false};
-  renderPlayer();trainer.begin(active.steps[0]);interval=setInterval(tick,200);window.scrollTo(0,0);
+  renderPlayer();trainer.begin(active.steps[0]);interval=setInterval(tick,200);focusScreen();
 }
 function tick(){
   if(!active||active.paused)return;
@@ -110,7 +111,7 @@ function pause(){if(!active)return;active.paused=true;trainer.stop();renderPlaye
 function renderPlayer(){
   syncBackground();
   const step=active.steps[active.index],next=active.steps[active.index+1],demo=movementSprite(step.id);
-  root.innerHTML=`<div class="app-shell player-shell"><header class="header"><span class="wordmark">On the Way</span><span class="step-count">${active.index+1} of ${active.steps.length}</span></header><main id="main"><div class="player-heading"><h1>${escape(step.title)}</h1><p class="player-station">${escape(step.station)}</p></div><div class="movement-stage${demo?' has-demo':''}">${demo}<div class="timer-ring" id="ring"><div><span id="clock" class="clock" role="timer" aria-label="Time remaining in this movement"></span><span class="player-status" role="status">${active.paused?'Paused':'Keep it easy'}</span></div></div></div><p class="cue">${active.paused?'Feet down. Rest, and resume only when ready.':escape(step.cue)}</p><details class="form-cue"><summary>A little guidance</summary><p>${escape(step.tip)}</p></details><p class="next-step">${next?`Next: ${escape(next.title)}`:'Then you’re done.'}</p><div class="player-controls"><button class="primary" id="pause">${active.paused?'Resume':'Pause'} ${icon(active.paused?'play':'pause')}</button><button class="text-button" id="stop">End workout</button><p id="remaining" class="remaining"></p></div></main></div>`;
+  root.innerHTML=`<div class="app-shell player-shell"><header class="header"><span class="wordmark">On the Way</span><span class="step-count">${active.index+1} of ${active.steps.length}</span></header><main id="main" tabindex="-1"><div class="player-heading"><h1>${escape(step.title)}</h1><p class="player-station">${escape(step.station)}</p></div><div class="movement-stage${demo?' has-demo':''}">${demo}<div class="timer-ring" id="ring"><div><span id="clock" class="clock" role="timer" aria-label="Time remaining in this movement"></span><span class="player-status" role="status">${active.paused?'Paused':'Keep it easy'}</span></div></div></div><p class="cue">${active.paused?'Feet down. Rest, and resume only when ready.':escape(step.cue)}</p><details class="form-cue"><summary>A little guidance</summary><p>${escape(step.tip)}</p></details><p class="next-step">${next?`Next: ${escape(next.title)}`:'Then you’re done.'}</p><div class="player-controls"><button class="primary" id="pause">${active.paused?'Resume':'Pause'} ${icon(active.paused?'play':'pause')}</button><button class="text-button" id="stop">End workout</button><p id="remaining" class="remaining"></p></div></main></div>`;
   root.querySelector('#pause').onclick=()=>{if(!active.paused){pause();return;}trainer.unlock();active.paused=false;active.tick=Date.now();trainer.begin(active.steps[active.index],active.steps[active.index].seconds-active.stepSpent);renderPlayer();};
   root.querySelector('#stop').onclick=()=>finish(false);
   root.querySelector('details').ontoggle=e=>{if(e.currentTarget.open&&active&&!active.paused){active.paused=true;trainer.stop();root.querySelector('#pause').innerHTML=`Resume ${icon('play')}`;root.querySelector('.player-status').textContent='Paused';root.querySelector('.cue').textContent='Feet down. Rest, and resume only when ready.';}};
@@ -120,22 +121,24 @@ function finish(full){
   if(!active)return;
   clearInterval(interval);interval=null;
   if(full)trainer.complete();else trainer.stop();
+  if(!full&&active.spent<1){active=null;render();focusScreen();return;}
   pending={date:active.date,level:active.level,seconds:Math.min(600,Math.floor(full?active.seconds:active.spent)),mode:active.mode,strength:active.strength&&active.spent>0,full};
   active=null;syncBackground();
   try{localStorage.setItem(PENDING,JSON.stringify(pending));}catch{storageProblem=true;}
-  renderFeedback();window.scrollTo(0,0);
+  renderFeedback();focusScreen();
 }
 function renderFeedback(){
-  root.innerHTML=`<div class="app-shell feedback-shell">${header()}<main id="main"><div class="done-symbol">${icon('check')}</div><h1>${pending.full?'That’s your<br>workout done.':'Small still counts.'}</h1><p class="feedback-duration">${duration(pending.seconds)} for yourself.</p><section class="feedback"><h2>How did that feel?</h2><p>I’ll use this for your next workout.</p><button class="feedback-option" data-effort="easy"><span>Easy</span><small>I’d happily do it again</small>${icon('arrow')}</button><button class="feedback-option" data-effort="okay"><span>Just right</span>${icon('arrow')}</button><button class="feedback-option" data-effort="hard"><span>Too much</span><small>Keep the next one small</small>${icon('arrow')}</button><button class="text-button" data-effort="pain">Pain or felt unwell</button></section>${storageNote()}</main></div>`;
+  root.innerHTML=`<div class="app-shell feedback-shell">${header()}<main id="main" tabindex="-1"><div class="done-symbol">${icon('check')}</div><h1>${pending.full?'That’s your<br>workout done.':'Small still counts.'}</h1><p class="feedback-duration">${duration(pending.seconds)} for yourself.</p><div class="feedback-exit"><button class="primary" id="home">Back to workout ${icon('arrow')}</button></div><section class="feedback"><h2>How did that feel?</h2><p>Optional. I’ll use this for your next workout.</p><div class="feedback-options"><button class="feedback-option" data-effort="easy"><span>Easy</span></button><button class="feedback-option" data-effort="okay"><span>Just right</span></button><button class="feedback-option" data-effort="hard"><span>Too much</span></button></div><button class="text-button" data-effort="pain">Pain or felt unwell</button></section>${storageNote()}</main></div>`;
+  root.querySelector('#home').onclick=()=>complete('skipped');
   root.querySelectorAll('[data-effort]').forEach(button=>button.onclick=()=>complete(button.dataset.effort));
   bindEdit();
 }
 function complete(effort){
   if(!pending)return;
-  const entry={...pending,effort,again:effort==='easy'?'yes':effort==='okay'?'maybe':'no'};
-  const result=record(state,entry);state=result.state;save();
+  const entry={...pending,effort,again:effort==='easy'?'yes':['okay','skipped'].includes(effort)?'maybe':'no'};
+  if(entry.seconds>0||effort==='pain'){const result=record(state,entry);state=result.state;save();}
   if(!storageProblem){try{localStorage.removeItem(PENDING);}catch{}}
-  pending=null;render();window.scrollTo(0,0);
+  pending=null;render();focusScreen();
 }
 document.addEventListener('visibilitychange',()=>{if(document.hidden)trainer.stop();syncBackground();if(document.hidden&&active&&!active.paused)pause();else if(!document.hidden&&!active&&!pending&&!editing)render();});
 window.addEventListener('beforeunload',e=>{if(active){e.preventDefault();e.returnValue='';}});

@@ -16,6 +16,20 @@ test('every session respects the chosen time, including recovery',()=>{for(const
 test('progression never expands the user’s time commitment',()=>{for(const timeBudget of [60,120,300,600]){let s={...fresh(),timeBudget};for(let d=1;d<=28;d++){const date=`2026-10-${String(d).padStart(2,'0')}`;s=record(s,visit(date,{level:s.level,seconds:Math.min(timeBudget,LEVELS[s.level])})).state;}assert.equal(s.timeBudget,timeBudget);assert.ok(recipe(s,{today:'2026-10-29'}).seconds<=timeBudget);}});
 test('progression requires three easy full days over at least seven calendar days',()=>{let s=fresh();s=record(s,visit('2026-10-01')).state;s=record(s,visit('2026-10-02')).state;let r=record(s,visit('2026-10-03'));assert.equal(r.promoted,false);assert.equal(r.state.level,0);r=record(r.state,visit('2026-10-07'));assert.equal(r.promoted,true);assert.equal(r.state.level,1);assert.equal(r.state.levelSince,'2026-10-07');});
 test('same-day repeated completion cannot add a visit or promote twice',()=>{let s=record(fresh(),visit('2026-10-01')).state;const r=record(s,visit('2026-10-01'));assert.equal(r.changed,false);assert.equal(r.state.sessions.length,1);assert.equal(r.state.level,0);});
+test('same-day repeat feedback preserves pain and lowers the dose at most once',()=>{
+ let s=record({...fresh(),level:3},visit('2026-10-22',{level:3,effort:'okay'})).state;
+ s=record(s,visit('2026-10-22',{level:3,effort:'hard',again:'no'})).state;
+ assert.equal(s.level,2);
+ s=record(s,visit('2026-10-22',{level:2,effort:'hard',again:'no'})).state;
+ assert.equal(s.level,2);
+ s=record(s,visit('2026-10-22',{level:2,effort:'pain',again:'no'})).state;
+ assert.equal(s.level,2);
+ s=record(s,visit('2026-10-22',{level:2,effort:'easy',again:'yes'})).state;
+ assert.equal(s.sessions.length,1);
+ assert.equal(s.sessions[0].effort,'pain');
+ assert.equal(s.sessions[0].again,'no');
+ assert.equal(recipe(s,{today:'2026-10-23'}).strength,false);
+});
 test('early, tiny, recovery, unenjoyed and old visits do not earn progression',()=>{for(const override of [{full:false},{mode:'tiny',seconds:60},{mode:'recovery'},{again:'no'},{effort:'okay'}]){let s=fresh();s=record(s,visit('2026-10-01',override)).state;s=record(s,visit('2026-10-04',override)).state;assert.equal(record(s,visit('2026-10-07',override)).promoted,false);}const s={...fresh(),levelSince:'2026-09-01',sessions:[visit('2026-09-01'),visit('2026-09-02')]};assert.equal(record(s,visit('2026-10-22')).promoted,false);});
 test('a rest calendar day separates strength visits; weekly strength is capped at three',()=>{const s={...fresh(),level:2,sessions:[visit('2026-10-20',{level:2,strength:true,seconds:180})]};assert.equal(recipe(s,{today:'2026-10-21'}).mode,'recovery');assert.equal(recipe(s,{today:'2026-10-22'}).strength,true);s.sessions=[16,18,20].map(d=>visit(`2026-10-${d}`,{level:2,strength:true,seconds:180}));assert.equal(recipe(s,{today:'2026-10-22'}).strength,false);});
 test('hard feedback lowers a level; pain stops strength and soreness selects an easy day',()=>{const s={...fresh(),level:3,levelSince:'2026-10-01'};const r=record(s,visit('2026-10-22',{level:3,seconds:100,full:false,effort:'pain',strength:true}));assert.equal(r.state.level,2);assert.equal(recipe(r.state,{today:'2026-10-23'}).strength,false);assert.equal(recipe({...s,sessions:[]},{sore:true}).mode,'recovery');assert.equal(record(s,visit('2026-10-22',{level:3,effort:'hard'})).state.level,2);});

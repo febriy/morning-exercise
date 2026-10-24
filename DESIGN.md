@@ -171,7 +171,13 @@ Native radio inputs sit inside visible labels. Unselected choices are white with
 
 The centered player uses a functional circular countdown (220px diameter, 172px in compact phone layouts) with a 10px total difference between outer and inner diameter. Forest progress and the leaf track surround a solid canvas interior. One cue, optional guidance, next movement and Pause follow the countdown. Guidance expands into a soft-leaf panel and pauses the active workout.
 
-Feedback choices are opaque white, bordered, rounded rows with at least 66px height. Hover-capable pointers get the shipped subtle border/background change. Warm notices carry storage and safety messages; preserve readable safety copy and every existing option.
+Feedback choices are three opaque white, bordered controls in an equal-column row, each at least 66px high. Labels are 15px semibold; the separate pain option remains a full-width text action. Hover-capable pointers get the shipped subtle border/background change. Warm notices carry storage and safety messages; preserve readable safety copy and every existing option.
+
+### Completion and Return
+
+Completion is an acknowledgment, never a terminal home state. Its primary action is **Back to workout**, placed before optional effort feedback so it is visible on short phone screens. Feedback offers Easy, Just right and Too much in one row, followed by the existing pain action. The return button has the same forest treatment as Start. Completion duration has 16px above and 24px below; the return action has 28px separation from feedback.
+
+Returning without feedback saves an unrated visit. Selecting a rating also returns directly to the familiar workout overview. The overview keeps the routine visible, acknowledges “Today’s visit is saved” in the supporting paragraph, and labels its primary action **Start again**. Repeats reset the timer, preserve history and respect the existing recovery policy without adding daily progression credit. There is no destructive reset or extra confirmation. An immediate cancellation before one elapsed second goes straight back without a visit. Moving between major screens focuses the main landmark with `tabindex="-1"`; countdown updates never move focus.
 
 ### Movement Sprites
 
