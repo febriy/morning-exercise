@@ -1,6 +1,6 @@
-import {loadPreferences,recipe,kidsRecipe,duration} from './model.mjs?v=kids-session-1';
+import {loadPreferences,recipe,kidsRecipe,duration} from './model.mjs?v=kids-prep-1';
 import {createTrainer} from './trainer.mjs?v=safari-audio-1';
-import {movementSprite,movementFrame} from './movements.mjs?v=kids-session-1';
+import {movementSprite,movementFrame} from './movements.mjs?v=kids-prep-1';
 const trainer=createTrainer(window);
 
 const PREFERENCES='on-the-way.preferences.v1';

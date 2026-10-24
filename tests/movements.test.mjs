@@ -30,7 +30,7 @@ test('every demo has a transparent, aligned four-frame strip and an accessible d
 test('jumping jacks loop from the exercise clock and freeze with pause or Reduce Motion',async()=>{
  assert.deepEqual([0,.5,1,1.5,2].map(t=>movementFrame('jumping-jacks',t)),[0,1,2,3,0]);
  const app=await mount();try{
-  app.click('#session-kids');app.click('#start');app.elapse(1);
+  app.click('#session-kids');app.click('#start');app.elapse(6);
   assert.equal(app.node('#movement-demo').attributes['data-frame'],'2');
   app.click('#pause');app.elapse(5);
   assert.equal(app.node('#movement-demo').attributes['data-frame'],'2');

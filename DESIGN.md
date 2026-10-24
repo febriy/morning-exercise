@@ -187,7 +187,7 @@ The upright hierarchy uses the recorded headline, button, duration, dose and cou
 
 ## Layout
 
-Phone first: a centered shell (maximum 520px) uses 24px side gutters, at least 100svh height and bottom safe-area padding. The header is at least 76px high. The overview flows from hero to metadata, five-row morning circuit or four-row kids sequence, and Start area. Normal rows are at least 68px high with 10px vertical padding; the Start area uses remaining vertical space without overlapping content.
+Phone first: a centered shell (maximum 520px) uses 24px side gutters, at least 100svh height and bottom safe-area padding. The header is at least 76px high. The overview flows from hero to metadata, five-row morning circuit or five-row kids sequence, and Start area. Normal rows are at least 68px high with 10px vertical padding; the Start area uses remaining vertical space without overlapping content.
 
 At widths below 375px, gutters become 20px, row gaps 8px, static previews 32px and time choices switch from four columns to two. At heights up to 720px and widths below 900px, the header becomes 56px, rows at least 52px with 6px vertical padding, surrounding gaps tighten and primary controls become at least 58px high. Allow vertical scrolling: the 320×568 view requires it, with no horizontal overflow. The 390×844 and 375×667 home views fit all five movements and Start.
 
@@ -221,7 +221,7 @@ A native button group uses Morning and With kids, with full accessible names and
 
 ### Circuit Rows
 
-A continuous transparent list uses numbered cyan stations, a pale square static sprite, a two-line label and a right-aligned condensed dose. A cyan 3px rule separates metadata from the first row; thin arena lines divide every movement. Static previews are 38px normally. Preserve the exact five morning movements and dose order. The kids overview shows all four timed phases, including both rests; never deduplicate them. Both overviews have one primary Start below.
+A continuous transparent list uses numbered cyan stations, a pale square static sprite, a two-line label and a right-aligned condensed dose. A cyan 3px rule separates metadata from the first row; thin arena lines divide every movement. Static previews are 38px normally. Preserve the exact five morning movements and dose order. The kids overview shows the five-second preparation followed by all four timed intervals, including both rests; never deduplicate them. Both overviews have one primary Start below.
 
 ### Time Choices
 
@@ -235,7 +235,7 @@ The guidance disclosure has a 44px summary target and a simple chevron. Opening 
 
 ### Returning to the workout and Motion
 
-Finishing or ending returns directly to the same selected session’s overview with **Start workout** ready. No completion page, saved-visit state, effort feedback or recovery substitution interrupts the loop. The completion bell and voice remain, with a visually hidden status announcement. Morning time choice is the only remembered preference; session selection lasts for the current page visit. The kids sequence is fixed at four 20-second phases, totaling 80 seconds. Its jumping-jacks demo loops every two seconds; the squat demo retains its three-second cycle.
+Finishing or ending returns directly to the same selected session’s overview with **Start workout** ready. No completion page, saved-visit state, effort feedback or recovery substitution interrupts the loop. The completion bell and voice remain, with a visually hidden status announcement. Morning time choice is the only remembered preference; session selection lasts for the current page visit. The kids sequence is fixed at five seconds of preparation followed by four 20-second intervals, totaling 85 seconds. Its jumping-jacks demo loops every two seconds; the squat demo retains its three-second cycle.
 
 Three bounded background elements share one course-drift animation: 24 seconds, ease-in-out, alternating between small opposing translations. This creates one slow peripheral drift. The background toggle controls it; Reduce Motion removes transitions and animations and hides the motion toggle. Hidden tabs stop the background and pause an active workout. Screen changes focus the main landmark; countdown updates do not move focus.
 

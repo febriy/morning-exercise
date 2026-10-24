@@ -33,7 +33,8 @@ export function recipe({timeBudget=DEFAULT_TIME}={},{tiny=false}={}){
 export function duration(seconds){return seconds<60?`${seconds} sec`:seconds%60?`${Math.floor(seconds/60)} min ${seconds%60} sec`:`${seconds/60} min`;}
 
 export function kidsRecipe(){
- return {seconds:80,steps:[
+ return {seconds:85,steps:[
+  {id:'prepare',title:'Get ready',seconds:5,cue:'Find your space. Jumping jacks are first.',tip:'Put your phone somewhere you can see and hear it, then get ready to move.',kind:'prepare',station:'Before you start'},
   {id:'jumping-jacks',title:'Jumping jacks',seconds:20,cue:'Arms up, feet out. Arms down, feet in. Go at your own pace.',tip:'Make space around you for your arms and feet. Land softly and take a break whenever you need.',kind:'move',station:'At home'},
   {id:'rest',title:'Rest',seconds:20,cue:'Catch your breath. Squats are next.',tip:'Relax. Pause the timer if you want a longer break.',kind:'rest',station:'Take a breather'},
   {id:'squat',title:'Squats',seconds:20,cue:'Hips back, then stand tall. Go at your own pace.',tip:'Keep your heels down. Lower only as far as feels comfortable, then stand back up.',kind:'move',station:'At home'},

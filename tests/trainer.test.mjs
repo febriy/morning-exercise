@@ -130,14 +130,15 @@ test('the real two-minute workout speaks countdowns and cues at boundaries witho
   }finally{app.restore();}
 });
 
-test('kids workout speaks Start, Rest and five-second countdowns for all four phases, then completes',async()=>{
+test('kids workout gives a five-second Get ready phase before movement and rest cues',async()=>{
  const browser=soundBrowser(),app=await mount({host:browser.host});try{
-  app.click('#session-kids');app.click('#start');app.elapse(80);
+  app.click('#session-kids');app.click('#start');app.elapse(85);
   assert.deepEqual(browser.spoken,[
+   'Get ready','4','3','2','1',
    'Start','5','4','3','2','1','Rest','5','4','3','2','1',
    'Start','5','4','3','2','1','Rest','5','4','3','2','1','Workout complete'
   ]);
-  assert.equal(browser.tones.length,15,'four phase bells and one completion bell');
+  assert.equal(browser.tones.length,18,'prep, four intervals and completion each ring once');
   assert.match(app.root.innerHTML,/Exercise<br>with kids/);
   assert.deepEqual(app.writes,[]);
  }finally{app.restore();}

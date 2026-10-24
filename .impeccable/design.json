@@ -376,7 +376,7 @@
     {
       "name": "Session selector",
       "refersTo": "session-picker",
-      "description": "Morning / With kids button group with cyan selected state and an immediate workout switch. Fixed kids timer includes both rests.",
+      "description": "Morning / With kids button group with cyan selected state and an immediate workout switch. Fixed kids timer includes five seconds of preparation and both rests.",
       "html": "<div class=\"ds-session-picker\" role=\"group\" aria-label=\"Workout session\"><button aria-label=\"Morning fitness corner\" aria-pressed=\"false\">Morning</button><button aria-label=\"Exercise with kids\" aria-pressed=\"true\">With kids</button></div>",
       "css": ".ds-session-picker{display:flex;gap:4px}.ds-session-picker button{min-height:44px;border:0;border-radius:10px;padding:10px 12px;background:transparent;color:var(--muted,#b8cce1);font:800 1.125rem/1 var(--display)}.ds-session-picker button[aria-pressed=\"true\"]{background:var(--energy,#67dfff);color:var(--canvas,#07172e)}.ds-session-picker button:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px}",
       "kind": "button"
