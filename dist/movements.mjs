@@ -1,4 +1,5 @@
 const DESCRIPTIONS={
+  'jumping-jacks':'Jumping jacks: feet apart with arms up, then feet together with arms down.',
   'platform-pushup':'Platform push-up: hands elevated, feet on the ground, body straight.',
   'hanging-knee-raise':'Controlled knee raises with arms long and no swinging.',
   'bar-hang':'Steady hang from a pull-up bar, arms long and body still.',
@@ -13,9 +14,10 @@ export function movementSprite(id,{preview=false}={}){
 }
 
 // Derive the pose from the workout clock, so pause/resume never restarts a rep.
-// Repetition demos match a three-second cycle; both holds remain still.
+// Morning repetition demos match a three-second cycle; both holds remain still.
 export function movementFrame(id,seconds,{reduce=false}={}){
   if(reduce||!Number.isFinite(seconds)||seconds<0)return 0;
+  if(id==='jumping-jacks')return Math.floor(((seconds+.001)%2)/.5);
   if(['platform-pushup','hanging-knee-raise','squat'].includes(id))return Math.floor(((seconds+.001)%3)/.75);
   return 0;
 }

@@ -130,6 +130,19 @@ test('the real two-minute workout speaks countdowns and cues at boundaries witho
   }finally{app.restore();}
 });
 
+test('kids workout speaks Start, Rest and five-second countdowns for all four phases, then completes',async()=>{
+ const browser=soundBrowser(),app=await mount({host:browser.host});try{
+  app.click('#session-kids');app.click('#start');app.elapse(80);
+  assert.deepEqual(browser.spoken,[
+   'Start','5','4','3','2','1','Rest','5','4','3','2','1',
+   'Start','5','4','3','2','1','Rest','5','4','3','2','1','Workout complete'
+  ]);
+  assert.equal(browser.tones.length,15,'four phase bells and one completion bell');
+  assert.match(app.root.innerHTML,/Exercise<br>with kids/);
+  assert.deepEqual(app.writes,[]);
+ }finally{app.restore();}
+});
+
 test('pause, guidance, hiding the page and ending stop cues; resume speaks only the current phase',async()=>{
   const browser=soundBrowser(),app=await mount({host:browser.host});try{
     app.click('#start');app.elapse(3);assert.equal(browser.spoken.at(-1),'5');

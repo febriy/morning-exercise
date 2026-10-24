@@ -17,7 +17,7 @@ test('repetition demos cycle eight times in 24 seconds while both holds stay sti
 });
 
 test('every demo has a transparent, aligned four-frame strip and an accessible description',async()=>{
-  for(const id of ['platform-pushup','hanging-knee-raise','support-hold','squat']){
+  for(const id of ['platform-pushup','hanging-knee-raise','support-hold','squat','jumping-jacks']){
     const bytes=await readFile(new URL(`../dist/sprites/${id}.png`,import.meta.url));
     assert.equal(bytes.readUInt32BE(16),800);
     assert.equal(bytes.readUInt32BE(20),200);
@@ -25,6 +25,18 @@ test('every demo has a transparent, aligned four-frame strip and an accessible d
     assert.match(movementSprite(id),/role="img" aria-label="[^"]+"/);
     assert.match(movementSprite(id,{preview:true}),/aria-hidden="true"/);
   }
+});
+
+test('jumping jacks loop from the exercise clock and freeze with pause or Reduce Motion',async()=>{
+ assert.deepEqual([0,.5,1,1.5,2].map(t=>movementFrame('jumping-jacks',t)),[0,1,2,3,0]);
+ const app=await mount();try{
+  app.click('#session-kids');app.click('#start');app.elapse(1);
+  assert.equal(app.node('#movement-demo').attributes['data-frame'],'2');
+  app.click('#pause');app.elapse(5);
+  assert.equal(app.node('#movement-demo').attributes['data-frame'],'2');
+  app.reduce(true);assert.equal(app.node('#movement-demo').attributes['data-frame'],'0');
+  app.reduce(false);assert.equal(app.node('#movement-demo').attributes['data-frame'],'2');
+ }finally{app.restore();}
 });
 
 test('workout clock freezes the pose on pause, guidance, hidden tabs and Reduce Motion',async()=>{

@@ -1,6 +1,6 @@
-import {loadPreferences,recipe,duration} from './model.mjs?v=fresh-start-1';
+import {loadPreferences,recipe,kidsRecipe,duration} from './model.mjs?v=kids-session-1';
 import {createTrainer} from './trainer.mjs?v=safari-audio-1';
-import {movementSprite,movementFrame} from './movements.mjs?v=five-moves-1';
+import {movementSprite,movementFrame} from './movements.mjs?v=kids-session-1';
 const trainer=createTrainer(window);
 
 const PREFERENCES='on-the-way.preferences.v1';
@@ -10,7 +10,7 @@ try {
   const saved=localStorage.getItem(PREFERENCES);
   state=loadPreferences(saved,saved===null?localStorage.getItem('on-the-way.v1'):null);
 }catch{state=loadPreferences(null);}
-let active=null,interval=null,editing=false,storageProblem=false;
+let active=null,interval=null,editing=false,storageProblem=false,session='morning';
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 let backgroundPaused=false;
 function syncBackground(){
@@ -29,7 +29,8 @@ function save(){
 }
 function focusScreen(){window.scrollTo(0,0);root.querySelector('#main')?.focus({preventScroll:true});}
 function backgroundControl(){return `<button class="icon-button background-control" id="background-motion" aria-label="${backgroundPaused?'Play':'Pause'} background motion" title="${backgroundPaused?'Play':'Pause'} background motion" ${reducedMotion.matches?'hidden':''}>${icon(backgroundPaused?'play':'pause')}</button>`;}
-function header({back=false}={}){return `<header class="header">${back?`<button class="icon-button" id="back" aria-label="Back to workout">${icon('back')}</button>`:'<span class="wordmark">On the Way</span>'}<div class="header-actions">${backgroundControl()}${!back?`<button class="time-button" id="edit" aria-label="Change time">${icon('edit')}<span>Time</span></button>`:''}</div></header>`;}
+function sessionPicker(){return `<div class="session-picker" role="group" aria-label="Workout session"><button id="session-morning" aria-label="Morning fitness corner" aria-pressed="${session==='morning'}">Morning</button><button id="session-kids" aria-label="Exercise with kids" aria-pressed="${session==='kids'}">With kids</button></div>`;}
+function header({back=false}={}){return `<header class="header">${back?`<button class="icon-button" id="back" aria-label="Back to workout">${icon('back')}</button>`:sessionPicker()}<div class="header-actions">${backgroundControl()}${!back&&session==='morning'?`<button class="time-button" id="edit" aria-label="Change time">${icon('edit')}<span>Time</span></button>`:''}</div></header>`;}
 function render(){
   syncBackground();
   document.querySelector('#overlay').innerHTML='';
@@ -38,7 +39,8 @@ function render(){
   renderToday();
 }
 function bindBackground(){root.querySelector('#background-motion')?.addEventListener('click',()=>{backgroundPaused=!backgroundPaused;syncBackground();});syncBackground();}
-function bindEdit(){root.querySelector('#edit')?.addEventListener('click',()=>{editing=true;render();focusScreen();});bindBackground();}
+function bindSessions(){for(const name of ['morning','kids'])root.querySelector(`#session-${name}`)?.addEventListener('click',()=>{if(session===name)return;session=name;render();focusScreen();});}
+function bindEdit(){bindSessions();root.querySelector('#edit')?.addEventListener('click',()=>{editing=true;render();focusScreen();});bindBackground();}
 function storageNote(){return storageProblem?'<p class="notice" role="status">Your time choice works for this visit, but this browser cannot remember it.</p>':'';}
 function renderSetup(){
   const selectedTime=state.timeBudget;
@@ -57,8 +59,8 @@ function planGroups(plan){
   return [...groups.values()];
 }
 function renderToday(){
-  const plan=recipe(state);
-  root.innerHTML=`<div class="app-shell">${header()}<main id="main" tabindex="-1" class="today-main${planGroups(plan).length===5?' five-movements':''}"><div class="workout-heading"><h1>Your corner<br>routine.</h1><p>Five movements. Go at your pace.</p></div><div class="workout-meta"><span class="duration">${duration(plan.seconds)}</span><span>Rest included</span></div><ol class="workout-card" aria-label="Today’s movements">${planGroups(plan).map((step,index)=>`<li class="movement-row"><span class="station-number" aria-hidden="true">${String(index+1).padStart(2,'0')}</span>${movementSprite(step.id,{preview:true})||`<span class="movement-icon">${icon('rest')}</span>`}<span class="movement-info"><span class="movement-name">${escape(step.title)}</span><span class="movement-station">${escape(step.station)}</span></span><span class="movement-time">${step.count>1?`${step.count} × `:''}<strong>${step.reps||step.seconds}</strong><span>${step.reps?(step.reps===1?'rep':'reps'):'sec'}</span></span></li>`).join('')}</ol><p class="routine-note">Pause for more rest whenever you need.</p>${storageNote()}<div class="start-area"><button class="primary" id="start">Start workout ${icon('play')}</button>${plan.seconds>60?'<button class="text-button" id="tiny">Just one minute today</button>':''}<p class="safety-line">Use only a dry, stable station that fits the instructions. Stop for pain or feeling unwell. Get advice first if a condition or injury limits exercise.</p></div></main></div>`;
+  const kids=session==='kids',plan=kids?kidsRecipe():recipe(state),steps=kids?plan.steps:planGroups(plan);
+  root.innerHTML=`<div class="app-shell">${header()}<main id="main" tabindex="-1" class="today-main${!kids&&steps.length===5?' five-movements':''}"><div class="workout-heading"><h1>${kids?'Exercise<br>with kids.':'Your corner<br>routine.'}</h1><p>${kids?'A little movement, together.':'Five movements. Go at your pace.'}</p></div><div class="workout-meta"><span class="duration">${duration(plan.seconds)}</span><span>Rest included</span></div><ol class="workout-card" aria-label="${kids?'Exercise with kids steps':'Today’s movements'}">${steps.map((step,index)=>`<li class="movement-row"><span class="station-number" aria-hidden="true">${String(index+1).padStart(2,'0')}</span>${movementSprite(step.id,{preview:true})||`<span class="movement-icon">${icon('rest')}</span>`}<span class="movement-info"><span class="movement-name">${escape(step.title)}</span><span class="movement-station">${escape(step.station)}</span></span><span class="movement-time">${step.count>1?`${step.count} × `:''}<strong>${step.reps||step.seconds}</strong><span>${step.reps?(step.reps===1?'rep':'reps'):'sec'}</span></span></li>`).join('')}</ol><p class="routine-note">Pause for more rest whenever you need.</p>${!kids?storageNote():''}<div class="start-area"><button class="primary" id="start">Start workout ${icon('play')}</button>${!kids&&plan.seconds>60?'<button class="text-button" id="tiny">Just one minute today</button>':''}<p class="safety-line">${kids?'Make a little space. Go at your own pace.': 'Use only a dry, stable station that fits the instructions. Stop for pain or feeling unwell. Get advice first if a condition or injury limits exercise.'}</p></div></main></div>`;
   bindEdit();
   root.querySelector('#start')?.addEventListener('click',()=>start(plan));
   root.querySelector('#tiny')?.addEventListener('click',()=>start(recipe(state,{tiny:true})));
@@ -99,7 +101,7 @@ function pause(){if(!active)return;active.paused=true;trainer.stop();renderPlaye
 function renderPlayer(){
   syncBackground();
   const step=active.steps[active.index],next=active.steps[active.index+1],demo=movementSprite(step.id);
-  root.innerHTML=`<div class="app-shell player-shell${step.kind==='rest'?' is-rest':''}${active.paused?' is-paused':''}"><header class="header"><span class="wordmark">On the Way</span><span class="step-count">${active.index+1} of ${active.steps.length}</span></header><main id="main" tabindex="-1"><div class="player-heading"><h1>${escape(step.title)}</h1><p class="player-station">${escape(step.station)}</p></div><div class="movement-stage${demo?' has-demo':''}">${demo}<div class="timer-ring" id="ring"><div><span id="clock" class="clock" role="timer" aria-label="Time remaining in this movement"></span><span class="player-status" role="status">${active.paused?'Paused':'Keep it easy'}</span></div></div></div><p class="cue">${active.paused?'Feet down. Rest, and resume only when ready.':escape(step.cue)}</p><details class="form-cue"><summary>A little guidance</summary><p>${escape(step.tip)}</p></details><p class="next-step">${next?`Next: ${escape(next.title)}`:'Then you’re done.'}</p><div class="player-controls"><button class="primary" id="pause">${active.paused?'Resume':'Pause'} ${icon(active.paused?'play':'pause')}</button><button class="text-button" id="stop">End workout</button><p id="remaining" class="remaining"></p></div></main></div>`;
+  root.innerHTML=`<div class="app-shell player-shell${step.kind==='rest'?' is-rest':''}${active.paused?' is-paused':''}"><header class="header"><span class="wordmark">${session==='kids'?'With kids':'On the Way'}</span><span class="step-count">${active.index+1} of ${active.steps.length}</span></header><main id="main" tabindex="-1"><div class="player-heading"><h1>${escape(step.title)}</h1><p class="player-station">${escape(step.station)}</p></div><div class="movement-stage${demo?' has-demo':''}">${demo}<div class="timer-ring" id="ring"><div><span id="clock" class="clock" role="timer" aria-label="Time remaining in this movement"></span><span class="player-status" role="status">${active.paused?'Paused':'Keep it easy'}</span></div></div></div><p class="cue">${active.paused?'Feet down. Rest, and resume only when ready.':escape(step.cue)}</p><details class="form-cue"><summary>A little guidance</summary><p>${escape(step.tip)}</p></details><p class="next-step">${next?`Next: ${escape(next.title)}`:'Then you’re done.'}</p><div class="player-controls"><button class="primary" id="pause">${active.paused?'Resume':'Pause'} ${icon(active.paused?'play':'pause')}</button><button class="text-button" id="stop">End workout</button><p id="remaining" class="remaining"></p></div></main></div>`;
   root.querySelector('#pause').onclick=()=>{if(!active.paused){pause();return;}trainer.unlock();active.paused=false;active.tick=Date.now();trainer.begin(active.steps[active.index],active.steps[active.index].seconds-active.stepSpent);renderPlayer();};
   root.querySelector('#stop').onclick=()=>finish(false);
   root.querySelector('details').ontoggle=e=>{if(e.currentTarget.open&&active&&!active.paused){active.paused=true;trainer.stop();root.querySelector('#pause').innerHTML=`Resume ${icon('play')}`;root.querySelector('.player-status').textContent='Paused';root.querySelector('.cue').textContent='Feet down. Rest, and resume only when ready.';}};

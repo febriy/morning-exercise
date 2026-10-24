@@ -1,15 +1,16 @@
 # Morning Exercise
 
-A personal web app for building an exercise habit at a Singapore fitness corner during a morning coffee walk. Success is opening the app, seeing an approachable workout and starting it immediately.
+A personal web app for building an exercise habit at a Singapore fitness corner during a morning coffee walk, and at home with his kids. Success is opening the app, seeing an approachable workout and starting it immediately.
 
 ## Constraints
 
 - Phone first, often outdoors. Instructions must be readable and controls easy to tap.
 - No onboarding, account, goal picker, dashboard, history screen or workout saving. The sole goal is building the habit.
-- Finishing or ending returns immediately to the original five-movement overview with **Start workout** ready. There is no completion page, effort feedback, saved-visit message, daily lockout, progression or automatic recovery routine. Each start resets the timer and movement order.
+- Finishing or ending returns immediately to the selected session’s original overview with **Start workout** ready. There is no completion page, effort feedback, saved-visit message, daily lockout, progression or automatic recovery routine. Each start resets the timer and movement order.
 - The default two-minute routine has exactly five movements: 8 platform push-ups, 8 knee raises, a 10-second pull-up bar hang, a 10-second parallel-bar hold and 8 squats. Preparation and four station rests are included. The one-minute option reduces reps and holds.
-- Only the chosen time is remembered on this browser. Legacy visits and feedback drafts are ignored; existing stored records are left untouched. Without browser storage, workouts still start and reset normally.
-- No floor exercises, pull-ups, dips, jumps or drops. Keep movement guidance, rest breaks, Pause, and stop-for-pain instructions.
+- A header selector switches between **Morning** and **With kids** without setup. **Exercise with kids** is one fixed 80-second round: jumping jacks 20 seconds, rest 20 seconds, squats 20 seconds, rest 20 seconds. No preparation phase or extra rounds. Completion and End return to this same selected session, ready to restart. Selection lasts for the current page visit only.
+- Only the chosen morning time is remembered on this browser. Legacy visits and feedback drafts are ignored; existing stored records are left untouched. Without browser storage, workouts still start and reset normally.
+- The morning session has no floor exercises, pull-ups, dips, jumps or drops. The home session includes the explicitly requested jumping jacks. Keep movement guidance, rest breaks, Pause, and stop-for-pain instructions.
 - Bell, voice cues, pixel demonstrations, background motion controls and Reduce Motion remain available.
 - Tone: calm, direct, encouraging without pressure or invented fitness claims. Familiar operation with one primary action per screen.
 - Visual identity: Ninja Arena, the user's chosen athlete/obstacle-arena style with navy, red and cyan, oversized athletic type and moving course lines.

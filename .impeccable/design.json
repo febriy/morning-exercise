@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-24T08:22:29.107259Z",
+  "generatedAt": "2026-10-24T11:56:57.514391+00:00",
   "title": "Design System: On the Way — Ninja Arena",
   "extensions": {
     "colorMeta": {
@@ -372,6 +372,14 @@
       "description": "Familiar disclosure; the app pauses the workout when opened.",
       "html": "<details class=\"ds-guidance\"><summary>A little guidance</summary><p>Use a dry, stable station that fits the instructions.</p></details>",
       "css": ".ds-guidance{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.875rem;color:var(--muted,#b8cce1)}.ds-guidance summary{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:8px;list-style:none;cursor:pointer}.ds-guidance summary::-webkit-details-marker{display:none}.ds-guidance summary:after{content:\"\";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translateY(-2px)}.ds-guidance[open] summary:after{transform:rotate(225deg) translate(-2px,-1px)}.ds-guidance summary:hover{background:var(--soft,#173651);color:var(--ink,#fff)}.ds-guidance summary:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px;}.ds-guidance p{padding:16px;background:var(--soft,#173651);color:var(--ink,#fff);border-radius:12px;line-height:1.5;margin:4px 0 0}"
+    },
+    {
+      "name": "Session selector",
+      "refersTo": "session-picker",
+      "description": "Morning / With kids button group with cyan selected state and an immediate workout switch. Fixed kids timer includes both rests.",
+      "html": "<div class=\"ds-session-picker\" role=\"group\" aria-label=\"Workout session\"><button aria-label=\"Morning fitness corner\" aria-pressed=\"false\">Morning</button><button aria-label=\"Exercise with kids\" aria-pressed=\"true\">With kids</button></div>",
+      "css": ".ds-session-picker{display:flex;gap:4px}.ds-session-picker button{min-height:44px;border:0;border-radius:10px;padding:10px 12px;background:transparent;color:var(--muted,#b8cce1);font:800 1.125rem/1 var(--display)}.ds-session-picker button[aria-pressed=\"true\"]{background:var(--energy,#67dfff);color:var(--canvas,#07172e)}.ds-session-picker button:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px}",
+      "kind": "button"
     }
   ],
   "narrative": {

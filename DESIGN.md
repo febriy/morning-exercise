@@ -81,6 +81,15 @@ spacing:
   "64": "64px"
   "80": "80px"
 components:
+  session-picker:
+    backgroundColor: "transparent"
+    textColor: "{colors.muted}"
+    rounded: "{rounded.text-control}"
+    padding: "10px 12px"
+    height: "44px"
+  session-picker-selected:
+    backgroundColor: "{colors.energy}"
+    textColor: "{colors.canvas}"
   button-primary:
     backgroundColor: "{colors.action}"
     textColor: "{colors.ink}"
@@ -136,7 +145,7 @@ components:
 
 **Creative North Star: "Ninja Arena"**
 
-Ninja Arena gives a small morning workout the presence of an athlete’s arena entrance. Midnight navy, signal red, ice cyan and oversized condensed type carry the energy; clear instructions and familiar controls keep the operation calm and direct.
+Ninja Arena gives a small personal workout the presence of an athlete’s arena entrance. Midnight navy, signal red, ice cyan and oversized condensed type carry the energy; clear instructions and familiar controls keep the operation calm and direct.
 
 Cropped course rails move at the edge of the view. The foreground is a disciplined reading and action layer: aligned numbered stations, exact quantities, one primary action, and unchanged pixel-art movement demos. The identity is athletic without competition, scores or extra tasks.
 
@@ -154,7 +163,7 @@ The palette is a dark arena with high-contrast reading and deliberately separate
 - **Signal Red** (`action`, `action-hover`): primary Start, Pause, Resume and return controls; white labels meet 4.59:1 contrast on the default red.
 
 ### Secondary
-- **Ice Cyan** (`energy`, `focus`): station numbers, metadata rule, selected time choice, active progress, selection, caret and keyboard focus.
+- **Ice Cyan** (`energy`, `focus`): station numbers, metadata rule, selected session and time choices, active progress, selection, caret and keyboard focus.
 
 ### Neutral
 - **Midnight Navy** (`canvas`): page, background scene and dark text on cyan.
@@ -178,7 +187,7 @@ The upright hierarchy uses the recorded headline, button, duration, dose and cou
 
 ## Layout
 
-Phone first: a centered shell (maximum 520px) uses 24px side gutters, at least 100svh height and bottom safe-area padding. The header is at least 76px high. The overview flows from hero to metadata, five-row circuit and Start area. Normal rows are at least 68px high with 10px vertical padding; the Start area uses remaining vertical space without overlapping content.
+Phone first: a centered shell (maximum 520px) uses 24px side gutters, at least 100svh height and bottom safe-area padding. The header is at least 76px high. The overview flows from hero to metadata, five-row morning circuit or four-row kids sequence, and Start area. Normal rows are at least 68px high with 10px vertical padding; the Start area uses remaining vertical space without overlapping content.
 
 At widths below 375px, gutters become 20px, row gaps 8px, static previews 32px and time choices switch from four columns to two. At heights up to 720px and widths below 900px, the header becomes 56px, rows at least 52px with 6px vertical padding, surrounding gaps tighten and primary controls become at least 58px high. Allow vertical scrolling: the 320×568 view requires it, with no horizontal overflow. The 390×844 and 375×667 home views fit all five movements and Start.
 
@@ -202,13 +211,17 @@ The brand mark is two red diagonal strokes. Course geometry uses a triple oval r
 
 Primary controls are full-width red with white uppercase upright condensed labels, a trailing 24px SVG icon, at least 64px height and standard control corners. Hover darkens red; press also scales to .985. The transition is 160ms ease-out. Compact phone height lowers the minimum height to 58px. Disabled buttons use .45 opacity.
 
-Text, Time and icon actions are transparent with tinted secondary text; hover uses the soft arena surface and white text. Text and icon targets are at least 44px. The header carries the italic wordmark, background-motion toggle and Time control; a back action replaces the wordmark during time editing. There is no separate navigation destination list.
+Text, Time and icon actions are transparent with tinted secondary text; hover uses the soft arena surface and white text. Text and icon targets are at least 44px. The overview header carries the Morning / With kids selector and background-motion toggle. Time appears only for Morning; time editing replaces the selector with Back. The player carries the italic wordmark or With kids label. Below 375px, the Time text is hidden while its icon and accessible name remain.
 
 Keyboard focus is a 3px cyan outline offset by 4px. Selection is cyan with navy text; the caret is cyan. Keep these native interaction treatments on future controls.
 
+### Session Selector
+
+A native button group uses Morning and With kids, with full accessible names and `aria-pressed` on each button. The selected choice uses cyan with navy text; the other choice is transparent with tinted text and a soft hover surface. Buttons use 800 upright condensed 1.125rem type, 10px corners, 10px by 12px padding, 4px gap and at least 44px height. Selection changes the visible workout directly without setup and keeps one Start action.
+
 ### Circuit Rows
 
-A continuous transparent list uses numbered cyan stations, a pale square static sprite, a two-line label and a right-aligned condensed dose. A cyan 3px rule separates metadata from the first row; thin arena lines divide every movement. Static previews are 38px normally. Preserve the exact five movements and their dose order, with one primary Start below.
+A continuous transparent list uses numbered cyan stations, a pale square static sprite, a two-line label and a right-aligned condensed dose. A cyan 3px rule separates metadata from the first row; thin arena lines divide every movement. Static previews are 38px normally. Preserve the exact five morning movements and dose order. The kids overview shows all four timed phases, including both rests; never deduplicate them. Both overviews have one primary Start below.
 
 ### Time Choices
 
@@ -216,13 +229,13 @@ Time choices are native radio inputs inside visible labels, with four equal colu
 
 ### Countdown, Guidance and Sprites
 
-The timer is a surface-colored panel with centered upright countdown and supporting status. Its bottom cyan strip shows active progress; rest uses tinted secondary and paused status turns cyan. Demo steps place the existing square sprite beside it (168px, or 128px below 375px); narrow demo timers are at least 152px high, other panels at least 176px. Sprites remain pixelated and square, using unchanged four-frame strips on a pale ground. Frame selection follows exercise time; it stops when the workout is paused.
+The timer is a surface-colored panel with centered upright countdown and supporting status. Its bottom cyan strip shows active progress; rest uses tinted secondary and paused status turns cyan. Demo steps place the existing square sprite beside it (168px, or 128px below 375px); narrow demo timers are at least 152px high, other panels at least 176px. Sprites remain pixelated and square, using transparent four-frame strips on a pale ground. Frame selection follows exercise time; it stops when the workout is paused.
 
 The guidance disclosure has a 44px summary target and a simple chevron. Opening it reveals a soft arena panel and pauses the workout. The single red Pause/Resume action follows cue and next-step text; End workout remains secondary.
 
 ### Returning to the workout and Motion
 
-Finishing or ending returns directly to the same five-movement overview with **Start workout** ready. No completion page, saved-visit state, effort feedback or recovery substitution interrupts the loop. The completion bell and voice remain, with a visually hidden status announcement. Time choice is the only remembered preference.
+Finishing or ending returns directly to the same selected session’s overview with **Start workout** ready. No completion page, saved-visit state, effort feedback or recovery substitution interrupts the loop. The completion bell and voice remain, with a visually hidden status announcement. Morning time choice is the only remembered preference; session selection lasts for the current page visit. The kids sequence is fixed at four 20-second phases, totaling 80 seconds. Its jumping-jacks demo loops every two seconds; the squat demo retains its three-second cycle.
 
 Three bounded background elements share one course-drift animation: 24 seconds, ease-in-out, alternating between small opposing translations. This creates one slow peripheral drift. The background toggle controls it; Reduce Motion removes transitions and animations and hides the motion toggle. Hidden tabs stop the background and pause an active workout. Screen changes focus the main landmark; countdown updates do not move focus.
 
