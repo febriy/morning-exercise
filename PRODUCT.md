@@ -12,6 +12,7 @@ A personal web app for building an exercise habit at a Singapore fitness corner 
 - No floor exercises, pull-ups, dips, jumps or drops.
 - Tone: calm, direct, encouraging without pressure or invented fitness claims.
 - Familiar, Apple-like simplicity; one primary action per screen.
+- Visual identity: the user chose Ninja Arena, an outrageous athlete/obstacle-arena style with navy, red and cyan, oversized athletic type and moving course lines. Keep the operation simple within that bold visual world.
 
 ## Delivery
 

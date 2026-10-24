@@ -1,60 +1,96 @@
 ---
-name: On the Way
-description: Bright morning energy for a small, approachable exercise habit.
+name: On the Way — Ninja Arena
+description: Broadcast-sport energy for a simple fitness-corner routine.
 colors:
-  ink: "#153d28"
-  muted: "#405c35"
-  green: "#173f29"
-  green-hover: "#0e3020"
-  energy: "#d4f458"
-  canvas: "#edf5d5"
-  surface: "#fff"
-  line: "#d7e3ce"
-  soft: "#e2efc3"
-  focus: "#245c35"
-  orbit: "#e1edac"
-  ground: "#deedb6"
+  "canvas": "#07172e"
+  "surface": "#102742"
+  "ink": "#ffffff"
+  "muted": "#b8cce1"
+  "line": "#304862"
+  "soft": "#173651"
+  "action": "#e51f34"
+  "action-hover": "#ce182c"
+  "energy": "#67dfff"
+  "focus": "#67dfff"
+  "preview": "#dcebf3"
+  "course-rail": "#245b77"
+  "course-red": "#8e2338"
+  "course-ground": "#102a45"
+  "notice-bg": "#473315"
+  "notice-text": "#ffdf9e"
 typography:
   display:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif'
-    fontSize: "2.75rem"
-    fontWeight: 750
-    lineHeight: 1.02
-    letterSpacing: "-.035em"
+    fontFamily: "\"Barlow Condensed\", \"Arial Narrow\", sans-serif"
+    fontSize: "clamp(3.5rem, 17vw, 5.5rem)"
+    fontWeight: 900
+    lineHeight: 0.92
+    letterSpacing: "-.02em"
   headline:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif'
-    fontSize: "2rem"
-    fontWeight: 650
-    lineHeight: 1.15
-    letterSpacing: "-.035em"
+    fontFamily: "\"Barlow Condensed\", \"Arial Narrow\", sans-serif"
+    fontSize: "1.75rem"
+    fontWeight: 800
+    lineHeight: 1.05
   body:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif'
+    fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
     fontSize: "1rem"
-    lineHeight: 1.55
+    lineHeight: 1.5
+  movement-label:
+    fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    fontSize: ".875rem"
+    fontWeight: 650
+    lineHeight: 1.3
+  button-label:
+    fontFamily: "\"Barlow Condensed\", \"Arial Narrow\", sans-serif"
+    fontSize: "1.625rem"
+    fontWeight: 800
+    lineHeight: 1.1
+  duration:
+    fontFamily: "\"Barlow Condensed\", \"Arial Narrow\", sans-serif"
+    fontSize: "1.875rem"
+    fontWeight: 800
+    lineHeight: 1
+  dose:
+    fontFamily: "\"Barlow Condensed\", \"Arial Narrow\", sans-serif"
+    fontSize: "2.125rem"
+    fontWeight: 800
+    lineHeight: 0.95
+  countdown:
+    fontFamily: "\"Barlow Condensed\", \"Arial Narrow\", sans-serif"
+    fontSize: "6rem"
+    fontWeight: 800
+    lineHeight: 0.95
+    letterSpacing: "-.02em"
 rounded:
-  small: "8px"
-  text-control: "10px"
-  control: "12px"
-  group: "16px"
-  circle: "50%"
+  "preview": "6px"
+  "small": "8px"
+  "text-control": "10px"
+  "control": "12px"
+  "panel": "16px"
 spacing:
-  micro: "4px"
-  small: "8px"
-  control: "12px"
-  standard: "16px"
-  group: "20px"
-  gutter: "24px"
-  section: "32px"
-  spacious: "40px"
+  "4": "4px"
+  "8": "8px"
+  "10": "10px"
+  "12": "12px"
+  "16": "16px"
+  "20": "20px"
+  "24": "24px"
+  "28": "28px"
+  "32": "32px"
+  "36": "36px"
+  "48": "48px"
+  "64": "64px"
+  "80": "80px"
 components:
   button-primary:
-    backgroundColor: "{colors.green}"
-    textColor: "{colors.surface}"
-    rounded: "{rounded.group}"
+    backgroundColor: "{colors.action}"
+    textColor: "{colors.ink}"
+    typography: "{typography.button-label}"
+    rounded: "{rounded.control}"
     padding: "16px 22px"
+    height: "64px"
     width: "100%"
   button-primary-hover:
-    backgroundColor: "{colors.green-hover}"
+    backgroundColor: "{colors.action-hover}"
   button-text:
     backgroundColor: "transparent"
     textColor: "{colors.muted}"
@@ -64,154 +100,158 @@ components:
     backgroundColor: "transparent"
     textColor: "{colors.muted}"
     rounded: "{rounded.control}"
-    padding: "10px 12px"
-  routine-group:
+    padding: "10px"
+    size: "44px"
+  routine-row:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    padding: "10px 0"
+    height: "68px"
+  countdown-panel:
     backgroundColor: "{colors.surface}"
-    rounded: "{rounded.group}"
-    padding: "0 20px"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.panel}"
+    height: "176px"
+    width: "100%"
   time-option:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.muted}"
     rounded: "{rounded.control}"
+    height: "64px"
+  guidance-panel:
+    backgroundColor: "{colors.soft}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.control}"
+    padding: "16px"
+  feedback-option:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.control}"
+    padding: "16px 8px"
+    height: "64px"
+  completion-symbol:
+    backgroundColor: "{colors.energy}"
+    textColor: "{colors.canvas}"
+    rounded: "{rounded.panel}"
+    size: "64px"
   time-option-selected:
-    backgroundColor: "{colors.green}"
-    textColor: "{colors.surface}"
+    backgroundColor: "{colors.energy}"
+    textColor: "{colors.canvas}"
+    rounded: "{rounded.control}"
+    height: "64px"
 ---
 
-# Design System: On the Way
+# Design System: On the Way — Ninja Arena
 
 ## Overview
 
-**Creative North Star: "Bright morning energy"**
+**Creative North Star: "Ninja Arena"**
 
-The existing phone-first exercise interface has an energetic lime morning atmosphere. Deep forest text and controls keep the screen legible outdoors; the solid white routine group provides a stable reading surface. Preserve the familiar single-column composition, direct language, workout content and immediate path from opening the app to starting a workout.
+Ninja Arena gives a small morning workout the presence of an athlete’s arena entrance. Midnight navy, signal red, ice cyan and oversized condensed type carry the energy; clear instructions and familiar controls keep the operation calm and direct.
 
-Three large, cropped CSS shapes move slowly behind the interface. Their motion is peripheral and settles as soon as a workout begins, including while that workout is paused. The backdrop remains CSS geometry. Small pixel-art movement demos supply practical guidance in the foreground.
+Cropped course rails move at the edge of the view. The foreground is a disciplined reading and action layer: aligned numbered stations, exact quantities, one primary action, and unchanged pixel-art movement demos. The identity is athletic without competition, scores or extra tasks.
 
 **Key Characteristics:**
-- Bright lime atmosphere with forest-green functional contrast.
-- One solid white routine group and one clear primary action.
-- Familiar system typography with a heavier workout heading.
-- Slow geometric background motion that yields to exercising and user preferences.
+- Midnight navy with white reading text, red actions and cyan station markers.
+- Black italic display type paired with upright condensed numerals and system body text.
+- Flat, aligned movement rows and rectangular timing panels.
+- One slow course drift that stops throughout active and paused workouts.
 
 ## Colors
 
-Lime provides the energy; forest greens carry reading and action; pale green and white separate background from content. The frontmatter records source values.
+The palette is a dark arena with high-contrast reading and deliberately separated action and state colors. Frontmatter values are normative.
 
 ### Primary
-- **Morning Lime** (`energy`): the filled background circle, selection highlight and primary-button icon accent.
-- **Forest Action** (`green`): primary actions, selected time choices, movement icons and timer progress. Its deeper hover variant is reserved for interactive response.
+- **Signal Red** (`action`, `action-hover`): primary Start, Pause, Resume and return controls; white labels meet 4.59:1 contrast on the default red.
+
+### Secondary
+- **Ice Cyan** (`energy`, `focus`): station numbers, metadata rule, selected time choice, active progress, completion acknowledgment, selection, caret and keyboard focus.
 
 ### Neutral
-- **Forest Ink** (`ink`): headings, body cues and feedback labels.
-- **Leaf Text** (`muted`): supporting copy, station labels, metadata and secondary actions.
-- **Morning Canvas** (`canvas`): page background and timer interior.
-- **White Surface** (`surface`): opaque routine, time-choice and feedback surfaces.
-- **Leaf Line** (`line`): borders, dividers and unfilled timer track.
-- **Soft Leaf** (`soft`): guidance panels, completion symbol and secondary-control hover.
-- **Orbit Leaf** (`orbit`) and **Ground Leaf** (`ground`): background ring and low ellipse.
-- **Forest Focus** (`focus`): keyboard focus outlines.
+- **Midnight Navy** (`canvas`): page, background scene and dark text on cyan.
+- **Arena Surface** (`surface`) and **Soft Arena** (`soft`): timer, unselected time choices, feedback and opened guidance; secondary hover surfaces.
+- **White Ink** (`ink`), **Tinted Secondary** (`muted`) and **Arena Line** (`line`): primary reading, supporting copy and thin dividers. Scrollbars use line over canvas.
+- **Pale Demo Ground** (`preview`): separates existing pixel sprites from the dark arena.
+- **Course Rail**, **Course Red** and **Course Ground**: restrained background geometry, distinct from the functional foreground.
+- **Notice Ground** and **Notice Text**: warm storage and safety notices.
 
-**The Readable Foreground Rule.** Keep routine content on its opaque white surface and functional text in the forest palette; the moving scene stays behind the interface.
+**The Action Color Rule.** Red identifies the primary action; cyan identifies station order, selection, focus and active progress.
 
 ## Typography
 
-**Display and Body Font:** the incumbent system stack recorded in the frontmatter. The current Operate scope explicitly preserves this familiar typography.
+**Display Font:** self-hosted Barlow Condensed, with Arial Narrow and sans-serif fallbacks. Black Italic (900) supplies the hero and wordmark; upright ExtraBold (800) supplies actions, quantities, countdowns, duration and section titles. Font synthesis is disabled.
 
-**Character:** compact, direct and readable. The heavier workout heading supplies emphasis while tabular numbers keep quantities and countdowns steady.
+**Body Font:** the system stack recorded in frontmatter. Supporting text remains upright and readable outdoors.
 
-### Hierarchy
-- **Workout display:** the `display` role (44px at the default browser font size). At heights up to 720px and widths 360–699px it becomes 36px; at heights up to 620px and widths below 360px the final override is 32px. Weight, tracking and line height remain unchanged.
-- **Page headline:** the `headline` role (32px), used for setup, feedback and completion. The narrow, short viewport override reduces the base heading to 28px.
-- **Player title:** 28px, weight 650, line height 1.15 and tracking −.035em; reduced to 24px at heights up to 720px and widths below 700px.
-- **Section title:** 20px, weight 600, line height 1.3 and tracking −.02em.
-- **Countdown:** 64px, weight 500, line height 1.15, tracking −.035em and tabular figures; reduced to 52px in the compact player.
-- **Body:** 16px with paragraph line height 1.55; player cues use 1.6. Supporting text uses 14px, station text 13px and small safety/unit text 12px.
-- **Movement label:** 15px, weight 600, line height 1.35; reduced to 14px below 360px wide. Quantities use 24px, weight 750 and line height 1.1.
+The hero is uppercase, tightly tracked and deliberately oversized. Its default responsive scale is the frontmatter `display`; the home heading grows to 6rem on desktop. Setup uses 3.75rem; the player uses 3.5rem. Compact phone height reduces home and completion headings to 3.5rem and player headings to 2.75rem. The wordmark is 1.375rem italic.
 
-The inherited system-family display is an observed, explicitly preserved implementation choice, not a new display-face precedent for unrelated surfaces.
+The upright hierarchy uses the recorded headline, button, duration, dose and countdown roles. A countdown beside a demo is 4.5rem, reducing to 3.75rem on narrow phones. All quantities and timers use tabular numerals. Body cues are 1rem; supporting copy ranges from .75rem to .9375rem. Movement station labels are .75rem, dose units .6875rem; narrow phones reduce movement labels to .8125rem and station labels to .6875rem. Preserve the distinction between expressive titles and plain instructions.
 
 ## Layout
 
-Keep the single-column shell at a maximum width of 480px with 24px side gutters, reduced to 20px below 360px wide. The shell fills at least the small viewport height and includes bottom safe-area padding. The default header is at least 88px high, reducing to 72px on compact phone heights and 64px on narrow, short phones.
+Phone first: a centered shell (maximum 520px) uses 24px side gutters, at least 100svh height and bottom safe-area padding. The header is at least 76px high. The overview flows from hero to metadata, five-row circuit and Start area. Normal rows are at least 68px high with 10px vertical padding; the Start area uses remaining vertical space without overlapping content.
 
-The routine is one grouped list, with 20px horizontal padding, 84px minimum movement rows and thin dividers. Below 360px wide, group padding reduces to 16px and row gaps to 10px. Compact-height overrides tighten rows and surrounding spacing; the narrowest, shortest case uses 72px minimum rows with 10px vertical padding. Preserve scrolling when content needs more room.
+At widths below 375px, gutters become 20px, row gaps 8px, static previews 32px and time choices switch from four columns to two. At heights up to 720px and widths below 900px, the header becomes 56px, rows at least 52px with 6px vertical padding, surrounding gaps tighten and primary controls become at least 58px high. Allow vertical scrolling: the 320×568 view requires it, with no horizontal overflow. The 390×844 and 375×667 home views fit all five movements and Start.
 
-The Start area follows content and uses available vertical space on phones. At 700px and wider, the centered shell gains 20px top padding, the workout gains 24px top padding and Start follows with a 16px top margin. Time choices form four equal columns, becoming two columns below 360px wide.
+At 900px and wider, only the overview expands into two work areas within a maximum 1180px shell, with 48px side padding and an 80px column gap. The hero and action occupy the left; duration, circuit and note occupy the right. Rows become at least 86px high and previews 48px. Setup, player and completion retain their narrow, centered shells.
 
-**The Immediate Start Rule.** The default screen remains the workout overview with its Start action. Background controls must not add an introductory step.
+**The Immediate Start Rule.** Show the workout and its single primary Start action without adding an introductory step.
 
 ## Elevation & Depth
 
-The interface has no box shadows. Depth comes from opaque white surfaces, pale-green tonal separation, thin borders and cropped background geometry. The fixed scene has strict containment, clips overflow, ignores pointer events and sits below the positioned app. No blur or translucent reading surface is used.
+No box shadows or backdrop blur. Depth comes from navy tonal separation, pale demo grounds, hairline row dividers and large cropped course geometry. The fixed background is clipped, contained, pointer-inert and below the app; it is never a reading surface or an overlay on controls.
 
 ## Shapes
 
-Controls and feedback rows use gently curved corners; routine groups and primary buttons use the larger group radius. Circles belong to the timer, completion symbol and background scene.
+Rectangular controls with modest curved corners define the foreground. Preview frames use the smallest radius, controls the standard radius, and timer panels and completion symbols the panel radius. Rows remain unboxed. The countdown is a broad rectangle with a 6px bottom progress strip, despite the legacy timer name in source.
 
-The background has exactly three bounded CSS layers: a filled circle (540 × 540px), a ring (850 × 850px with a 54px stroke), and a low ellipse (720 × 400px). They are cropped by the fixed viewport and retain their source positions and transforms.
+The brand mark is two red diagonal strokes. Course geometry uses a triple oval rail (1080×600px, 2px strokes), red bar and thick lower loop, rotated across the margins. These are background course markings, not component borders or floating cards. The icon repeats the navy/red diagonal-stroke identity.
 
 ## Components
 
-### Buttons
+### Buttons and Header
 
-Primary actions are full-width forest controls with white labels, lime SVG icons, at least 58px height and the group radius. Hover-capable pointers receive the deeper forest background; pressing scales the control to .985. Background and transform transitions take 160ms with ease-out.
+Primary controls are full-width red with white uppercase upright condensed labels, a trailing 24px SVG icon, at least 64px height and standard control corners. Hover darkens red; press also scales to .985. The transition is 160ms ease-out. Compact phone height lowers the minimum height to 58px. Disabled buttons use .45 opacity.
 
-Secondary text actions remain transparent and at least 48px high. Icon and Time controls have at least 44px targets; icons are inline stroked SVG. Keyboard focus uses a 3px forest outline with a 4px offset. Disabled buttons use .45 opacity.
+Text, Time and icon actions are transparent with tinted secondary text; hover uses the soft arena surface and white text. Text and icon targets are at least 44px. The header carries the italic wordmark, background-motion toggle and Time control; a back action replaces the wordmark during time editing. There is no separate navigation destination list.
 
-### Routine Group
+Keyboard focus is a 3px cyan outline offset by 4px. Selection is cyan with navy text; the caret is cyan. Keep these native interaction treatments on future controls.
 
-One opaque white list contains the movements. Each strength row pairs a static 48px pixel-art movement preview and station label with a right-aligned quantity. Previews reduce to 40px below 375px wide. Recovery rows retain the small line icon. Borders separate rows; the final row has no divider.
+### Circuit Rows
 
-### Five-Movement Overview
+A continuous transparent list uses numbered cyan stations, a pale square static sprite, a two-line label and a right-aligned condensed dose. A cyan 3px rule separates metadata from the first row; thin arena lines divide every movement. Static previews are 38px normally. Preserve the exact five movements and their dose order, with one primary Start below.
 
-Normal and small routines retain one white grouped list for all five movements, with 64px minimum rows, 10px vertical padding, 40px static pixel previews, 14px movement names and 12px station text. The existing right-aligned counts remain prominent. The heading uses the existing 32px size; metadata begins 16px below its supporting copy. Routine notes use 12px vertical spacing and Start retains its 58px target. Recovery lists keep their existing two-movement layout. Keep the five-movement order and user-specified 8/8/10 seconds/10 seconds/8 targets in the normal view; counts do not change with stage.
+### Time Choices and Feedback
 
-### Time Choices
+Time choices are native radio inputs inside visible labels, with four equal columns normally. Unselected choices use the arena surface, line border and tinted label; selection fills cyan with navy text. Focus outlines the whole label. Choices are at least 64px high.
 
-Native radio inputs sit inside visible labels. Unselected choices are white with leaf borders; selection fills the choice with forest green, white text and weight 600. Each choice is at least 56px high. Keyboard focus outlines the entire label.
+Feedback offers three equal-column surface buttons with white system labels, line borders and at least 64px height. Hover changes the border to cyan and ground to soft arena. The pain option remains a separate text action. No independent chip or text-entry component is currently shipped.
 
-### Player, Feedback and Notices
+### Countdown, Guidance and Sprites
 
-The centered player uses a functional circular countdown (220px diameter, 172px in compact phone layouts) with a 10px total difference between outer and inner diameter. Forest progress and the leaf track surround a solid canvas interior. One cue, optional guidance, next movement and Pause follow the countdown. Guidance expands into a soft-leaf panel and pauses the active workout.
+The timer is a surface-colored panel with centered upright countdown and supporting status. Its bottom cyan strip shows active progress; rest uses tinted secondary and paused status turns cyan. Demo steps place the existing square sprite beside it (168px, or 128px below 375px); narrow demo timers are at least 152px high, other panels at least 176px. Sprites remain pixelated and square, using unchanged four-frame strips on a pale ground. Frame selection follows exercise time; it stops when the workout is paused.
 
-Feedback choices are three opaque white, bordered controls in an equal-column row, each at least 66px high. Labels are 15px semibold; the separate pain option remains a full-width text action. Hover-capable pointers get the shipped subtle border/background change. Warm notices carry storage and safety messages; preserve readable safety copy and every existing option.
+The guidance disclosure has a 44px summary target and a simple chevron. Opening it reveals a soft arena panel and pauses the workout. The single red Pause/Resume action follows cue and next-step text; End workout remains secondary.
 
-### Completion and Return
+### Completion and Motion
 
-Completion is an acknowledgment, never a terminal home state. Its primary action is **Back to workout**, placed before optional effort feedback so it is visible on short phone screens. Feedback offers Easy, Just right and Too much in one row, followed by the existing pain action. The return button has the same forest treatment as Start. Completion duration has 16px above and 24px below; the return action has 28px separation from feedback.
+The cyan square check acknowledgment precedes the large italic completion title. The red **Back to workout** action comes before optional feedback, including on short screens. Return preserves the visible routine; a saved visit changes Start to **Start again** without a destructive reset or extra step.
 
-Returning without feedback saves an unrated visit. Selecting a rating also returns directly to the familiar workout overview. The overview keeps the routine visible, acknowledges “Today’s visit is saved” in the supporting paragraph, and labels its primary action **Start again**. Repeats reset the timer, preserve history and respect the existing recovery policy without adding daily progression credit. There is no destructive reset or extra confirmation. An immediate cancellation before one elapsed second goes straight back without a visit. Moving between major screens focuses the main landmark with `tabindex="-1"`; countdown updates never move focus.
+Three bounded background elements share one course-drift animation: 24 seconds, ease-in-out, alternating between small opposing translations. This creates one slow peripheral drift. The background toggle controls it; Reduce Motion removes transitions and animations and hides the motion toggle. Hidden tabs stop the background and pause an active workout. Screen changes focus the main landmark; countdown updates do not move focus.
 
-### Movement Sprites
-
-The same friendly pixel-art man wears a forest shirt, lime shorts and white trainers. Grey-green equipment clearly distinguishes a high push-up platform, overhead pull-up bar and parallel bars. The five movements are platform push-ups, knee raises, a pull-up bar hang, parallel-bar support and squats. Transparent four-frame PNG strips live in `dist/sprites/`; source and prompt live in `assets/sprites/`. Use pixelated image rendering and preserve the square frame aspect ratio.
-
-Strength steps show one demo beside a 156px timer; preparation, rest and recovery retain the centered timer. The demo is 184px normally, 156px below 400px wide and 140px below 375px. On the narrow layout, the timer becomes 132px. Countdown type is 48px beside a demo and 42px below 375px wide; status type is 13px. No new controls or introductory screen accompany the demos. Text cues, quantities and guidance remain the authority.
-
-Demo frames derive from elapsed workout time rather than independent animation loops. Platform push-ups, knee raises and squats use three-second cycles that match eight demonstrations in a 24-second rep window. Both holds remain static with straight arms. The hang reuses the initial hanging pose from the knee-raise atlas. Pause, expanded guidance, a hidden tab and interrupted timing freeze the pose with the workout. Resume continues the same demonstration rather than restarting an attempt. Reduce Motion shows the first static pose, including live preference changes.
-
-### Background Motion and Control
-
-The three layers use transform-only, ease-in-out, infinite alternate animations: the filled circle takes 22s, the ring 28s and the low ellipse 26s. Translations, scale and rotation stay within the source keyframes. There are no animated layout properties, filters or opacity loops.
-
-The accessible header button toggles “Pause background motion” and “Play background motion,” with matching inline SVG and title. Manual pause persists for the current app session. The background is automatically still whenever a workout exists, including a paused workout, and whenever the document is hidden. The player header omits the background control. After the workout ends, motion can resume only when the document is visible, manual pause is off and Reduce Motion is off.
-
-The live `prefers-reduced-motion` preference disables animations and transitions and hides the redundant background-motion control. Changing that preference or tab visibility immediately synchronizes the background state.
-
-**The Exercise Stillness Rule.** Start settles the decorative background for the entire active workout; pausing the workout never restarts the background.
+**The Exercise Stillness Rule.** Decorative course motion stays frozen throughout active and paused workouts and yields to manual pause, hidden tabs and Reduce Motion.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep lime energy behind a solid, legible routine group.
-- **Do** preserve the existing content, system typography, single-column structure and direct Start path.
-- **Do** keep background motion slow, bounded and transform-only.
-- **Do** honor manual pause, hidden tabs and live Reduce Motion changes.
-- **Do** retain visible keyboard focus, generous tap targets and readable safety instructions.
+- **Do** retain the large athletic display face and the quieter system-font instructions.
+- **Do** align station numbers, movement labels and right-aligned doses in one continuous list.
+- **Do** keep the normal routine at 8 push-ups, 8 knee raises, a 10-second hang, a 10-second hold and 8 squats.
+- **Do** keep focus visible, secondary text tinted, tap targets generous and short screens scrollable.
+- **Do** preserve the existing sprites on pale square grounds and the one-primary-action flow.
 
 ### Don't:
-- **Don't** run decorative background motion during an active or paused workout.
-- **Don't** add onboarding or another step before the workout overview.
-- **Don't** replace the CSS geometry with raster assets or extra animated layers.
-- **Don't** turn the routine into separate floating movement cards or add shadows to the flat surface system.
+- **Don't** restore the superseded lime-and-forest palette or white grouped-card identity.
+- **Don't** add photos, new raster decoration, floating movement cards, shadows or competitive metrics.
+- **Don't** animate the course during an active or paused workout.
+- **Don't** replace the rectangular countdown and bottom progress strip with a circular dial.

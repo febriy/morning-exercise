@@ -1,88 +1,318 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-23T08:18:43.556917+00:00",
-  "title": "Design System: On the Way",
+  "generatedAt": "2026-10-24T05:18:47.850366+00:00",
+  "title": "Design System: On the Way — Ninja Arena",
   "extensions": {
     "colorMeta": {
-      "energy": {
-        "role": "primary",
-        "displayName": "Morning Lime"
-      },
-      "green": {
-        "role": "primary",
-        "displayName": "Forest Action"
-      },
       "canvas": {
         "role": "neutral",
-        "displayName": "Morning Canvas"
-      },
-      "ink": {
-        "role": "neutral",
-        "displayName": "Forest Ink"
+        "displayName": "Midnight Navy",
+        "canonical": "#07172e",
+        "tonalRamp": [
+          "oklch(15% 0.0510 257.41)",
+          "oklch(26% 0.0510 257.41)",
+          "oklch(38% 0.0510 257.41)",
+          "oklch(49% 0.0510 257.41)",
+          "oklch(61% 0.0510 257.41)",
+          "oklch(72% 0.0510 257.41)",
+          "oklch(84% 0.0510 257.41)",
+          "oklch(95% 0.0510 257.41)"
+        ]
       },
       "surface": {
         "role": "neutral",
-        "displayName": "White Surface"
+        "displayName": "Arena Surface",
+        "canonical": "#102742",
+        "tonalRamp": [
+          "oklch(15% 0.0584 253.90)",
+          "oklch(26% 0.0584 253.90)",
+          "oklch(38% 0.0584 253.90)",
+          "oklch(49% 0.0584 253.90)",
+          "oklch(61% 0.0584 253.90)",
+          "oklch(72% 0.0584 253.90)",
+          "oklch(84% 0.0584 253.90)",
+          "oklch(95% 0.0584 253.90)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "White Ink",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Tinted Secondary",
+        "canonical": "#b8cce1",
+        "tonalRamp": [
+          "oklch(15% 0.0366 249.56)",
+          "oklch(26% 0.0366 249.56)",
+          "oklch(38% 0.0366 249.56)",
+          "oklch(49% 0.0366 249.56)",
+          "oklch(61% 0.0366 249.56)",
+          "oklch(72% 0.0366 249.56)",
+          "oklch(84% 0.0366 249.56)",
+          "oklch(95% 0.0366 249.56)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Arena Line",
+        "canonical": "#304862",
+        "tonalRamp": [
+          "oklch(15% 0.0534 251.20)",
+          "oklch(26% 0.0534 251.20)",
+          "oklch(38% 0.0534 251.20)",
+          "oklch(49% 0.0534 251.20)",
+          "oklch(61% 0.0534 251.20)",
+          "oklch(72% 0.0534 251.20)",
+          "oklch(84% 0.0534 251.20)",
+          "oklch(95% 0.0534 251.20)"
+        ]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft Arena",
+        "canonical": "#173651",
+        "tonalRamp": [
+          "oklch(15% 0.0607 247.28)",
+          "oklch(26% 0.0607 247.28)",
+          "oklch(38% 0.0607 247.28)",
+          "oklch(49% 0.0607 247.28)",
+          "oklch(61% 0.0607 247.28)",
+          "oklch(72% 0.0607 247.28)",
+          "oklch(84% 0.0607 247.28)",
+          "oklch(95% 0.0607 247.28)"
+        ]
+      },
+      "action": {
+        "role": "primary",
+        "displayName": "Signal Red",
+        "canonical": "#e51f34",
+        "tonalRamp": [
+          "oklch(15% 0.2253 23.69)",
+          "oklch(26% 0.2253 23.69)",
+          "oklch(38% 0.2253 23.69)",
+          "oklch(49% 0.2253 23.69)",
+          "oklch(61% 0.2253 23.69)",
+          "oklch(72% 0.2253 23.69)",
+          "oklch(84% 0.2253 23.69)",
+          "oklch(95% 0.2253 23.69)"
+        ]
+      },
+      "action-hover": {
+        "role": "primary",
+        "displayName": "Signal Red Hover",
+        "canonical": "#ce182c",
+        "tonalRamp": [
+          "oklch(15% 0.2095 23.89)",
+          "oklch(26% 0.2095 23.89)",
+          "oklch(38% 0.2095 23.89)",
+          "oklch(49% 0.2095 23.89)",
+          "oklch(61% 0.2095 23.89)",
+          "oklch(72% 0.2095 23.89)",
+          "oklch(84% 0.2095 23.89)",
+          "oklch(95% 0.2095 23.89)"
+        ]
+      },
+      "energy": {
+        "role": "secondary",
+        "displayName": "Ice Cyan",
+        "canonical": "#67dfff",
+        "tonalRamp": [
+          "oklch(15% 0.1158 218.05)",
+          "oklch(26% 0.1158 218.05)",
+          "oklch(38% 0.1158 218.05)",
+          "oklch(49% 0.1158 218.05)",
+          "oklch(61% 0.1158 218.05)",
+          "oklch(72% 0.1158 218.05)",
+          "oklch(84% 0.1158 218.05)",
+          "oklch(95% 0.1158 218.05)"
+        ]
+      },
+      "focus": {
+        "role": "secondary",
+        "displayName": "Ice Cyan Focus",
+        "canonical": "#67dfff",
+        "tonalRamp": [
+          "oklch(15% 0.1158 218.05)",
+          "oklch(26% 0.1158 218.05)",
+          "oklch(38% 0.1158 218.05)",
+          "oklch(49% 0.1158 218.05)",
+          "oklch(61% 0.1158 218.05)",
+          "oklch(72% 0.1158 218.05)",
+          "oklch(84% 0.1158 218.05)",
+          "oklch(95% 0.1158 218.05)"
+        ]
+      },
+      "preview": {
+        "role": "neutral",
+        "displayName": "Pale Demo Ground",
+        "canonical": "#dcebf3",
+        "tonalRamp": [
+          "oklch(15% 0.0193 230.70)",
+          "oklch(26% 0.0193 230.70)",
+          "oklch(38% 0.0193 230.70)",
+          "oklch(49% 0.0193 230.70)",
+          "oklch(61% 0.0193 230.70)",
+          "oklch(72% 0.0193 230.70)",
+          "oklch(84% 0.0193 230.70)",
+          "oklch(95% 0.0193 230.70)"
+        ]
+      },
+      "course-rail": {
+        "role": "neutral",
+        "displayName": "Course Rail",
+        "canonical": "#245b77",
+        "tonalRamp": [
+          "oklch(15% 0.0733 234.01)",
+          "oklch(26% 0.0733 234.01)",
+          "oklch(38% 0.0733 234.01)",
+          "oklch(49% 0.0733 234.01)",
+          "oklch(61% 0.0733 234.01)",
+          "oklch(72% 0.0733 234.01)",
+          "oklch(84% 0.0733 234.01)",
+          "oklch(95% 0.0733 234.01)"
+        ]
+      },
+      "course-red": {
+        "role": "neutral",
+        "displayName": "Course Red",
+        "canonical": "#8e2338",
+        "tonalRamp": [
+          "oklch(15% 0.1418 14.40)",
+          "oklch(26% 0.1418 14.40)",
+          "oklch(38% 0.1418 14.40)",
+          "oklch(49% 0.1418 14.40)",
+          "oklch(61% 0.1418 14.40)",
+          "oklch(72% 0.1418 14.40)",
+          "oklch(84% 0.1418 14.40)",
+          "oklch(95% 0.1418 14.40)"
+        ]
+      },
+      "course-ground": {
+        "role": "neutral",
+        "displayName": "Course Ground",
+        "canonical": "#102a45",
+        "tonalRamp": [
+          "oklch(15% 0.0594 251.51)",
+          "oklch(26% 0.0594 251.51)",
+          "oklch(38% 0.0594 251.51)",
+          "oklch(49% 0.0594 251.51)",
+          "oklch(61% 0.0594 251.51)",
+          "oklch(72% 0.0594 251.51)",
+          "oklch(84% 0.0594 251.51)",
+          "oklch(95% 0.0594 251.51)"
+        ]
+      },
+      "notice-bg": {
+        "role": "neutral",
+        "displayName": "Notice Ground",
+        "canonical": "#473315",
+        "tonalRamp": [
+          "oklch(15% 0.0529 75.30)",
+          "oklch(26% 0.0529 75.30)",
+          "oklch(38% 0.0529 75.30)",
+          "oklch(49% 0.0529 75.30)",
+          "oklch(61% 0.0529 75.30)",
+          "oklch(72% 0.0529 75.30)",
+          "oklch(84% 0.0529 75.30)",
+          "oklch(95% 0.0529 75.30)"
+        ]
+      },
+      "notice-text": {
+        "role": "neutral",
+        "displayName": "Notice Text",
+        "canonical": "#ffdf9e",
+        "tonalRamp": [
+          "oklch(15% 0.0894 84.53)",
+          "oklch(26% 0.0894 84.53)",
+          "oklch(38% 0.0894 84.53)",
+          "oklch(49% 0.0894 84.53)",
+          "oklch(61% 0.0894 84.53)",
+          "oklch(72% 0.0894 84.53)",
+          "oklch(84% 0.0894 84.53)",
+          "oklch(95% 0.0894 84.53)"
+        ]
       }
     },
     "typographyMeta": {
       "display": {
-        "displayName": "Workout display",
-        "purpose": "Existing workout heading; 44px normally, 36px on compact phones and 32px on narrow, short phones."
+        "displayName": "Display",
+        "purpose": "Uppercase hero and completion titles; Black Italic 900. Compact and desktop overrides are documented in DESIGN.md."
       },
       "headline": {
-        "displayName": "Page headline",
-        "purpose": "Setup, feedback and completion."
+        "displayName": "Headline",
+        "purpose": "Upright ExtraBold section headings."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Readable paragraph copy."
+        "purpose": "Plain upright exercise cues and instructions."
+      },
+      "movement-label": {
+        "displayName": "Movement Label",
+        "purpose": "System-font movement names, paired with smaller station labels."
+      },
+      "button-label": {
+        "displayName": "Button Label",
+        "purpose": "Upright condensed primary actions."
+      },
+      "duration": {
+        "displayName": "Duration",
+        "purpose": "Upright condensed visit duration."
+      },
+      "dose": {
+        "displayName": "Dose",
+        "purpose": "Right-aligned, tabular movement quantities."
+      },
+      "countdown": {
+        "displayName": "Countdown",
+        "purpose": "Tabular rectangular player countdown; smaller beside a demo."
       }
     },
     "shadows": [],
     "motion": [
       {
-        "name": "morning-sun",
-        "value": "22s ease-in-out infinite alternate",
-        "purpose": "Filled circle; transform from translate(-35px, -22px) scale(.96) to translate(35px, 34px) scale(1.04)."
+        "name": "course-drift",
+        "value": "24s ease-in-out infinite alternate",
+        "purpose": "Three bounded elements share one slow peripheral drift; translate(-24px, 16px) to translate(24px, -16px)."
       },
       {
-        "name": "morning-orbit",
-        "value": "28s ease-in-out infinite alternate",
-        "purpose": "Ring; transform from translate(-16px, 14px) rotate(-8deg) to translate(24px, -12px) rotate(10deg)."
-      },
-      {
-        "name": "morning-ground",
-        "value": "26s ease-in-out infinite alternate",
-        "purpose": "Low ellipse; transform from translate(-18px, 0) rotate(-7deg) to translate(28px, -24px) rotate(5deg)."
-      },
-      {
-        "name": "button-response",
+        "name": "button-transition",
         "value": "background-color 160ms ease-out, transform 160ms ease-out",
-        "purpose": "Primary control response; transitions disabled for Reduce Motion."
+        "purpose": "Primary hover and press response; press scale .985."
       },
       {
-        "name": "movement-demo",
-        "value": "workout-clock frames",
-        "purpose": "Five-second push-up cycle; one 2.4-second knee raise; static parallel-bar support. Freezes with the workout; Reduce Motion uses frame zero."
+        "name": "motion-gate",
+        "value": "manual pause || prefers-reduced-motion || document.hidden || active workout",
+        "purpose": "Any condition freezes course motion, including paused workouts. Reduce Motion removes all transitions and animations and hides the motion toggle."
       }
     ],
     "breakpoints": [
       {
-        "name": "desktop-min-width",
-        "value": "700px"
+        "name": "desktop-overview",
+        "value": "(min-width: 900px)"
       },
       {
-        "name": "narrow-max-width",
-        "value": "359px"
+        "name": "phone-course-bar",
+        "value": "(max-width: 899px)"
       },
       {
-        "name": "compact-max-height",
-        "value": "720px"
+        "name": "narrow-phone",
+        "value": "(max-width: 374px)"
       },
       {
-        "name": "short-max-height",
-        "value": "620px"
+        "name": "compact-phone-height",
+        "value": "(max-height: 720px) and (max-width: 899px)"
       }
     ]
   },
@@ -91,81 +321,113 @@
       "name": "Primary action",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Full-width forest action with lime inline SVG and visible focus.",
-      "html": "<button class=\"ds-primary\">Start workout <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-5-5 5 5-5 5\"/></svg></button>",
-      "css": ".ds-primary { --ink: #153d28; --muted: #405c35; --green: #173f29; --green-hover: #0e3020; --surface: #fff; --line: #d7e3ce; --soft: #e2efc3; --focus: #245c35; --energy: #d4f458; --canvas: #edf5d5; }.ds-primary { font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif; cursor: pointer;width: 100%; min-height: 58px; border: 0; border-radius: 16px; background: var(--green); color: #fff;\n  padding: 16px 22px; display: flex; justify-content: center; align-items: center; gap: 12px;\n  font-size: 1rem; line-height: 1.5; font-weight: 600; transition: background-color 160ms ease-out, transform 160ms ease-out; }.ds-primary svg { width: 20px; height: 20px; color: var(--energy); }.ds-primary:active { transform: scale(.985); background: var(--green-hover); }.ds-primary:focus-visible { outline: 3px solid var(--focus, #245c35); outline-offset: 4px; }@media (hover: hover) { .ds-primary:hover { background: var(--green-hover); } } @media (prefers-reduced-motion: reduce) { .ds-primary { transition: none; } }"
+      "description": "Full-width red Start, Pause, Resume and return action.",
+      "html": "<button class=\"ds-primary\">Start workout <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"m8 5 10 7-10 7Z\"/></svg></button>",
+      "css": ".ds-primary{font-family:var(--display,'Barlow Condensed','Arial Narrow',sans-serif);font-weight:800;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:64px;padding:16px 22px;border:0;border-radius:12px;background:var(--action,#e51f34);color:var(--ink,#fff);font-size:1.625rem;line-height:1.1;cursor:pointer;transition:background-color 160ms ease-out,transform 160ms ease-out}.ds-primary:hover{background:var(--action-hover,#ce182c)}.ds-primary:active{background:var(--action-hover,#ce182c);transform:scale(.985)}.ds-primary:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px;}.ds-primary:disabled{opacity:.45;cursor:default}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
     },
     {
-      "name": "Text action",
+      "name": "Secondary text action",
       "kind": "button",
       "refersTo": "button-text",
-      "description": "Quiet secondary action with a generous target.",
+      "description": "A quieter shortcut or End workout action.",
       "html": "<button class=\"ds-text\">Just one minute today</button>",
-      "css": ".ds-text { --ink: #153d28; --muted: #405c35; --green: #173f29; --green-hover: #0e3020; --surface: #fff; --line: #d7e3ce; --soft: #e2efc3; --focus: #245c35; --energy: #d4f458; --canvas: #edf5d5; }.ds-text { font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif; cursor: pointer;display: block; border: 0; background: transparent; color: var(--muted); padding: 12px; min-height: 48px; font-size: .875rem; line-height: 1.5; border-radius: 10px; margin: 4px auto; }.ds-text:focus-visible { outline: 3px solid var(--focus, #245c35); outline-offset: 4px; }@media (hover: hover) { .ds-text:hover { background: var(--soft); } }"
+      "css": ".ds-text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;display:block;margin:4px auto;min-height:44px;padding:12px;border:0;border-radius:10px;background:transparent;color:var(--muted,#b8cce1);font-size:.875rem;line-height:1.5;cursor:pointer}.ds-text:hover{background:var(--soft,#173651);color:var(--ink,#fff)}.ds-text:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px;}"
     },
     {
-      "name": "Background motion control",
+      "name": "Header icon action",
       "kind": "button",
       "refersTo": "button-icon",
-      "description": "Accessible pause control; the app changes its label and SVG to Play when manually paused and hides it for Reduce Motion.",
-      "html": "<button class=\"ds-icon\" aria-label=\"Pause background motion\" title=\"Pause background motion\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9 6v12m6-12v12\"/></svg></button>",
-      "css": ".ds-icon { --ink: #153d28; --muted: #405c35; --green: #173f29; --green-hover: #0e3020; --surface: #fff; --line: #d7e3ce; --soft: #e2efc3; --focus: #245c35; --energy: #d4f458; --canvas: #edf5d5; }.ds-icon { font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif; cursor: pointer;border: 0; background: transparent; border-radius: 12px; color: var(--ink); min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 12px; }.ds-icon svg { width: 20px; height: 20px; }.ds-icon:focus-visible { outline: 3px solid var(--focus, #245c35); outline-offset: 4px; }@media (hover: hover) { .ds-icon:hover { background: var(--soft); } }"
+      "description": "A 44px target for the background-motion or back control.",
+      "html": "<button class=\"ds-icon\" aria-label=\"Back to workout\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"m9 5 7 7-7 7\"/></svg></button>",
+      "css": ".ds-icon{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:10px;border:0;border-radius:12px;background:transparent;color:var(--muted,#b8cce1);cursor:pointer}.ds-icon svg{width:20px;height:20px}.ds-icon:hover{background:var(--soft,#173651);color:var(--ink,#fff)}.ds-icon:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px;}"
     },
     {
-      "name": "Time radio choice",
+      "name": "Time choices",
       "kind": "input",
       "refersTo": "time-option",
-      "description": "Native radio selection in a visible rounded label.",
-      "html": "<label class=\"ds-time\"><input type=\"radio\" name=\"ds-time-budget\" value=\"120\" checked><span>2 min</span></label>",
-      "css": ".ds-time { --ink: #153d28; --muted: #405c35; --green: #173f29; --green-hover: #0e3020; --surface: #fff; --line: #d7e3ce; --soft: #e2efc3; --focus: #245c35; --energy: #d4f458; --canvas: #edf5d5; }.ds-time { font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif; cursor: pointer;display: block; position: relative; cursor: pointer; }.ds-time input { position: absolute; opacity: 0; width: 1px; height: 1px; }.ds-time span { display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); font-size: .9375rem; color: var(--muted); }.ds-time input:checked + span { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }.ds-time:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: 12px; }"
+      "description": "Native radio labels; cyan selects the duration.",
+      "html": "<div class=\"ds-times\"><label class=\"ds-time\"><input type=\"radio\" name=\"ds-time\" value=\"1\"><span>1 min</span></label><label class=\"ds-time\"><input type=\"radio\" name=\"ds-time\" value=\"2\" checked><span>2 min</span></label></div>",
+      "css": ".ds-times{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ds-time{position:relative;cursor:pointer}.ds-time input{position:absolute;opacity:0;width:1px;height:1px}.ds-time span{font-family:var(--display,'Barlow Condensed','Arial Narrow',sans-serif);font-weight:800;text-transform:uppercase;display:flex;align-items:center;justify-content:center;min-height:64px;border:1px solid var(--line,#304862);border-radius:12px;background:var(--surface,#102742);color:var(--muted,#b8cce1);font-size:1.625rem;line-height:1}.ds-time input:checked+span{background:var(--energy,#67dfff);border-color:var(--energy,#67dfff);color:var(--canvas,#07172e)}.ds-time:has(input:focus-visible){outline:3px solid var(--focus,#67dfff);outline-offset:4px;border-radius:12px}"
     },
     {
-      "name": "Routine group",
+      "name": "Circuit row",
       "kind": "card",
-      "refersTo": "routine-group",
-      "description": "Opaque white grouped list with station labels and right-aligned quantities.",
-      "html": "<ol class=\"ds-routine\" aria-label=\"Today’s movements\"><li class=\"ds-row\"><span class=\"ds-info\"><span class=\"ds-name\">Platform push-ups</span><span class=\"ds-station\">Platform</span></span><span class=\"ds-quantity\"><strong>3</strong><span>reps</span></span></li></ol>",
-      "css": ".ds-routine { --ink: #153d28; --muted: #405c35; --green: #173f29; --green-hover: #0e3020; --surface: #fff; --line: #d7e3ce; --soft: #e2efc3; --focus: #245c35; --energy: #d4f458; --canvas: #edf5d5; }.ds-routine { font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", sans-serif; color: var(--ink);list-style: none; margin: 0; padding: 0 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }.ds-row { display: flex; align-items: center; gap: 14px; min-height: 84px; padding: 16px 0; border-bottom: 1px solid var(--line); }.ds-row:last-child { border-bottom: 0; }.ds-info { display: flex; flex-direction: column; gap: 5px; min-width: 0; }.ds-name { font-size: .9375rem; line-height: 1.35; font-weight: 600; }.ds-station { font-size: .8125rem; color: var(--muted); line-height: 1.4; }.ds-quantity { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; font-variant-numeric: tabular-nums; }.ds-quantity strong { font-size: 1.5rem; font-weight: 750; line-height: 1.1; }.ds-quantity > span { font-size: .75rem; color: var(--muted); }"
+      "refersTo": "routine-row",
+      "description": "Number, instruction and aligned dose; production adds the unchanged pale-ground pixel sprite.",
+      "html": "<ol class=\"ds-circuit\"><li class=\"ds-row\"><span class=\"ds-number\">01</span><span class=\"ds-info\"><strong>Platform push-ups</strong><span>Push-up platform</span></span><span class=\"ds-dose\"><strong>8</strong><span>reps</span></span></li></ol>",
+      "css": ".ds-circuit{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;list-style:none;margin:0;padding:0;color:var(--ink,#fff)}.ds-row{display:flex;align-items:center;gap:12px;min-height:68px;padding:10px 0;border-bottom:1px solid var(--line,#304862)}.ds-number{font-family:var(--display,'Barlow Condensed','Arial Narrow',sans-serif);font-weight:800;text-transform:uppercase;width:25px;flex-shrink:0;color:var(--energy,#67dfff);font-size:1.75rem;line-height:1;font-variant-numeric:tabular-nums}.ds-info{display:flex;flex-direction:column;gap:3px;min-width:0}.ds-info strong{font-size:.875rem;font-weight:650;line-height:1.3}.ds-info>span{font-size:.75rem;line-height:1.35;color:var(--muted,#b8cce1)}.ds-dose{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:1px;font-variant-numeric:tabular-nums}.ds-dose strong{font-family:var(--display,'Barlow Condensed','Arial Narrow',sans-serif);font-weight:800;text-transform:uppercase;font-size:2.125rem;line-height:.95}.ds-dose>span{font-size:.6875rem;color:var(--muted,#b8cce1)}"
+    },
+    {
+      "name": "Rectangular countdown",
+      "kind": "custom",
+      "refersTo": "countdown-panel",
+      "description": "Centered numerals with a six-pixel bottom progress strip.",
+      "html": "<div class=\"ds-countdown\"><span class=\"ds-clock\" role=\"timer\">0:10</span><span class=\"ds-status\">Keep it easy</span></div>",
+      "css": ".ds-countdown{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:176px;overflow:hidden;border-radius:16px;background:var(--surface,#102742);color:var(--ink,#fff)}.ds-countdown:after{content:\"\";position:absolute;bottom:0;left:0;width:65%;height:6px;background:var(--energy,#67dfff)}.ds-clock{font-family:var(--display,'Barlow Condensed','Arial Narrow',sans-serif);font-weight:800;text-transform:uppercase;font-size:6rem;line-height:.95;letter-spacing:-.02em;font-variant-numeric:tabular-nums}.ds-status{font-size:.8125rem;margin-top:8px;color:var(--muted,#b8cce1)}"
+    },
+    {
+      "name": "Guidance disclosure",
+      "kind": "custom",
+      "refersTo": "guidance-panel",
+      "description": "Familiar disclosure; the app pauses the workout when opened.",
+      "html": "<details class=\"ds-guidance\"><summary>A little guidance</summary><p>Use a dry, stable station that fits the instructions.</p></details>",
+      "css": ".ds-guidance{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.875rem;color:var(--muted,#b8cce1)}.ds-guidance summary{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:8px;list-style:none;cursor:pointer}.ds-guidance summary::-webkit-details-marker{display:none}.ds-guidance summary:after{content:\"\";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translateY(-2px)}.ds-guidance[open] summary:after{transform:rotate(225deg) translate(-2px,-1px)}.ds-guidance summary:hover{background:var(--soft,#173651);color:var(--ink,#fff)}.ds-guidance summary:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px;}.ds-guidance p{padding:16px;background:var(--soft,#173651);color:var(--ink,#fff);border-radius:12px;line-height:1.5;margin:4px 0 0}"
+    },
+    {
+      "name": "Effort feedback",
+      "kind": "button",
+      "refersTo": "feedback-option",
+      "description": "Optional three-column choices below the primary return action.",
+      "html": "<div class=\"ds-feedback\"><button>Easy</button><button>Just right</button><button>Too much</button></div>",
+      "css": ".ds-feedback{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.ds-feedback button{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center;min-width:0;min-height:64px;width:100%;padding:16px 8px;border:1px solid var(--line,#304862);border-radius:12px;background:var(--surface,#102742);color:var(--ink,#fff);font-size:.9375rem;font-weight:600;line-height:1.5;cursor:pointer}.ds-feedback button:hover{border-color:var(--energy,#67dfff);background:var(--soft,#173651)}.ds-feedback button:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px;}"
+    },
+    {
+      "name": "Completion acknowledgment",
+      "kind": "custom",
+      "refersTo": "completion-symbol",
+      "description": "Small cyan square before the oversized completion heading.",
+      "html": "<div class=\"ds-done\" aria-label=\"Workout complete\"><svg width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"m5 12 4 4L19 6\"/></svg></div>",
+      "css": ".ds-done{display:grid;place-items:center;width:64px;height:64px;border-radius:16px;background:var(--energy,#67dfff);color:var(--canvas,#07172e)}"
     }
   ],
   "narrative": {
-    "northStar": "Bright morning energy",
-    "overview": "The existing phone-first exercise interface has an energetic lime morning atmosphere. Deep forest text and controls keep the screen legible outdoors; the solid white routine group provides a stable reading surface. Preserve the familiar single-column composition, direct language, workout content and immediate path from opening the app to starting a workout.\n\nThree large, cropped CSS shapes move slowly behind the interface. Their motion is peripheral and settles as soon as a workout begins, including while that workout is paused. The backdrop remains CSS geometry. Small pixel-art movement demos supply practical guidance in the foreground.",
+    "northStar": "Ninja Arena",
+    "overview": "Ninja Arena gives a small morning workout the presence of an athlete’s arena entrance. Midnight navy, signal red, ice cyan and oversized condensed type carry the energy; clear instructions and familiar controls keep the operation calm and direct.\n\nCropped course rails move at the edge of the view. The foreground is a disciplined reading and action layer: aligned numbered stations, exact quantities, one primary action, and unchanged pixel-art movement demos. The identity is athletic without competition, scores or extra tasks.",
     "keyCharacteristics": [
-      "Bright lime atmosphere with forest-green functional contrast.",
-      "One solid white routine group and one clear primary action.",
-      "Familiar system typography with a heavier workout heading.",
-      "Slow geometric background motion that yields to exercising and user preferences."
+      "Midnight navy with white reading text, red actions and cyan station markers.",
+      "Black italic display type paired with upright condensed numerals and system body text.",
+      "Flat, aligned movement rows and rectangular timing panels.",
+      "One slow course drift that stops throughout active and paused workouts."
     ],
     "rules": [
       {
-        "name": "The Readable Foreground Rule",
-        "body": "Keep routine content on its opaque white surface and functional text in the forest palette; the moving scene stays behind the interface.",
+        "name": "The Action Color Rule",
+        "body": "Red identifies the primary action; cyan identifies station order, selection, focus and active progress.",
         "section": "colors"
       },
       {
         "name": "The Immediate Start Rule",
-        "body": "The default screen remains the workout overview with its Start action. Background controls must not add an introductory step.",
+        "body": "Show the workout and its single primary Start action without adding an introductory step.",
         "section": "layout"
       },
       {
         "name": "The Exercise Stillness Rule",
-        "body": "Start settles the decorative background for the entire active workout; pausing the workout never restarts the background.",
+        "body": "Decorative course motion stays frozen throughout active and paused workouts and yields to manual pause, hidden tabs and Reduce Motion.",
         "section": "components"
       }
     ],
     "dos": [
-      "**Do** keep lime energy behind a solid, legible routine group.",
-      "**Do** preserve the existing content, system typography, single-column structure and direct Start path.",
-      "**Do** keep background motion slow, bounded and transform-only.",
-      "**Do** honor manual pause, hidden tabs and live Reduce Motion changes.",
-      "**Do** retain visible keyboard focus, generous tap targets and readable safety instructions."
+      "**Do** retain the large athletic display face and the quieter system-font instructions.",
+      "**Do** align station numbers, movement labels and right-aligned doses in one continuous list.",
+      "**Do** keep the normal routine at 8 push-ups, 8 knee raises, a 10-second hang, a 10-second hold and 8 squats.",
+      "**Do** keep focus visible, secondary text tinted, tap targets generous and short screens scrollable.",
+      "**Do** preserve the existing sprites on pale square grounds and the one-primary-action flow."
     ],
     "donts": [
-      "**Don't** run decorative background motion during an active or paused workout.",
-      "**Don't** add onboarding or another step before the workout overview.",
-      "**Don't** replace the CSS geometry with raster assets or extra animated layers.",
-      "**Don't** turn the routine into separate floating movement cards or add shadows to the flat surface system."
+      "**Don't** restore the superseded lime-and-forest palette or white grouped-card identity.",
+      "**Don't** add photos, new raster decoration, floating movement cards, shadows or competitive metrics.",
+      "**Don't** animate the course during an active or paused workout.",
+      "**Don't** replace the rectangular countdown and bottom progress strip with a circular dial."
     ]
   }
 }
