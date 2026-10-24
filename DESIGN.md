@@ -123,17 +123,6 @@ components:
     textColor: "{colors.ink}"
     rounded: "{rounded.control}"
     padding: "16px"
-  feedback-option:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.control}"
-    padding: "16px 8px"
-    height: "64px"
-  completion-symbol:
-    backgroundColor: "{colors.energy}"
-    textColor: "{colors.canvas}"
-    rounded: "{rounded.panel}"
-    size: "64px"
   time-option-selected:
     backgroundColor: "{colors.energy}"
     textColor: "{colors.canvas}"
@@ -165,11 +154,11 @@ The palette is a dark arena with high-contrast reading and deliberately separate
 - **Signal Red** (`action`, `action-hover`): primary Start, Pause, Resume and return controls; white labels meet 4.59:1 contrast on the default red.
 
 ### Secondary
-- **Ice Cyan** (`energy`, `focus`): station numbers, metadata rule, selected time choice, active progress, completion acknowledgment, selection, caret and keyboard focus.
+- **Ice Cyan** (`energy`, `focus`): station numbers, metadata rule, selected time choice, active progress, selection, caret and keyboard focus.
 
 ### Neutral
 - **Midnight Navy** (`canvas`): page, background scene and dark text on cyan.
-- **Arena Surface** (`surface`) and **Soft Arena** (`soft`): timer, unselected time choices, feedback and opened guidance; secondary hover surfaces.
+- **Arena Surface** (`surface`) and **Soft Arena** (`soft`): timer, unselected time choices and opened guidance; secondary hover surfaces.
 - **White Ink** (`ink`), **Tinted Secondary** (`muted`) and **Arena Line** (`line`): primary reading, supporting copy and thin dividers. Scrollbars use line over canvas.
 - **Pale Demo Ground** (`preview`): separates existing pixel sprites from the dark arena.
 - **Course Rail**, **Course Red** and **Course Ground**: restrained background geometry, distinct from the functional foreground.
@@ -183,7 +172,7 @@ The palette is a dark arena with high-contrast reading and deliberately separate
 
 **Body Font:** the system stack recorded in frontmatter. Supporting text remains upright and readable outdoors.
 
-The hero is uppercase, tightly tracked and deliberately oversized. Its default responsive scale is the frontmatter `display`; the home heading grows to 6rem on desktop. Setup uses 3.75rem; the player uses 3.5rem. Compact phone height reduces home and completion headings to 3.5rem and player headings to 2.75rem. The wordmark is 1.375rem italic.
+The hero is uppercase, tightly tracked and deliberately oversized. Its default responsive scale is the frontmatter `display`; the home heading grows to 6rem on desktop. Setup uses 3.75rem; the player uses 3.5rem. Compact phone height reduces home headings to 3.5rem and player headings to 2.75rem. The wordmark is 1.375rem italic.
 
 The upright hierarchy uses the recorded headline, button, duration, dose and countdown roles. A countdown beside a demo is 4.5rem, reducing to 3.75rem on narrow phones. All quantities and timers use tabular numerals. Body cues are 1rem; supporting copy ranges from .75rem to .9375rem. Movement station labels are .75rem, dose units .6875rem; narrow phones reduce movement labels to .8125rem and station labels to .6875rem. Preserve the distinction between expressive titles and plain instructions.
 
@@ -193,7 +182,7 @@ Phone first: a centered shell (maximum 520px) uses 24px side gutters, at least 1
 
 At widths below 375px, gutters become 20px, row gaps 8px, static previews 32px and time choices switch from four columns to two. At heights up to 720px and widths below 900px, the header becomes 56px, rows at least 52px with 6px vertical padding, surrounding gaps tighten and primary controls become at least 58px high. Allow vertical scrolling: the 320×568 view requires it, with no horizontal overflow. The 390×844 and 375×667 home views fit all five movements and Start.
 
-At 900px and wider, only the overview expands into two work areas within a maximum 1180px shell, with 48px side padding and an 80px column gap. The hero and action occupy the left; duration, circuit and note occupy the right. Rows become at least 86px high and previews 48px. Setup, player and completion retain their narrow, centered shells.
+At 900px and wider, only the overview expands into two work areas within a maximum 1180px shell, with 48px side padding and an 80px column gap. The hero and action occupy the left; duration, circuit and note occupy the right. Rows become at least 86px high and previews 48px. Setup and player retain their narrow, centered shells.
 
 **The Immediate Start Rule.** Show the workout and its single primary Start action without adding an introductory step.
 
@@ -203,7 +192,7 @@ No box shadows or backdrop blur. Depth comes from navy tonal separation, pale de
 
 ## Shapes
 
-Rectangular controls with modest curved corners define the foreground. Preview frames use the smallest radius, controls the standard radius, and timer panels and completion symbols the panel radius. Rows remain unboxed. The countdown is a broad rectangle with a 6px bottom progress strip, despite the legacy timer name in source.
+Rectangular controls with modest curved corners define the foreground. Preview frames use the smallest radius, controls the standard radius, and timer panels the panel radius. Rows remain unboxed. The countdown is a broad rectangle with a 6px bottom progress strip, despite the legacy timer name in source.
 
 The brand mark is two red diagonal strokes. Course geometry uses a triple oval rail (1080×600px, 2px strokes), red bar and thick lower loop, rotated across the margins. These are background course markings, not component borders or floating cards. The icon repeats the navy/red diagonal-stroke identity.
 
@@ -221,11 +210,9 @@ Keyboard focus is a 3px cyan outline offset by 4px. Selection is cyan with navy 
 
 A continuous transparent list uses numbered cyan stations, a pale square static sprite, a two-line label and a right-aligned condensed dose. A cyan 3px rule separates metadata from the first row; thin arena lines divide every movement. Static previews are 38px normally. Preserve the exact five movements and their dose order, with one primary Start below.
 
-### Time Choices and Feedback
+### Time Choices
 
 Time choices are native radio inputs inside visible labels, with four equal columns normally. Unselected choices use the arena surface, line border and tinted label; selection fills cyan with navy text. Focus outlines the whole label. Choices are at least 64px high.
-
-Feedback offers three equal-column surface buttons with white system labels, line borders and at least 64px height. Hover changes the border to cyan and ground to soft arena. The pain option remains a separate text action. No independent chip or text-entry component is currently shipped.
 
 ### Countdown, Guidance and Sprites
 
@@ -233,9 +220,9 @@ The timer is a surface-colored panel with centered upright countdown and support
 
 The guidance disclosure has a 44px summary target and a simple chevron. Opening it reveals a soft arena panel and pauses the workout. The single red Pause/Resume action follows cue and next-step text; End workout remains secondary.
 
-### Completion and Motion
+### Returning to the workout and Motion
 
-The cyan square check acknowledgment precedes the large italic completion title. The red **Back to workout** action comes before optional feedback, including on short screens. Return preserves the visible routine; a saved visit changes Start to **Start again** without a destructive reset or extra step.
+Finishing or ending returns directly to the same five-movement overview with **Start workout** ready. No completion page, saved-visit state, effort feedback or recovery substitution interrupts the loop. The completion bell and voice remain, with a visually hidden status announcement. Time choice is the only remembered preference.
 
 Three bounded background elements share one course-drift animation: 24 seconds, ease-in-out, alternating between small opposing translations. This creates one slow peripheral drift. The background toggle controls it; Reduce Motion removes transitions and animations and hides the motion toggle. Hidden tabs stop the background and pause an active workout. Screen changes focus the main landmark; countdown updates do not move focus.
 

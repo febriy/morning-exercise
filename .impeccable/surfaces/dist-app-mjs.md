@@ -7,7 +7,7 @@ related_targets: ["dist/style.css","dist/index.html"]
 
 # Morning workout surface
 
-Mode: Operate. The user is a Singapore father stopping at a fitness corner on his coffee walk. His job is to see the movements, start, follow the timer, and return home. Preserve exercise doses, recovery policy, sound, sprites, local history, time choices, and one-primary-action flow.
+Mode: Operate. The user is a Singapore father stopping at a fitness corner on his coffee walk. His job is to see the movements, start, follow the timer, and return home. Preserve exercise doses, sound, sprites, time choices, and one-primary-action flow. Finish or End returns directly to the original overview; save only the time preference. Ignore old visits and feedback drafts.
 
 ## Direction contract
 
@@ -15,7 +15,7 @@ THESIS: Ninja Arena turns this short personal workout into an athlete's arena en
 
 OWN-WORLD: Deep midnight navy, clean white, signal red for primary action and ice cyan for ordered stations. Self-hosted Barlow Condensed ExtraBold and Black Italic, dense aligned movement rows, course-rail geometry. Standard buttons, form radios and disclosure controls remain familiar.
 
-STORY: Open to the exact five-movement circuit and its duration. Start once, follow readable cues and pixel demos, pause freely, then return with Back to workout.
+STORY: Open to the exact five-movement circuit and its duration. Start once, follow readable cues and pixel demos, pause freely, then return automatically to the original overview ready for Start workout. No saving, feedback, daily credit or recovery substitution.
 
 FIRST VIEWPORT: Header at top; enormous two-line italic athletic title; clear duration/rest row; five numbered rows with tiny sprites, station labels and aligned reps/seconds; red full-width Start. One slow course-rail drift occupies the margins, freezes for the whole workout and honors Reduce Motion. At 390×844 all five movements and Start fit; short phones keep Start reachable without overlap. Desktop expands the heading and workout into two work areas inside one shell.
 

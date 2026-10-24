@@ -123,7 +123,8 @@ test('the real two-minute workout speaks countdowns and cues at boundaries witho
     app.elapse(8);assert.deepEqual(browser.spoken,['Get ready','5','4','3','2','1','Start']);
     app.elapse(24);assert.equal(browser.spoken.at(-1),'Rest');
     app.elapse(88);assert.equal(browser.spoken.at(-1),'Workout complete');
-    assert.match(app.root.innerHTML,/That’s your/);
+    assert.match(app.root.innerHTML,/Your corner/);
+    assert.match(app.root.innerHTML,/Start workout/);
     assert.equal(browser.spoken.filter(x=>x==='Workout complete').length,1);
     assert.equal(browser.tones.length,33); // Start, nine boundaries and completion: one bell each.
   }finally{app.restore();}
@@ -178,4 +179,20 @@ test('stopping before voice downloads finish suppresses late playback',async()=>
   coach.unlock();coach.begin({kind:'move',seconds:15});coach.stop();browser.release();
   await new Promise(resolve=>setImmediate(resolve));
   assert.deepEqual(browser.played,[]);assert.deepEqual(browser.spoken,[]);
+});
+
+
+test('starting fresh immediately after completion cancels the old finish cue without releasing the new playback session',async()=>{
+  const browser=soundBrowser({silentPhone:true,clips:true}),app=await mount({host:browser.host});try{
+    app.click('#start');await new Promise(resolve=>setImmediate(resolve));
+    app.elapse(120);
+    const oldVoice=browser.sources.at(-1),oldBell=browser.tones.slice(-3);
+    app.click('#start');
+    assert.equal(browser.audioSession.type,'playback');
+    assert.equal(browser.played.at(-1),0,'new round begins with Get ready');
+    oldVoice.onended();for(const tone of oldBell)tone.onended();
+    assert.equal(browser.audioSession.type,'playback','late finish callbacks do not mute the new round');
+    assert.equal(app.node('#clock').textContent,'0:08');
+    app.click('#stop');assert.equal(browser.audioSession.type,'auto');
+  }finally{app.restore();}
 });

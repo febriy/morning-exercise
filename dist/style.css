@@ -95,7 +95,6 @@ legend { font-size: 1rem; font-weight: 600; padding: 0; }
 .time-option span { display: flex; align-items: center; justify-content: center; min-height: 64px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); font: 800 1.625rem/1 var(--display); color: var(--muted); text-transform: uppercase; }
 .time-option input:checked + span { background: var(--energy); border-color: var(--energy); color: var(--canvas); }
 .time-option:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: 12px; }
-.privacy { text-align: center; font-size: .8125rem; color: var(--muted); margin-top: 20px; }
 .player-shell main { flex: 1; display: flex; flex-direction: column; text-align: center; padding-top: 20px; }
 .player-heading h1 { font-size: 3.5rem; }
 .player-station { font-size: .875rem; color: var(--energy); margin-top: 12px; }
@@ -126,17 +125,8 @@ legend { font-size: 1rem; font-weight: 600; padding: 0; }
 .next-step { font-size: .8125rem; color: var(--muted); margin: 16px 0 24px; }
 .player-controls { margin-top: auto; padding-top: 8px; }
 .remaining { font-size: .8125rem; color: var(--muted); margin-top: 8px; }
-.feedback-shell main { flex: 1; display: flex; flex-direction: column; padding-top: 28px; }
-.feedback-exit { margin-bottom: 36px; }
-.feedback-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.done-symbol { width: 64px; height: 64px; border-radius: 16px; display: grid; place-items: center; background: var(--energy); color: var(--canvas); margin-bottom: 28px; }
-.done-symbol svg { width: 32px; height: 32px; }
-.feedback-duration { color: var(--muted); font-size: 1rem; margin: 20px 0 28px; }
-.feedback > p { color: var(--muted); font-size: .875rem; margin: 10px 0 20px; }
-.feedback-option { display: flex; align-items: center; justify-content: center; text-align: center; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 16px 8px; width: 100%; min-width: 0; min-height: 64px; }
-.feedback-option > span { font-size: .9375rem; font-weight: 600; line-height: 1.5; }
-#toast { display: none; }
-@media (hover: hover) { .primary:hover { background: var(--action-hover); } .time-button:hover, .icon-button:hover, .text-button:hover, summary:hover { background: var(--soft); color: var(--ink); } .feedback-option:hover { border-color: var(--energy); background: var(--soft); } }
+#toast { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (hover: hover) { .primary:hover { background: var(--action-hover); } .time-button:hover, .icon-button:hover, .text-button:hover, summary:hover { background: var(--soft); color: var(--ink); }  }
 @media (min-width: 900px) {
   .app-shell:has(.today-main) { max-width: 1180px; padding: 16px 48px 48px; }
   .today-main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 80px; grid-template-areas: 'heading meta' 'heading list' 'action list' 'action note'; grid-template-rows: auto auto auto auto; align-content: start; padding-top: 64px; }
@@ -153,7 +143,7 @@ legend { font-size: 1rem; font-weight: 600; padding: 0; }
   .routine-note { grid-area: note; margin-bottom: 0; }
   .today-main .start-area { grid-area: action; align-self: start; margin-top: 32px; max-width: 420px; }
   .today-main > .notice { grid-column: 1 / -1; }
-  .player-shell, .setup-shell, .feedback-shell { padding-top: 16px; }
+  .player-shell, .setup-shell { padding-top: 16px; }
 }
 @media (max-width: 899px) { .scene-sun { width: 420px; height: 70px; top: -44px; left: calc(50% + 92px); rotate: -36deg; } }
 @media (max-width: 374px) {
@@ -183,7 +173,5 @@ legend { font-size: 1rem; font-weight: 600; padding: 0; }
   .player-heading h1 { font-size: 2.75rem; }
   .movement-stage { margin: 20px 0; }
   .next-step { margin: 12px 0 16px; }
-  .feedback-shell main { padding-top: 16px; }
-  .feedback-shell h1 { font-size: 3.5rem; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

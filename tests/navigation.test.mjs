@@ -1,84 +1,98 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mount} from './helpers/app.mjs';
+const PREFS='on-the-way.preferences.v1';
 
-test('finishing a workout offers an explicit return to the main workout without mandatory feedback',async()=>{
-  const app=await mount();try{
-    app.click('#start');app.elapse(120);
-    assert.match(app.root.innerHTML,/That’s your/);
-    app.click('#home');
-    assert.match(app.root.innerHTML,/aria-label="Today’s movements"/);
-    assert.doesNotMatch(app.root.innerHTML,/How did that feel/);
-    assert.equal(app.node('#main').focused,true);
-    const saved=JSON.parse(app.storage.get('on-the-way.v1'));
-    assert.equal(saved.sessions[0].effort,'skipped','returning does not invent an effort rating');
-    assert.equal(saved.sessions[0].again,'maybe');
-  }finally{app.restore();}
+test('completion returns straight to the original screen and saves no workout',async()=>{
+ const app=await mount();try{
+  const start=app.root.innerHTML;
+  app.click('#start');app.elapse(120);
+  assert.equal(app.root.innerHTML,start);
+  assert.equal(app.node('#main').focused,true);
+  assert.equal(app.node('#toast').textContent,'Workout complete. Ready to start again.');
+  assert.equal(app.document.documentElement.dataset.background,'moving');
+  assert.deepEqual(app.writes,[]);
+ }finally{app.restore();}
 });
-
-test('a saved visit keeps the main screen and allows a fresh timer without duplicate daily credit',async()=>{
-  let saved;
-  const app=await mount();try{
-    app.click('#start');app.elapse(120);app.click('[data-effort="easy"]');
-    saved=app.storage.get('on-the-way.v1');
-    assert.match(app.root.innerHTML,/Start again/);
-    app.click('#start');
-    assert.match(app.root.innerHTML,/1 of 3/,'repeat keeps the existing recovery policy');
-    assert.equal(app.node('#remaining').textContent,'2 min remaining');
-    app.elapse(120);app.click('#home');
-    assert.equal(app.storage.get('on-the-way.v1'),saved,'replaying does not add credit or promote');
-  }finally{app.restore();}
-  const reopened=await mount({saved:{'on-the-way.v1':saved}});try{
-    assert.match(reopened.root.innerHTML,/Today’s movements/);
-    assert.match(reopened.root.innerHTML,/Start again/);
-    reopened.click('#start');
-    assert.equal(reopened.node('#remaining').textContent,'2 min remaining');
-  }finally{reopened.restore();}
+test('consecutive full workouts each restart the original timer and movement order',async()=>{
+ const app=await mount();try{
+  const home=app.root.innerHTML;
+  for(let round=0;round<3;round++){
+   app.click('#start');
+   assert.match(app.root.innerHTML,/1 of 10/);
+   assert.equal(app.node('#clock').textContent,'0:08');
+   assert.equal(app.node('#remaining').textContent,'2 min remaining');
+   app.elapse(8);assert.match(app.root.innerHTML,/Do up to 8 controlled push-ups/);
+   app.elapse(112);assert.equal(app.root.innerHTML,home);
+  }
+  assert.deepEqual(app.writes,[]);
+ }finally{app.restore();}
 });
-
-test('an immediate accidental start can return directly without feedback or a saved visit',async()=>{
+test('ending immediately or partway through returns home without a feedback step',async()=>{
+ for(const elapsed of [0,.6,11,119]){
   const app=await mount();try{
-    app.click('#start');app.click('#stop');
-    assert.match(app.root.innerHTML,/Today’s movements/);
-    assert.match(app.root.innerHTML,/Start workout/);
-    assert.doesNotMatch(app.root.innerHTML,/How did that feel/);
-    assert.equal(app.storage.get('on-the-way.v1'),undefined);
-    assert.equal(app.storage.get('on-the-way.pending.v1'),undefined);
+   const home=app.root.innerHTML;
+   app.click('#start');app.elapse(elapsed);app.click('#stop');
+   assert.equal(app.root.innerHTML,home);
+   assert.doesNotMatch(app.root.innerHTML,/saved|How did that feel|Start again|An easy day/);
+   app.click('#start');assert.equal(app.node('#clock').textContent,'0:08');
+   assert.deepEqual(app.writes,[]);
   }finally{app.restore();}
+ }
 });
-
-test('an existing feedback draft has a neutral return route after reopening',async()=>{
-  const first=await mount();let draft;try{
-    first.click('#start');first.elapse(120);draft=first.storage.get('on-the-way.pending.v1');
-  }finally{first.restore();}
-  const app=await mount({saved:{'on-the-way.pending.v1':draft}});try{
-    app.click('#home');
-    assert.match(app.root.innerHTML,/Today’s movements/);
-    assert.match(app.root.innerHTML,/Start again/);
-    assert.equal(app.storage.get('on-the-way.pending.v1'),undefined);
-    assert.equal(JSON.parse(app.storage.get('on-the-way.v1')).sessions.length,1);
-  }finally{app.restore();}
+test('old saved visits and unfinished feedback drafts never change or block the workout',async()=>{
+ const saved={
+  'on-the-way.v1':JSON.stringify({version:1,program:'personal-corner-v2',setupComplete:true,goal:'habit',timeBudget:120,level:7,levelSince:'2026-10-20',healthReady:false,equipment:[],sessions:[{date:'2026-10-24',level:7,seconds:120,mode:'normal',strength:true,full:true,effort:'pain',again:'no'}]}),
+  'on-the-way.pending.v1':JSON.stringify({date:'2026-10-24',seconds:120,level:7,mode:'normal',full:true,strength:true})
+ };
+ const app=await mount({saved});try{
+  assert.match(app.root.innerHTML,/Your corner/);
+  assert.match(app.root.innerHTML,/Squats/);
+  assert.doesNotMatch(app.root.innerHTML,/recovery|saved|How did that feel|unwell\. Resume/);
+  const home=app.root.innerHTML;app.click('#start');app.elapse(120);assert.equal(app.root.innerHTML,home);
+  assert.deepEqual(Object.fromEntries(app.storage),saved,'legacy entries are left untouched, not resumed or rewritten');
+  assert.deepEqual(app.writes,[]);
+ }finally{app.restore();}
+ const reopened=await mount({saved});try{assert.match(reopened.root.innerHTML,/Start workout/);assert.match(reopened.root.innerHTML,/Squats/);}finally{reopened.restore();}
 });
-
-test('pain reported after restarting is retained without adding a second daily visit',async()=>{
-  const app=await mount();try{
-    app.click('#start');app.elapse(120);app.click('#home');
-    app.click('#start');app.elapse(1);app.click('#stop');app.click('[data-effort="pain"]');
-    const saved=JSON.parse(app.storage.get('on-the-way.v1'));
-    assert.equal(saved.sessions.length,1);
-    assert.equal(saved.sessions[0].effort,'pain');
-    assert.equal(saved.sessions[0].again,'no');
-    assert.match(app.root.innerHTML,/Resume only once symptoms have resolved/);
-  }finally{app.restore();}
+test('finishing the one-minute shortcut returns to the chosen two-minute workout',async()=>{
+ const app=await mount();try{
+  const home=app.root.innerHTML;
+  app.click('#tiny');assert.equal(app.node('#remaining').textContent,'1 min remaining');
+  app.elapse(60);assert.equal(app.root.innerHTML,home);
+  app.click('#start');assert.equal(app.node('#remaining').textContent,'2 min remaining');
+  assert.deepEqual(app.writes,[]);
+ }finally{app.restore();}
 });
-
-test('choosing feedback returns to the main workout rather than a completion dead end',async()=>{
-  const app=await mount();try{
-    app.click('#start');app.elapse(120);
-    app.click('[data-effort="okay"]');
-    assert.match(app.root.innerHTML,/aria-label="Today’s movements"/);
-    const saved=JSON.parse(app.storage.get('on-the-way.v1'));
-    assert.equal(saved.sessions.length,1);
-    assert.equal(saved.sessions[0].effort,'okay');
+test('only changing Time writes a preference, and it survives finishing and reopening',async()=>{
+ const app=await mount();let saved;try{
+  app.click('#edit');app.submitTime(300);
+  assert.deepEqual(app.writes,[[PREFS,'{"timeBudget":300}']]);
+  app.click('#start');assert.equal(app.node('#remaining').textContent,'5 min remaining');app.elapse(300);
+  assert.equal(app.writes.length,1,'finishing does not write a visit');
+  saved=Object.fromEntries(app.storage);
+ }finally{app.restore();}
+ const reopened=await mount({saved});try{
+  reopened.click('#start');assert.equal(reopened.node('#remaining').textContent,'5 min remaining');
+  assert.match(reopened.root.innerHTML,/1 of 10/);
+ }finally{reopened.restore();}
+});
+test('blocked storage does not prevent a fresh workout or reset',async()=>{
+ for(const options of [{readBlocked:true},{writeBlocked:true}]){
+  const app=await mount(options);try{
+   if(options.writeBlocked){app.click('#edit');app.submitTime(120);assert.match(app.root.innerHTML,/cannot remember/);}
+   const home=app.root.innerHTML;app.click('#start');app.elapse(120);assert.equal(app.root.innerHTML,home);
+   app.click('#start');assert.equal(app.node('#clock').textContent,'0:08');
   }finally{app.restore();}
+ }
+});
+test('legacy storage events are ignored; changed time preferences pause an active workout safely',async()=>{
+ const app=await mount();try{
+  app.click('#start');app.elapse(10);
+  app.storageEvent('on-the-way.v1','{"sessions":[{"effort":"pain"}]}');
+  assert.doesNotMatch(app.root.innerHTML,/Paused/);
+  app.storageEvent(PREFS,'{"timeBudget":60}');assert.match(app.root.innerHTML,/Paused/);
+  app.click('#pause');app.elapse(110);
+  app.click('#start');assert.equal(app.node('#remaining').textContent,'1 min remaining');assert.equal(app.node('#clock').textContent,'0:07');
+ }finally{app.restore();}
 });

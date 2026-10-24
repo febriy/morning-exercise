@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 let mounts=0;
 // Exercise the actual app's motion controls and lifecycle without a browser or timers.
-export async function mount({reduce=false,host={},saved={}}={}) {
-  const previous = new Map(['document','window','localStorage','setInterval','clearInterval'].map(k=>[k,globalThis[k]]));
+export async function mount({reduce=false,host={},saved={},readBlocked=false,writeBlocked=false}={}) {
+  const previous = new Map(['document','window','localStorage','setInterval','clearInterval','FormData'].map(k=>[k,globalThis[k]]));
   const events=new Map(), mediaEvents=new Map(), windowEvents=new Map(), nodes=new Map(), storage=new Map(Object.entries(saved));
+  const writes=[];
   const realNow=Date.now;let now=realNow(),tick=null;Date.now=()=>now;
   const media={matches:reduce,addEventListener:(type,fn)=>mediaEvents.set(type,fn)};
   function node(selector){
@@ -17,12 +18,15 @@ export async function mount({reduce=false,host={},saved={}}={}) {
   const document={hidden:false,documentElement:{dataset:{}},querySelector:s=>s==='#app'?root:node(s),addEventListener:(type,fn)=>events.set(type,fn)};
   globalThis.document=document;
   globalThis.window={matchMedia:()=>media,addEventListener:(type,fn)=>windowEvents.set(type,fn),scrollTo(){},...host};
-  globalThis.localStorage={getItem:k=>storage.get(k)??null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)};
+  globalThis.localStorage={getItem:k=>{if(readBlocked)throw Error('Storage blocked');return storage.get(k)??null;},setItem:(k,v)=>{writes.push([k,v]);if(writeBlocked)throw Error('Storage blocked');storage.set(k,v);},removeItem:k=>storage.delete(k)};
+  globalThis.FormData=class {constructor(form){this.time=form.time;}get(name){return name==='time'?String(this.time):null;}};
   globalThis.setInterval=fn=>{tick=fn;return 1;};
   globalThis.clearInterval=()=>{tick=null;};
   try {await import(`../../dist/app.mjs?app-test=${++mounts}`);}
   catch(error){Date.now=realNow;for(const [k,v] of previous){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}throw error;}
-  return {document,media,root,node,storage,
+  return {document,media,root,node,storage,writes,
+    submitTime(time){node('#setup').onsubmit({preventDefault(){},currentTarget:{time}});},
+    storageEvent(key,newValue){windowEvents.get('storage')({key,newValue});},
     elapse(seconds){for(let ms=0;ms<seconds*1000;ms+=200){now+=200;tick?.();}},
     jump(seconds){now+=seconds*1000;tick?.();},
     pagehide(){windowEvents.get('pagehide')?.();},
