@@ -1,6 +1,7 @@
-import {loadPreferences,recipe,kidsRecipe,duration} from './model.mjs?v=kids-prep-1';
+import {loadPreferences,recipe,duration} from './model.mjs?v=session-editor-1';
 import {createTrainer} from './trainer.mjs?v=safari-audio-1';
-import {movementSprite,movementFrame} from './movements.mjs?v=kids-prep-1';
+import {movementSprite,movementFrame} from './movements.mjs?v=session-editor-1';
+import {SESSION_STORAGE,MAX_STEPS,EXERCISES,defaultPlan,editableSteps,sessionError,loadSessions,sessionPlan} from './sessions.mjs?v=session-editor-1';
 const trainer=createTrainer(window);
 
 const PREFERENCES='on-the-way.preferences.v1';
@@ -11,6 +12,8 @@ try {
   state=loadPreferences(saved,saved===null?localStorage.getItem('on-the-way.v1'):null);
 }catch{state=loadPreferences(null);}
 let active=null,interval=null,editing=false,storageProblem=false,session='morning';
+let sessions={};try{sessions=loadSessions(localStorage.getItem(SESSION_STORAGE));}catch{}
+let draft=null,sessionStorageProblem=false;
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 let backgroundPaused=false;
 function syncBackground(){
@@ -30,11 +33,12 @@ function save(){
 function focusScreen(){window.scrollTo(0,0);root.querySelector('#main')?.focus({preventScroll:true});}
 function backgroundControl(){return `<button class="icon-button background-control" id="background-motion" aria-label="${backgroundPaused?'Play':'Pause'} background motion" title="${backgroundPaused?'Play':'Pause'} background motion" ${reducedMotion.matches?'hidden':''}>${icon(backgroundPaused?'play':'pause')}</button>`;}
 function sessionPicker(){return `<div class="session-picker" role="group" aria-label="Workout session"><button id="session-morning" aria-label="Morning fitness corner" aria-pressed="${session==='morning'}">Morning</button><button id="session-kids" aria-label="Exercise with kids" aria-pressed="${session==='kids'}">With kids</button></div>`;}
-function header({back=false}={}){return `<header class="header">${back?`<button class="icon-button" id="back" aria-label="Back to workout">${icon('back')}</button>`:sessionPicker()}<div class="header-actions">${backgroundControl()}${!back&&session==='morning'?`<button class="time-button" id="edit" aria-label="Change time">${icon('edit')}<span>Time</span></button>`:''}</div></header>`;}
+function header({back=false}={}){return `<header class="header">${back?`<button class="icon-button" id="back" aria-label="Back to workout">${icon('back')}</button>`:sessionPicker()}<div class="header-actions">${backgroundControl()}${!back&&session==='morning'&&!sessions.morning?`<button class="time-button" id="edit" aria-label="Change time">${icon('edit')}<span>Time</span></button>`:''}</div></header>`;}
 function render(){
   syncBackground();
   document.querySelector('#overlay').innerHTML='';
   if(active){renderPlayer();return;}
+  if(draft){renderEditor();return;}
   if(editing){renderSetup();return;}
   renderToday();
 }
@@ -59,11 +63,38 @@ function planGroups(plan){
   return [...groups.values()];
 }
 function renderToday(){
-  const kids=session==='kids',plan=kids?kidsRecipe():recipe(state),steps=kids?plan.steps:planGroups(plan);
-  root.innerHTML=`<div class="app-shell">${header()}<main id="main" tabindex="-1" class="today-main${!kids&&steps.length===5?' five-movements':''}"><div class="workout-heading"><h1>${kids?'Exercise<br>with kids.':'Your corner<br>routine.'}</h1><p>${kids?'A little movement, together.':'Five movements. Go at your pace.'}</p></div><div class="workout-meta"><span class="duration">${duration(plan.seconds)}</span><span>Rest included</span></div><ol class="workout-card" aria-label="${kids?'Exercise with kids steps':'Today’s movements'}">${steps.map((step,index)=>`<li class="movement-row"><span class="station-number" aria-hidden="true">${String(index+1).padStart(2,'0')}</span>${movementSprite(step.id,{preview:true})||`<span class="movement-icon">${icon('rest')}</span>`}<span class="movement-info"><span class="movement-name">${escape(step.title)}</span><span class="movement-station">${escape(step.station)}</span></span><span class="movement-time">${step.count>1?`${step.count} × `:''}<strong>${step.reps||step.seconds}</strong><span>${step.reps?(step.reps===1?'rep':'reps'):'sec'}</span></span></li>`).join('')}</ol><p class="routine-note">Pause for more rest whenever you need.</p>${!kids?storageNote():''}<div class="start-area"><button class="primary" id="start">Start workout ${icon('play')}</button>${!kids&&plan.seconds>60?'<button class="text-button" id="tiny">Just one minute today</button>':''}<p class="safety-line">${kids?'Make a little space. Go at your own pace.': 'Use only a dry, stable station that fits the instructions. Stop for pain or feeling unwell. Get advice first if a condition or injury limits exercise.'}</p></div></main></div>`;
+  const kids=session==='kids',custom=!!sessions[session],plan=sessionPlan(session,state,sessions),steps=kids||custom?plan.steps:planGroups(plan);
+  root.innerHTML=`<div class="app-shell">${header()}<main id="main" tabindex="-1" class="today-main${!kids&&steps.length===5?' five-movements':''}"><div class="workout-heading"><h1>${kids?'Exercise<br>with kids.':'Your corner<br>routine.'}</h1><p>${kids?'A little movement, together.':(custom?'Your movements. Your pace.':'Five movements. Go at your pace.')}</p></div><div class="workout-meta"><span class="duration">${duration(plan.seconds)}</span><button class="edit-session" id="edit-session">Edit session ${icon('edit')}</button></div><ol class="workout-card" aria-label="${kids?'Exercise with kids steps':'Today’s movements'}">${steps.map((step,index)=>`<li class="movement-row"><span class="station-number" aria-hidden="true">${String(index+1).padStart(2,'0')}</span>${movementSprite(step.id,{preview:true})||`<span class="movement-icon">${icon('rest')}</span>`}<span class="movement-info"><span class="movement-name">${escape(step.title)}</span><span class="movement-station">${escape(step.station)}</span></span><span class="movement-time">${step.count>1?`${step.count} × `:''}<strong>${step.reps||step.seconds}</strong><span>${step.reps?(step.reps===1?'rep':'reps'):'sec'}</span></span></li>`).join('')}</ol><p class="routine-note">Pause for more rest whenever you need.</p>${!kids?storageNote():''}${sessionStorageProblem?'<p class="notice" role="status">Your changes work for this visit, but this browser cannot remember them.</p>':''}<div class="start-area"><button class="primary" id="start">Start workout ${icon('play')}</button>${!kids&&!custom&&plan.seconds>60?'<button class="text-button" id="tiny">Just one minute today</button>':''}<p class="safety-line">${kids?'Make a little space. Go at your own pace.': 'Use only a dry, stable station that fits the instructions. Stop for pain or feeling unwell. Get advice first if a condition or injury limits exercise.'}</p></div></main></div>`;
   bindEdit();
+  root.querySelector('#edit-session').onclick=()=>{draft=editableSteps(plan);render();focusScreen();};
   root.querySelector('#start')?.addEventListener('click',()=>start(plan));
   root.querySelector('#tiny')?.addEventListener('click',()=>start(recipe(state,{tiny:true})));
+}
+
+function draftSteps(){return draft.map(step=>({id:step.id,seconds:Number(step.seconds)}));}
+function updateEditorTotal(){
+  const steps=draftSteps(),total=steps.reduce((sum,step)=>sum+step.seconds,0);
+  root.querySelector('#editor-total').textContent=steps.length&&steps.every(step=>Number.isInteger(step.seconds)&&step.seconds>0)?duration(total):'—';
+}
+function renderEditor(){
+  root.innerHTML=`<div class="app-shell editor-shell">${header({back:true})}<main id="main" tabindex="-1"><div class="editor-heading"><h1>Edit session.</h1><p>${session==='kids'?'Exercise with kids':'Morning fitness corner'}</p><p>Choose each movement and its seconds.</p></div><form id="session-editor" novalidate><div class="editor-list">${draft.map((step,index)=>`<fieldset class="editor-step"><legend>Step ${index+1}</legend><div class="editor-fields"><label>Exercise<select id="type-${index}" aria-label="Step ${index+1} exercise">${EXERCISES.map(choice=>`<option value="${choice.id}" ${step.id===choice.id?'selected':''}>${escape(choice.title)}</option>`).join('')}</select></label><label class="seconds-field">Seconds<input id="seconds-${index}" aria-label="Step ${index+1} seconds" type="number" inputmode="numeric" min="1" max="600" step="1" required value="${escape(step.seconds)}"></label><button type="button" class="icon-button remove-step" id="remove-${index}" aria-label="Remove step ${index+1}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 3h6l1 4M6 7l1 14h10l1-14M10 11v6m4-6v6"/></svg></button></div></fieldset>`).join('')}</div>${!draft.length?'<p class="editor-empty">Add your first exercise to build this session.</p>':''}<button class="add-step" id="add-step" type="button" ${draft.length>=MAX_STEPS?'disabled':''}>Add step ${icon('plus')}</button>${draft.length>=MAX_STEPS?'<p class="routine-note">20 steps is the limit for one session.</p>':''}<div class="editor-summary"><span>Total time</span><strong id="editor-total"></strong></div><p class="editor-help">Up to 10 minutes. Remembered on this browser.</p><p id="editor-error" class="editor-error" role="alert" tabindex="-1" hidden></p><button class="primary" type="submit">Save changes ${icon('check')}</button><button class="text-button" id="restore-session" type="button">Restore original routine</button></form></main></div>`;
+  root.querySelector('#back').onclick=()=>{draft=null;render();focusScreen();document.querySelector('#toast').textContent='Changes discarded.';};
+  for(let index=0;index<draft.length;index++){
+    root.querySelector(`#type-${index}`).addEventListener('change',e=>{draft[index].id=e.currentTarget.value;});
+    root.querySelector(`#seconds-${index}`).addEventListener('input',e=>{draft[index].seconds=e.currentTarget.value;updateEditorTotal();});
+    root.querySelector(`#remove-${index}`).onclick=()=>{draft.splice(index,1);renderEditor();root.querySelector(`#type-${Math.min(index,draft.length-1)}`)?.focus();if(!draft.length)root.querySelector('#add-step').focus();};
+  }
+  root.querySelector('#add-step').onclick=()=>{if(draft.length>=MAX_STEPS)return;draft.push({id:'squat',seconds:20});renderEditor();root.querySelector(`#type-${draft.length-1}`).focus();};
+  root.querySelector('#restore-session').onclick=()=>{draft=editableSteps(defaultPlan(session,state));renderEditor();focusScreen();document.querySelector('#toast').textContent='Original routine restored in the editor. Save changes to apply it.';};
+  root.querySelector('#session-editor').onsubmit=e=>{
+    e.preventDefault();const steps=draftSteps(),error=sessionError(steps);
+    if(error){const notice=root.querySelector('#editor-error');notice.hidden=false;notice.textContent=error;notice.focus();for(let index=0;index<steps.length;index++)root.querySelector(`#seconds-${index}`).setAttribute('aria-invalid',String(!Number.isInteger(steps[index].seconds)||steps[index].seconds<1||steps[index].seconds>600));return;}
+    const previous=JSON.stringify(sessions[session]??null),original=JSON.stringify(steps)===JSON.stringify(editableSteps(defaultPlan(session,state)));
+    if(original)delete sessions[session];else sessions[session]=steps;
+    if(previous!==JSON.stringify(sessions[session]??null)||sessionStorageProblem){try{localStorage.setItem(SESSION_STORAGE,JSON.stringify({version:1,...sessions}));sessionStorageProblem=false;}catch{sessionStorageProblem=true;}}
+    draft=null;render();focusScreen();document.querySelector('#toast').textContent=sessionStorageProblem?'Session updated for this visit.':'Session updated.';
+  };
+  updateEditorTotal();bindBackground();
 }
 
 function start(plan){
@@ -111,12 +142,12 @@ function finish(full){
   if(!active)return;
   clearInterval(interval);interval=null;
   if(full)trainer.complete();else trainer.stop();
-  active=null;editing=false;render();focusScreen();
+  active=null;editing=false;draft=null;render();focusScreen();
   document.querySelector('#toast').textContent=full?'Workout complete. Ready to start again.':'Workout ended. Ready to start again.';
 }
-document.addEventListener('visibilitychange',()=>{if(document.hidden)trainer.stop();syncBackground();if(document.hidden&&active&&!active.paused)pause();else if(!document.hidden&&!active&&!editing)render();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)trainer.stop();syncBackground();if(document.hidden&&active&&!active.paused)pause();else if(!document.hidden&&!active&&!editing&&!draft)render();});
 window.addEventListener('beforeunload',e=>{if(active){e.preventDefault();e.returnValue='';}});
 window.addEventListener('pagehide',()=>{trainer.stop();if(active&&!active.paused){active.paused=true;renderPlayer();}});
-window.addEventListener('storage',e=>{if(e.key!==PREFERENCES&&e.key!==null)return;state=loadPreferences(e.newValue);if(active)pause();else if(!editing)render();});
-window.addEventListener('pageshow',()=>{if(!active&&!editing)render();});
+window.addEventListener('storage',e=>{if(e.key!==PREFERENCES&&e.key!==SESSION_STORAGE&&e.key!==null)return;if(e.key===PREFERENCES||e.key===null)state=loadPreferences(e.newValue);if(e.key===SESSION_STORAGE||e.key===null)sessions=loadSessions(e.newValue);if(active)pause();else if(!editing&&!draft)render();});
+window.addEventListener('pageshow',()=>{if(!active&&!editing&&!draft)render();});
 render();

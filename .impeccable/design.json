@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-24T11:56:57.514391+00:00",
+  "generatedAt": "2026-10-24T12:17:09.625702+00:00",
   "title": "Design System: On the Way — Ninja Arena",
   "extensions": {
     "colorMeta": {
@@ -376,10 +376,18 @@
     {
       "name": "Session selector",
       "refersTo": "session-picker",
-      "description": "Morning / With kids button group with cyan selected state and an immediate workout switch. Fixed kids timer includes five seconds of preparation and both rests.",
+      "description": "Morning / With kids button group with cyan selected state and an immediate workout switch. The default kids timer includes five seconds of preparation and both rests; edited sessions show their saved steps.",
       "html": "<div class=\"ds-session-picker\" role=\"group\" aria-label=\"Workout session\"><button aria-label=\"Morning fitness corner\" aria-pressed=\"false\">Morning</button><button aria-label=\"Exercise with kids\" aria-pressed=\"true\">With kids</button></div>",
       "css": ".ds-session-picker{display:flex;gap:4px}.ds-session-picker button{min-height:44px;border:0;border-radius:10px;padding:10px 12px;background:transparent;color:var(--muted,#b8cce1);font:800 1.125rem/1 var(--display)}.ds-session-picker button[aria-pressed=\"true\"]{background:var(--energy,#67dfff);color:var(--canvas,#07172e)}.ds-session-picker button:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px}",
       "kind": "button"
+    },
+    {
+      "name": "Session editor field",
+      "kind": "input",
+      "refersTo": "editor-field",
+      "description": "Native exercise select and numeric seconds field with a 48px touch target and cyan keyboard focus. Narrow phones stack the exercise above seconds/removal.",
+      "html": "<label class=\"ds-editor-field\">Seconds<input type=\"number\" min=\"1\" max=\"600\" step=\"1\" value=\"20\"></label>",
+      "css": ".ds-editor-field{display:flex;flex-direction:column;gap:7px;color:var(--muted,#b8cce1);font-size:.75rem}.ds-editor-field input{font:1rem -apple-system,BlinkMacSystemFont,sans-serif;height:48px;border:1px solid var(--line,#304862);border-radius:12px;padding:10px;color:var(--ink,#fff);background:var(--surface,#102742);font-variant-numeric:tabular-nums}.ds-editor-field input:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px}"
     }
   ],
   "narrative": {

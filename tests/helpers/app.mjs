@@ -26,6 +26,8 @@ export async function mount({reduce=false,host={},saved={},readBlocked=false,wri
   catch(error){Date.now=realNow;for(const [k,v] of previous){if(v===undefined)delete globalThis[k];else globalThis[k]=v;}throw error;}
   return {document,media,root,node,storage,writes,
     submitTime(time){node('#setup').onsubmit({preventDefault(){},currentTarget:{time}});},
+    field(selector,value,type='input'){const el=root.querySelector(selector);assert.ok(el,`Missing ${selector}`);el.events.get(type)({currentTarget:{value}});},
+    submitSession(){node('#session-editor').onsubmit({preventDefault(){}});},
     storageEvent(key,newValue){windowEvents.get('storage')({key,newValue});},
     elapse(seconds){for(let ms=0;ms<seconds*1000;ms+=200){now+=200;tick?.();}},
     jump(seconds){now+=seconds*1000;tick?.();},
