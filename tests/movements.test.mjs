@@ -60,7 +60,7 @@ test('workout clock freezes the pose on pause, guidance, hidden tabs and Reduce 
 
 test('pausing knee raises preserves the current rep and resumes the demonstration',async()=>{
  const app=await mount();try{
-  app.click('#start');app.elapse(38.6);
+  app.click('#start');app.elapse(48.6);
   assert.match(app.root.innerHTML,/Knee raises/);
   assert.equal(app.node('#movement-demo').attributes['data-frame'],'2');
   app.click('#pause');app.elapse(4);app.click('#pause');

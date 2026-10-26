@@ -4,6 +4,17 @@ import {SESSION_STORAGE,sessionError,loadSessions,sessionPlan} from '../dist/ses
 import {recipe,kidsRecipe} from '../dist/model.mjs';
 import {mount} from './helpers/app.mjs';
 
+test('legacy Morning rests become fifteen seconds while other exercises and sessions retain their timing',()=>{
+ const morning=[{id:'prepare',seconds:3},{id:'squat',seconds:12},{id:'rest',seconds:5},{id:'bar-hang',seconds:7}];
+ const kids=[{id:'squat',seconds:8},{id:'rest',seconds:20}];
+ const loaded=loadSessions(JSON.stringify({version:1,morning,kids}));
+ assert.deepEqual(loaded.morning,morning.map(s=>s.id==='rest'?{...s,seconds:15}:s));assert.deepEqual(loaded.kids,kids);
+ assert.equal(sessionPlan('morning',{},loaded).seconds,37);
+ assert.deepEqual(loadSessions(JSON.stringify({version:2,morning,kids})),{morning,kids},'later explicit edits remain editable');
+ const long=[{id:'squat',seconds:590},{id:'rest',seconds:5}];
+ assert.deepEqual(loadSessions(JSON.stringify({version:1,morning:long})).morning,long,'migration cannot silently discard an existing routine beyond the editor limit');
+});
+
 test('missing, corrupt or incompatible session settings preserve both default recipes',()=>{
  for(const raw of [null,'broken','null','[]','{"version":2,"kids":[]}',JSON.stringify({version:1,kids:[{id:'<script>',seconds:20}]})]){
   const overrides=loadSessions(raw);
@@ -107,7 +118,7 @@ test('restoring and saving defaults affects only the selected session',async()=>
   assert.equal(app.root.querySelector('#tiny'),null);assert.equal(app.root.querySelector('#edit'),null);
   app.click('#session-kids');app.click('#edit-session');app.click('#restore-session');app.submitSession();
   assert.match(app.root.innerHTML,/1 min 25 sec/);
-  assert.deepEqual(JSON.parse(app.storage.get(SESSION_STORAGE)),{version:1,morning:[{id:'squat',seconds:9}]});
+  assert.deepEqual(JSON.parse(app.storage.get(SESSION_STORAGE)),{version:2,morning:[{id:'squat',seconds:9}]});
   app.click('#session-morning');app.click('#start');assert.equal(app.node('#clock').textContent,'0:09');
  }finally{app.restore();}
 });

@@ -13,7 +13,7 @@ test('Exercise with kids starts with five seconds of prep before one 80-second r
  assert.ok(plan.steps.every(s=>!('reps' in s)),'these are timed movements, not rep targets');
  plan.steps[0].seconds=1;
  assert.equal(kidsRecipe().steps[0].seconds,5,'each start gets a fresh preparation phase');
- assert.equal(recipe().seconds,120,'the morning routine remains two minutes');
+ assert.equal(recipe().seconds,160,'the longer Morning routine does not change kids');
 });
 
 test('kids overview includes prep and all four intervals, with a fixed time and no setup or Time preset',async()=>{
@@ -64,13 +64,12 @@ test('ending or pausing kids preserves the selected session and its timer withou
  }finally{app.restore();}
 });
 
-test('switching sessions keeps the morning time choice independent of the fixed kids session',async()=>{
+test('switching sessions keeps the longer Morning circuit independent of kids',async()=>{
  const app=await mount();try{
-  app.click('#edit');app.submitTime(300);const morning=app.root.innerHTML;
+  const morning=app.root.innerHTML;
   app.click('#session-kids');app.click('#start');app.elapse(85);
   app.click('#session-morning');assert.equal(app.root.innerHTML,morning);
-  app.click('#start');assert.equal(app.node('#remaining').textContent,'5 min remaining');
-  assert.match(app.root.innerHTML,/1 of 10/);
-  assert.deepEqual(app.writes,[['on-the-way.preferences.v1','{"timeBudget":300}']]);
+  app.click('#start');assert.equal(app.node('#remaining').textContent,'2 min 40 sec remaining');
+  assert.deepEqual(app.writes,[]);
  }finally{app.restore();}
 });

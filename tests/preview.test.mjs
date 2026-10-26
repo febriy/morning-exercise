@@ -32,15 +32,15 @@ test('rest previews knee raises at the pull-up bar, freezes on pause and honors 
   assert.match(app.root.innerHTML,/id="upcoming-station">Pull-up bar/);
   assert.match(app.root.innerHTML,/Rest time left/);
   assert.match(app.root.innerHTML,/aria-label="Rest time remaining"/);
-  assert.equal(app.node('#clock').textContent,'0:05');
+  assert.equal(app.node('#clock').textContent,'0:15');
   app.elapse(1.6);assert.equal(app.node('#movement-demo').attributes['data-frame'],'2');
   app.click('#pause');app.elapse(5);
   assert.equal(app.document.documentElement.dataset.phase,'rest');
-  assert.equal(app.node('#clock').textContent,'0:04');
+  assert.equal(app.node('#clock').textContent,'0:14');
   assert.equal(app.node('#movement-demo').attributes['data-frame'],'2');
   app.reduce(true);assert.equal(app.node('#movement-demo').attributes['data-frame'],'0');
   app.reduce(false);assert.equal(app.node('#movement-demo').attributes['data-frame'],'2');
-  app.click('#pause');app.elapse(3.4);
+  app.click('#pause');app.elapse(13.4);
   assert.equal(app.document.documentElement.dataset.phase,'move');
   assert.equal(app.node('#clock').textContent,'0:24');
   assert.equal(app.node('#movement-demo').attributes['data-frame'],'0');

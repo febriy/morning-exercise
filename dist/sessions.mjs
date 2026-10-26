@@ -1,6 +1,7 @@
-import {recipe,kidsRecipe,homeRecipe} from './model.mjs?v=at-home-1';
+import {recipe,kidsRecipe,homeRecipe} from './model.mjs?v=named-cues-1';
 
 export const SESSION_STORAGE='on-the-way.sessions.v1';
+export const SESSION_VERSION=2;
 export const MAX_STEPS=20;
 export const MAX_SECONDS=600;
 export const EXERCISES=[
@@ -37,9 +38,14 @@ export function loadSessions(raw){
  const result={};
  try{
   const parsed=JSON.parse(raw);
-  if(parsed?.version!==1)return result;
+  if(![1,SESSION_VERSION].includes(parsed?.version))return result;
   for(const session of ['morning','kids','home']){
-   if(Array.isArray(parsed[session])&&!sessionError(parsed[session]))result[session]=parsed[session].map(({id,seconds})=>({id,seconds}));
+   if(Array.isArray(parsed[session])&&!sessionError(parsed[session])){
+    const steps=parsed[session].map(({id,seconds})=>({id,seconds}));
+    const updated=parsed.version===1&&session==='morning'?steps.map(step=>step.id==='rest'?{...step,seconds:15}:step):steps;
+    // Preserve an unusually long existing routine if migration would exceed the editor limit.
+    result[session]=sessionError(updated)?steps:updated;
+   }
   }
  }catch{}
  return result;

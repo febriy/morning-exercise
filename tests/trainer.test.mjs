@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createTrainer} from '../dist/trainer.mjs';
 import {mount} from './helpers/app.mjs';
+import {readFile} from 'node:fs/promises';
 
 function soundBrowser({suspended=false,clips=false,deferred=false,silentPhone=false}={}) {
   const spoken=[],tones=[],played=[],sources=[],requests=[],audible=[];let cancelled=0,resumeAudio,releaseFiles;
@@ -20,10 +21,10 @@ function soundBrowser({suspended=false,clips=false,deferred=false,silentPhone=fa
     createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){},disconnect(){}};}
   }
   const host={AudioContext,SpeechSynthesisUtterance:class{constructor(text){this.text=text;}},speechSynthesis:{
-    cancel(){cancelled++;},getVoices(){return [{lang:'en-SG',localService:true,name:'English'}];},speak(u){spoken.push(u.text);}
+    cancel(){cancelled++;},getVoices(){return [{lang:'en-SG',localService:true,name:'English'}];},speak(u){spoken.push(u.text);u.onend?.();}
   }};
   if(silentPhone)host.navigator={audioSession};
-  if(clips)host.fetch=async url=>{requests.push(String(url));await fileGate;const file=String(url).split('/').at(-1).replace('.m4a','');const id=['ready','start','rest','complete','5','4','3','2','1'].indexOf(file);return {ok:true,arrayBuffer:async()=>new Uint8Array([id]).buffer};};
+  if(clips)host.fetch=async url=>{requests.push(String(url));await fileGate;const file=String(url).split('/').at(-1).replace('.m4a','');const id=['ready','start','rest','complete','5','4','3','2','1','next-platform-pushup','next-hanging-knee-raise','next-bar-hang','next-support-hold','next-squat','next-jumping-jacks','next-kettlebell-squat','next-incline-pushup','next-kettlebell-swing'].indexOf(file);return {ok:true,arrayBuffer:async()=>new Uint8Array([id]).buffer};};
   return {host,spoken,tones,contexts,played,sources,requests,audible,audioSession,release(){releaseFiles?.();},get cancelled(){return cancelled;},resume(){resumeAudio?.();}};
 }
 
@@ -31,9 +32,44 @@ test('At home speaks prep, three starts, three rests and completion through the 
  const browser=soundBrowser(),app=await mount({host:browser.host});try{
   app.click('#session-home');app.click('#start');app.elapse(125);
   const cues=browser.spoken.filter(text=>!/^\d$/.test(text));
-  assert.deepEqual(cues,['Get ready','Start','Rest','Start','Rest','Start','Rest','Workout complete']);
+  assert.deepEqual(cues,['Next exercise. Kettlebell squats.','Start','Next exercise. Incline push-ups.','Start','Next exercise. Kettlebell swings.','Start','Rest','Workout complete']);
   assert.equal(browser.spoken.filter(text=>text==='5').length,6);
   assert.match(app.root.innerHTML,/At<br>home\./);
+ }finally{app.restore();}
+});
+
+test('all movement names have bundled AAC announcements and play without system speech',async()=>{
+ const ids=['platform-pushup','hanging-knee-raise','bar-hang','support-hold','squat','jumping-jacks','kettlebell-squat','incline-pushup','kettlebell-swing'];
+ for(const id of ids){
+  const bytes=await readFile(new URL(`../dist/audio/next-${id}.m4a`,import.meta.url));
+  assert.equal(bytes.toString('ascii',4,8),'ftyp');assert.ok(bytes.length>2000);
+ }
+ const browser=soundBrowser({clips:true});delete browser.host.speechSynthesis;delete browser.host.SpeechSynthesisUtterance;
+ const coach=createTrainer(browser.host);coach.unlock();coach.begin({kind:'rest',seconds:15},15,{id:'bar-hang',title:'Pull-up bar hang'});
+ await new Promise(resolve=>setImmediate(resolve));
+ assert.deepEqual(browser.played,[11]);assert.deepEqual(browser.spoken,[]);
+ coach.stop();
+});
+
+test('countdown never cuts off an exercise name and resumes with the current number after it ends',async()=>{
+ const browser=soundBrowser({clips:true}),coach=createTrainer(browser.host);
+ coach.unlock();coach.begin({kind:'prepare',seconds:5},5,{id:'squat',title:'Squats'});
+ await new Promise(resolve=>setImmediate(resolve));
+ assert.deepEqual(browser.played,[13]);
+ coach.countdown(4);coach.countdown(3);assert.deepEqual(browser.played,[13]);
+ browser.sources.at(-1).onended();coach.countdown(2);coach.countdown(1);
+ assert.deepEqual(browser.played,[13,7,8],'expired countdown numbers are skipped');
+ coach.stop();
+});
+
+test('named cues follow edited movement order and stop when a paused or ended phase is abandoned',async()=>{
+ const saved={'on-the-way.sessions.v1':JSON.stringify({version:2,morning:[{id:'prepare',seconds:5},{id:'kettlebell-swing',seconds:20},{id:'rest',seconds:15},{id:'incline-pushup',seconds:20}]})};
+ const browser=soundBrowser(),app=await mount({saved,host:browser.host});try{
+  app.click('#start');assert.equal(browser.spoken.at(-1),'Next exercise. Kettlebell swings.');
+  app.elapse(25);assert.equal(browser.spoken.at(-1),'Next exercise. Incline push-ups.');
+  app.click('#pause');const count=browser.spoken.length;app.elapse(20);assert.equal(browser.spoken.length,count);
+  app.click('#pause');assert.equal(browser.spoken.at(-1),'Next exercise. Incline push-ups.');
+  app.click('#stop');app.elapse(30);assert.equal(browser.spoken.filter(x=>x==='Workout complete').length,0);
  }finally{app.restore();}
 });
 
@@ -43,7 +79,7 @@ test('iPhone Silent Mode uses a playback session so the actual Start tap produce
     app.click('#start');
     await new Promise(resolve=>setImmediate(resolve));
     assert.ok(browser.audible.includes(880),'opening bell reaches the playback route in Silent Mode');
-    assert.ok(browser.audible.includes(0),'Get ready voice reaches the playback route in Silent Mode');
+    assert.ok(browser.audible.includes(9),'Named preview voice reaches the playback route in Silent Mode');
     assert.equal(browser.contexts[0].sessionAtCreation,'playback','select route before opening audio');
     app.click('#pause');
     assert.equal(browser.audioSession.type,'auto','pausing releases the playback session');
@@ -127,12 +163,12 @@ test('missing or blocked audio and speech APIs never block a session',()=>{
   }
 });
 
-test('the real two-minute workout speaks countdowns and cues at boundaries without replaying on every tick',async()=>{
+test('the real Morning workout speaks countdowns and cues at boundaries without replaying on every tick',async()=>{
   const browser=soundBrowser(),app=await mount({host:browser.host});try{
-    app.click('#start');assert.deepEqual(browser.spoken,['Get ready']);
-    app.elapse(8);assert.deepEqual(browser.spoken,['Get ready','5','4','3','2','1','Start']);
-    app.elapse(24);assert.equal(browser.spoken.at(-1),'Rest');
-    app.elapse(88);assert.equal(browser.spoken.at(-1),'Workout complete');
+    app.click('#start');assert.deepEqual(browser.spoken,['Next exercise. Platform push-ups.']);
+    app.elapse(8);assert.deepEqual(browser.spoken,['Next exercise. Platform push-ups.','5','4','3','2','1','Start']);
+    app.elapse(24);assert.equal(browser.spoken.at(-1),'Next exercise. Knee raises.');
+    app.elapse(128);assert.equal(browser.spoken.at(-1),'Workout complete');
     assert.match(app.root.innerHTML,/Your corner/);
     assert.match(app.root.innerHTML,/Start workout/);
     assert.equal(browser.spoken.filter(x=>x==='Workout complete').length,1);
@@ -144,8 +180,8 @@ test('kids workout gives a five-second Get ready phase before movement and rest 
  const browser=soundBrowser(),app=await mount({host:browser.host});try{
   app.click('#session-kids');app.click('#start');app.elapse(85);
   assert.deepEqual(browser.spoken,[
-   'Get ready','4','3','2','1',
-   'Start','5','4','3','2','1','Rest','5','4','3','2','1',
+   'Next exercise. Jumping jacks.','4','3','2','1',
+   'Start','5','4','3','2','1','Next exercise. Squats.','5','4','3','2','1',
    'Start','5','4','3','2','1','Rest','5','4','3','2','1','Workout complete'
   ]);
   assert.equal(browser.tones.length,18,'prep, four intervals and completion each ring once');
@@ -158,7 +194,7 @@ test('pause, guidance, hiding the page and ending stop cues; resume speaks only 
   const browser=soundBrowser(),app=await mount({host:browser.host});try{
     app.click('#start');app.elapse(3);assert.equal(browser.spoken.at(-1),'5');
     app.click('#pause');const paused=browser.spoken.length;app.elapse(10);assert.equal(browser.spoken.length,paused);
-    app.click('#pause');assert.equal(browser.spoken.at(-1),'Get ready');
+    app.click('#pause');assert.equal(browser.spoken.at(-1),'Next exercise. Platform push-ups.');
     app.elapse(1);assert.equal(browser.spoken.at(-1),'4');
     const details=app.root.querySelector('details');details.ontoggle({currentTarget:{open:true}});
     const guided=browser.spoken.length;app.elapse(10);assert.equal(browser.spoken.length,guided);
@@ -182,7 +218,7 @@ test('bundled clips play through Web Audio without any system speech voices',asy
   const browser=soundBrowser({clips:true});delete browser.host.speechSynthesis;delete browser.host.SpeechSynthesisUtterance;
   const coach=createTrainer(browser.host);coach.unlock();coach.begin({kind:'prepare',seconds:20});
   await new Promise(resolve=>setImmediate(resolve));
-  assert.equal(browser.requests.length,9);assert.ok(browser.requests.every(x=>x.endsWith('.m4a')));
+  assert.equal(browser.requests.length,18);assert.ok(browser.requests.every(x=>x.endsWith('.m4a')));
   assert.deepEqual(browser.played,[0]);
   coach.begin({kind:'move',seconds:15});coach.countdown(5);coach.countdown(4);coach.countdown(3);coach.countdown(2);coach.countdown(1);
   coach.begin({kind:'rest',seconds:25});coach.complete();
@@ -209,11 +245,11 @@ test('stopping before voice downloads finish suppresses late playback',async()=>
 test('starting fresh immediately after completion cancels the old finish cue without releasing the new playback session',async()=>{
   const browser=soundBrowser({silentPhone:true,clips:true}),app=await mount({host:browser.host});try{
     app.click('#start');await new Promise(resolve=>setImmediate(resolve));
-    app.elapse(120);
+    app.elapse(160);
     const oldVoice=browser.sources.at(-1),oldBell=browser.tones.slice(-3);
     app.click('#start');
     assert.equal(browser.audioSession.type,'playback');
-    assert.equal(browser.played.at(-1),0,'new round begins with Get ready');
+    assert.equal(browser.played.at(-1),9,'new round announces the first exercise');
     oldVoice.onended();for(const tone of oldBell)tone.onended();
     assert.equal(browser.audioSession.type,'playback','late finish callbacks do not mute the new round');
     assert.equal(app.node('#clock').textContent,'0:08');

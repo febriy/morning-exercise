@@ -26,7 +26,7 @@ test('Bare minimum is available from every session, completes without saving, an
    app.elapse(5);assert.equal(app.node('#clock').textContent,'0:20');
    app.elapse(20);assert.equal(app.root.innerHTML,original);
    app.click('#start');
-   assert.equal(app.node('#remaining').textContent,session==='morning'?'2 min remaining':session==='home'?'2 min 5 sec remaining':'1 min 25 sec remaining');
+   assert.equal(app.node('#remaining').textContent,session==='morning'?'2 min 40 sec remaining':session==='home'?'2 min 5 sec remaining':'1 min 25 sec remaining');
    assert.deepEqual(app.writes,[]);
   }finally{app.restore();}
  }

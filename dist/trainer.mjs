@@ -4,9 +4,11 @@ export function createTrainer(host=window) {
   let lastSecond=null, utterance=null, voice=null, cue=0, decoded=null;
   let prepared=Promise.resolve();
   let session=null, previousSessionType=null, finishing=false, pendingVoice=false, pendingBell=false;
+  let announcement=false;
   const tones=new Set();
   const speech=host.speechSynthesis;
   const clips=new Map([['Get ready','ready'],['Start','start'],['Rest','rest'],['Workout complete','complete'],...['5','4','3','2','1'].map(n=>[n,n])]);
+  for(const [id,title] of Object.entries({'platform-pushup':'Platform push-ups','hanging-knee-raise':'Knee raises','bar-hang':'Pull-up bar hang','support-hold':'Parallel-bar hold','squat':'Squats','jumping-jacks':'Jumping jacks','kettlebell-squat':'Kettlebell squats','incline-pushup':'Incline push-ups','kettlebell-swing':'Kettlebell swings'}))clips.set(`Next exercise. ${title}.`,`next-${id}`);
   const files=new Map(),buffers=new Map();
   // Prefetch tiny same-origin clips without playing anything or using a voice service.
   const downloads=host.fetch?Promise.all([...clips].map(async([text,file])=>{
@@ -38,6 +40,7 @@ export function createTrainer(host=window) {
 
   function silence(){
     generation++;
+    announcement=false;
     finishing=false;pendingBell=false;
     stopVoice();
     for(const tone of tones){try{tone.stop();tone.disconnect();}catch{}}
@@ -123,18 +126,21 @@ export function createTrainer(host=window) {
     };
     if(context?.state==='running')play();else void ready.then(play);
   }
-  function begin(step,remaining=step.seconds){
+  function begin(step,remaining=step.seconds,nextMovement=null){
     if(!enabled)return;
     silence();
     lastSecond=Math.max(0,Math.ceil(remaining-.001));
     ring();
-    say(step.kind==='prepare'?'Get ready':step.kind==='rest'?'Rest':'Start');
+    announcement=!!nextMovement&&(step.kind==='prepare'||step.kind==='rest');
+    say(announcement?`Next exercise. ${nextMovement.title}.`:step.kind==='prepare'?'Get ready':step.kind==='rest'?'Rest':'Start');
   }
   function countdown(remaining){
     if(!enabled)return;
     const second=Math.max(0,Math.ceil(remaining-.001));
     if(second===lastSecond)return;
     lastSecond=second;
+    // Let the full exercise name finish; skip expired counts rather than queueing them.
+    if(announcement){if(pendingVoice||voice||utterance)return;announcement=false;}
     // Never queue missed numbers, zero, or a countdown over the opening cue.
     if(second>=1&&second<=5)say(String(second));
   }

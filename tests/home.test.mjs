@@ -62,7 +62,7 @@ test('home settings persist independently while older stored sessions retain the
  const reopened=await mount({saved});try{
   reopened.click('#session-home');reopened.click('#start');assert.equal(reopened.node('#clock').textContent,'0:03');
   reopened.click('#stop');reopened.click('#edit-session');reopened.click('#restore-session');reopened.submitSession();
-  assert.deepEqual(JSON.parse(reopened.storage.get(SESSION_STORAGE)),original);
+  assert.deepEqual(JSON.parse(reopened.storage.get(SESSION_STORAGE)),{...original,version:2});
   reopened.click('#start');assert.equal(reopened.node('#clock').textContent,'0:05');
  }finally{reopened.restore();}
 });

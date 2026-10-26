@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-26T08:18:47.960182+00:00",
+  "generatedAt": "2026-10-26T21:19:35.206323+00:00",
   "title": "Design System: On the Way \u2014 Ninja Arena",
   "extensions": {
     "colorMeta": {
@@ -372,18 +372,10 @@
       "css": ".ds-icon{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:10px;border:0;border-radius:12px;background:transparent;color:var(--muted,#b8cce1);cursor:pointer}.ds-icon svg{width:20px;height:20px}.ds-icon:hover{background:var(--soft,#173651);color:var(--ink,#fff)}.ds-icon:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px;}"
     },
     {
-      "name": "Time choices",
-      "kind": "input",
-      "refersTo": "time-option",
-      "description": "Native radio labels; cyan selects the duration.",
-      "html": "<div class=\"ds-times\"><label class=\"ds-time\"><input type=\"radio\" name=\"ds-time\" value=\"1\"><span>1 min</span></label><label class=\"ds-time\"><input type=\"radio\" name=\"ds-time\" value=\"2\" checked><span>2 min</span></label></div>",
-      "css": ".ds-times{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ds-time{position:relative;cursor:pointer}.ds-time input{position:absolute;opacity:0;width:1px;height:1px}.ds-time span{font-family:var(--display,'Barlow Condensed','Arial Narrow',sans-serif);font-weight:800;text-transform:uppercase;display:flex;align-items:center;justify-content:center;min-height:64px;border:1px solid var(--line,#304862);border-radius:12px;background:var(--surface,#102742);color:var(--muted,#b8cce1);font-size:1.625rem;line-height:1}.ds-time input:checked+span{background:var(--energy,#67dfff);border-color:var(--energy,#67dfff);color:var(--canvas,#07172e)}.ds-time:has(input:focus-visible){outline:3px solid var(--focus,#67dfff);outline-offset:4px;border-radius:12px}"
-    },
-    {
       "name": "Circuit row",
       "kind": "card",
       "refersTo": "routine-row",
-      "description": "Number, instruction and aligned dose with a pale-ground pixel sprite in production. Default At home shows three 20-second movement rows and the explicit note \u201c5 sec prep \u00b7 20 sec rest after each exercise.\u201d Morning retains its five movements, kids shows all five phases, and custom routines show every saved step.",
+      "description": "Number, instruction and aligned dose with a pale-ground pixel sprite in production. Default Morning retains 8 platform push-ups, 8 knee raises, a 10-second pull-up bar hang, a 10-second parallel-bar hold and 8 squats; eight seconds prep and four 15-second rests make 2 min 40 sec. Its note says \u201c15 sec rest between exercises.\u201d Default At home shows three 20-second movement rows and the explicit note \u201c5 sec prep \u00b7 20 sec rest after each exercise.\u201d Kids shows all five phases, and custom routines show every saved step.",
       "html": "<ol class=\"ds-circuit\"><li class=\"ds-row\"><span class=\"ds-number\">01</span><span class=\"ds-info\"><strong>Platform push-ups</strong><span>Push-up platform</span></span><span class=\"ds-dose\"><strong>8</strong><span>reps</span></span></li></ol>",
       "css": ".ds-circuit{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;list-style:none;margin:0;padding:0;color:var(--ink,#fff)}.ds-row{display:flex;align-items:center;gap:12px;min-height:68px;padding:10px 0;border-bottom:1px solid var(--line,#304862)}.ds-number{font-family:var(--display,'Barlow Condensed','Arial Narrow',sans-serif);font-weight:800;text-transform:uppercase;width:25px;flex-shrink:0;color:var(--energy,#67dfff);font-size:1.75rem;line-height:1;font-variant-numeric:tabular-nums}.ds-info{display:flex;flex-direction:column;gap:3px;min-width:0}.ds-info strong{font-size:.875rem;font-weight:650;line-height:1.3}.ds-info>span{font-size:.75rem;line-height:1.35;color:var(--muted,#b8cce1)}.ds-dose{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:1px;font-variant-numeric:tabular-nums}.ds-dose strong{font-family:var(--display,'Barlow Condensed','Arial Narrow',sans-serif);font-weight:800;text-transform:uppercase;font-size:2.125rem;line-height:.95}.ds-dose>span{font-size:.6875rem;color:var(--muted,#b8cce1)}"
     },
@@ -406,7 +398,7 @@
     {
       "name": "Session selector",
       "refersTo": "session-picker",
-      "description": "Morning / At home / With kids switch the visible workout directly. Default Morning places Time beside Edit session in the metadata row; custom Morning hides Time. All three session settings persist independently in the existing version-1 configuration, with home optional for compatibility. Completion and End return to the selected overview, including after Bare minimum.",
+      "description": "Morning / At home / With kids switch the visible workout directly. Edit session is the metadata row\u2019s timing action; former Time presets are retired and stored time preferences are untouched and ignored. All three session settings persist independently under on-the-way.sessions.v1 using payload version 2. Loading version 1 normalizes Morning rests to 15 seconds in memory when the result remains within ten minutes; exercises and other sessions stay as saved, version-2 explicit rests remain exact, and migration never writes automatically. Completion and End return to the selected overview, including after Bare minimum.",
       "html": "<div class=\"ds-session-picker\" role=\"group\" aria-label=\"Workout session\"><button aria-label=\"Morning fitness corner\" aria-pressed=\"false\">Morning</button><button aria-label=\"At home\" aria-pressed=\"true\">At home</button><button aria-label=\"Exercise with kids\" aria-pressed=\"false\">With kids</button></div>",
       "css": ".ds-session-picker{display:flex;flex:0 1 320px;min-width:0;gap:4px}.ds-session-picker button{flex:1;white-space:nowrap;min-height:44px;border:0;border-radius:10px;padding:10px 8px;background:transparent;color:var(--muted,#b8cce1);font:800 1.125rem/1 var(--display,\"Barlow Condensed\",\"Arial Narrow\",sans-serif);text-transform:uppercase;cursor:pointer}.ds-session-picker button[aria-pressed=\"true\"]{background:var(--energy,#67dfff);color:var(--canvas,#07172e)}@media(hover:hover){.ds-session-picker button[aria-pressed=\"false\"]:hover{background:var(--soft,#173651);color:var(--ink,#fff)}}.ds-session-picker button:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px}",
       "kind": "button"
@@ -415,7 +407,7 @@
       "name": "Session editor field",
       "kind": "input",
       "refersTo": "editor-field",
-      "description": "Native exercise select and numeric seconds field with a 48px touch target and cyan keyboard focus. At home exposes all seven phases: 5 seconds prep, then 20 seconds each of kettlebell squats, rest, incline push-ups, rest, kettlebell swings and rest (125 seconds total). Narrow phones stack the exercise above seconds/removal.",
+      "description": "Native exercise select and numeric seconds field with a 48px touch target and cyan keyboard focus. At home exposes all seven phases: 5 seconds prep, then 20 seconds each of kettlebell squats, rest, incline push-ups, rest, kettlebell swings and rest (125 seconds total). Narrow phones stack the exercise above seconds/removal. Morning exposes its eight-second prep, 24-second rep sets, 10-second holds and four 15-second rests; Edit session is the route for explicit timing changes.",
       "html": "<label class=\"ds-editor-field\">Seconds<input type=\"number\" min=\"1\" max=\"600\" step=\"1\" value=\"20\"></label>",
       "css": ".ds-editor-field{display:flex;flex-direction:column;gap:7px;color:var(--muted,#b8cce1);font-size:.75rem}.ds-editor-field input{font:1rem -apple-system,BlinkMacSystemFont,sans-serif;height:48px;border:1px solid var(--line,#304862);border-radius:12px;padding:10px;color:var(--ink,#fff);background:var(--surface,#102742);font-variant-numeric:tabular-nums}.ds-editor-field input:focus-visible{outline:3px solid var(--focus,#67dfff);outline-offset:4px}"
     },
@@ -423,8 +415,8 @@
       "name": "Preparation and rest",
       "kind": "custom",
       "refersTo": "countdown-panel-rest",
-      "description": "Teal break state with an explicit phase heading, next movement and station, and current-phase countdown. Production pairs the timer with the next movement\u2019s pixel demo; final rest omits it. New kettlebell squat/swing strips match the incumbent character, while incline push-ups reuse the platform sprite. Finishing or ending restores the selected overview.",
-      "html": "<section class=\"ds-break\"><h1>Rest</h1><div class=\"ds-upcoming\"><h2><span>Next:</span> Knee raises</h2><p>Pull-up bar</p></div><div class=\"ds-break-countdown\"><span class=\"ds-break-clock\" role=\"timer\" aria-label=\"Rest time remaining\">0:30</span><span class=\"ds-break-status\">Rest time left</span></div></section>",
+      "description": "Teal break state with an explicit phase heading, next actual movement and station, and current-phase countdown. Production pairs the timer with the next movement\u2019s pixel demo and announces \u201cNext exercise\u201d followed by its name, looking past prep/rest steps and following edited order. Eighteen bundled voice clips cover all nine exercise announcements. Countdown numbers wait for the full name and skip expired counts. Final rest says All movements done, omits the preview and invents no next exercise. Preview time never consumes exercise time; pause, guidance, hidden tabs and Reduce Motion freeze demos. New kettlebell squat/swing strips match the incumbent character, while incline push-ups reuse the platform sprite. Finishing or ending restores the selected overview.",
+      "html": "<section class=\"ds-break\"><h1>Rest</h1><div class=\"ds-upcoming\"><h2><span>Next:</span> Knee raises</h2><p>Pull-up bar</p></div><div class=\"ds-break-countdown\"><span class=\"ds-break-clock\" role=\"timer\" aria-label=\"Rest time remaining\">0:15</span><span class=\"ds-break-status\">Rest time left</span></div></section>",
       "css": ".ds-break{font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;padding:24px;color:var(--ink,#fff);background:var(--rest-canvas,#103e47);text-align:center}.ds-break h1{margin:0;font:italic 900 3.5rem/.92 var(--display,\"Barlow Condensed\",\"Arial Narrow\",sans-serif);letter-spacing:-.02em;text-transform:uppercase}.ds-upcoming{margin-top:16px}.ds-upcoming h2{margin:0;font:800 2rem/1.1 var(--display,\"Barlow Condensed\",\"Arial Narrow\",sans-serif);text-transform:uppercase;text-wrap:balance}.ds-upcoming h2 span{font:600 .875rem/1.4 -apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;color:var(--muted,#b8cce1);text-transform:none}.ds-upcoming p{margin:6px 0 0;font-size:.875rem;line-height:1.5;color:var(--energy,#67dfff)}.ds-break-countdown{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:176px;margin-top:20px;overflow:hidden;border-radius:16px;background:var(--rest-surface,#164d56)}.ds-break-countdown:after{content:\"\";position:absolute;bottom:0;left:0;width:40%;height:6px;background:var(--muted,#b8cce1)}.ds-break-clock{font:800 4.5rem/.95 var(--display,\"Barlow Condensed\",\"Arial Narrow\",sans-serif);letter-spacing:-.02em;font-variant-numeric:tabular-nums}.ds-break-status{font-size:.8125rem;margin-top:8px;color:var(--muted,#b8cce1)}"
     }
   ],
@@ -457,7 +449,7 @@
     "dos": [
       "**Do** retain the large athletic display face and the quieter system-font instructions.",
       "**Do** align station numbers, movement labels and right-aligned doses in one continuous list.",
-      "**Do** keep the normal routine at 8 push-ups, 8 knee raises, a 10-second hang, a 10-second hold and 8 squats.",
+      "**Do** keep the normal routine at 8 push-ups, 8 knee raises, a 10-second hang, a 10-second hold and 8 squats, with four 15-second rests and a 2 min 40 sec total.",
       "**Do** keep focus visible, secondary text tinted, tap targets generous and short screens scrollable.",
       "**Do** preserve the existing sprites on pale square grounds and the one-primary-action flow."
     ],
