@@ -1,7 +1,7 @@
-import {recipe,kidsRecipe,homeRecipe} from './model.mjs?v=named-cues-1';
+import {recipe,kidsRecipe,homeRecipe,kettlebellSquat} from './model.mjs?v=home-packing-1';
 
 export const SESSION_STORAGE='on-the-way.sessions.v1';
-export const SESSION_VERSION=2;
+export const SESSION_VERSION=3;
 export const MAX_STEPS=20;
 export const MAX_SECONDS=600;
 export const EXERCISES=[
@@ -11,6 +11,8 @@ export const EXERCISES=[
  {id:'kettlebell-squat',title:'Kettlebell squats'},
  {id:'incline-pushup',title:'Incline push-ups'},
  {id:'kettlebell-swing',title:'Kettlebell swings'},
+ {id:'trampoline',title:'Trampoline'},
+ {id:'packing-squats',title:'Packing with squats'},
  {id:'platform-pushup',title:'Platform push-ups'},
  {id:'hanging-knee-raise',title:'Knee raises'},
  {id:'bar-hang',title:'Pull-up bar hang'},
@@ -38,8 +40,9 @@ export function loadSessions(raw){
  const result={};
  try{
   const parsed=JSON.parse(raw);
-  if(![1,SESSION_VERSION].includes(parsed?.version))return result;
+  if(![1,2,SESSION_VERSION].includes(parsed?.version))return result;
   for(const session of ['morning','kids','home']){
+   if(session==='home'&&parsed.version<3)continue; // Replace the previous At home routine with the newly requested session.
    if(Array.isArray(parsed[session])&&!sessionError(parsed[session])){
     const steps=parsed[session].map(({id,seconds})=>({id,seconds}));
     const updated=parsed.version===1&&session==='morning'?steps.map(step=>step.id==='rest'?{...step,seconds:15}:step):steps;
@@ -55,7 +58,7 @@ export function sessionPlan(session,preferences,overrides={}){
  const custom=overrides[session];
  if(!custom||sessionError(custom))return defaultPlan(session,preferences);
  const defaults=defaultPlan(session,preferences);
- const templates=new Map([...recipe().steps,...kidsRecipe().steps,...homeRecipe().steps,...defaults.steps].map(step=>[step.id,step]));
+ const templates=new Map([...recipe().steps,...kidsRecipe().steps,...homeRecipe().steps,kettlebellSquat(),...defaults.steps].map(step=>[step.id,step]));
  const cues={
   'platform-pushup':'Hands on the platform, feet on the ground. Move at your own pace.',
   'hanging-knee-raise':'Lift bent knees gently, then lower with control. Feet down when you need a rest.',
@@ -63,6 +66,8 @@ export function sessionPlan(session,preferences,overrides={}){
   'kettlebell-squat':'Bell close to your chest. Squat comfortably, then stand tall.',
   'incline-pushup':'Hands on a fixed, raised surface. Keep your body in one line.',
   'kettlebell-swing':'Hips back, then stand tall. Let your hips drive the bell.',
+  'trampoline':'Easy, low bounces. Stay in the centre and go at your own pace.',
+  'packing-squats':'Pack at your normal pace. Use a comfortable squat for floor pickups.',
   'jumping-jacks':'Arms up, feet out. Arms down, feet in. Go at your own pace.'
  };
  const steps=custom.map(({id,seconds},index)=>{

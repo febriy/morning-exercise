@@ -7,12 +7,14 @@ const DESCRIPTIONS={
   'squat':'Controlled squat: hips back, heels down, then stand tall.',
   'kettlebell-squat':'Kettlebell squat: hold the bell close to your chest, squat with heels down, then stand tall.',
   'incline-pushup':'Incline push-up: hands on a fixed raised support, feet on the floor, body straight.',
+  'trampoline':'Gentle, low trampoline bounces with soft knees and a steady body.',
+  'packing-squats':'Packing with squats: use a comfortable squat for floor pickups. The demo shows the pickup movement, not a continuous pace.',
   'kettlebell-swing':'Two-handed kettlebell swing: hinge at the hips, then stand tall as the bell floats to chest height.'
 };
 
 export function movementSprite(id,{preview=false,upNext=false}={}){
   if(!Object.hasOwn(DESCRIPTIONS,id))return '';
-  const file=id==='bar-hang'?'hanging-knee-raise':id==='incline-pushup'?'platform-pushup':id;
+  const file=id==='bar-hang'?'hanging-knee-raise':id==='incline-pushup'?'platform-pushup':id==='packing-squats'?'squat':id;
   return `<span class="movement-sprite${preview?' sprite-preview':''}"${preview?' aria-hidden="true"':` id="movement-demo" role="img" aria-label="${upNext?'Next exercise preview. ':''}${DESCRIPTIONS[id]}"`} data-frame="0"><img src="sprites/${file}.png" width="800" height="200" alt="" decoding="async" draggable="false"></span>`;
 }
 
@@ -20,7 +22,7 @@ export function movementSprite(id,{preview=false,upNext=false}={}){
 // Morning repetition demos match a three-second cycle; both holds remain still.
 export function movementFrame(id,seconds,{reduce=false}={}){
   if(reduce||!Number.isFinite(seconds)||seconds<0)return 0;
-  if(['jumping-jacks','kettlebell-swing'].includes(id))return Math.floor(((seconds+.001)%2)/.5);
-  if(['platform-pushup','incline-pushup','hanging-knee-raise','squat','kettlebell-squat'].includes(id))return Math.floor(((seconds+.001)%3)/.75);
+  if(['jumping-jacks','kettlebell-swing','trampoline'].includes(id))return Math.floor(((seconds+.001)%2)/.5);
+  if(['platform-pushup','incline-pushup','hanging-knee-raise','squat','kettlebell-squat','packing-squats'].includes(id))return Math.floor(((seconds+.001)%3)/.75);
   return 0;
 }

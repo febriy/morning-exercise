@@ -28,16 +28,19 @@ export function minimumRecipe(){
  ]};
 }
 
+export function kettlebellSquat(){return {id:'kettlebell-squat',title:'Kettlebell squats',seconds:20,cue:'Bell close to your chest. Squat comfortably, then stand tall.',tip:'Hold one light kettlebell securely at chest height with both hands. Keep your chest upright, heels down and knees in line with your toes. Lower only as far as comfortable, then stand. Keep the bell close throughout. Stop before straining; the timer is not a rep target.',kind:'move',station:'Kettlebell · clear floor'};}
+
 export function homeRecipe(){
- const rest={id:'rest',title:'Rest',seconds:20,cue:'Put the kettlebell down in control. Relax and catch your breath.',tip:'Leave the kettlebell on the floor during the break. Pause if you need more time to rest or get into position.',kind:'rest',station:'Take a breather'};
- return {seconds:125,steps:[
-  {id:'prepare',title:'Get ready',seconds:5,cue:'Find your space. Kettlebell squats are first.',tip:'Have a light kettlebell and a fixed, stable surface ready. Clear the space around you and put your phone where you can see it. Pause for more preparation whenever needed.',kind:'prepare',station:'Before you start'},
-  {id:'kettlebell-squat',title:'Kettlebell squats',seconds:20,cue:'Bell close to your chest. Squat comfortably, then stand tall.',tip:'Hold one light kettlebell securely at chest height with both hands. Keep your chest upright, heels down and knees in line with your toes. Lower only as far as comfortable, then stand. Keep the bell close throughout. Stop before straining; the timer is not a rep target.',kind:'move',station:'Kettlebell · clear floor'},
-  {...rest},
+ const rest={id:'rest',title:'Rest',seconds:15,cue:'Relax and catch your breath. Get ready for the next activity.',tip:'Pause if you need more time to rest or get into position. Set the kettlebell down in control and leave it on the floor during breaks.',kind:'rest',station:'Take a breather'};
+ return {seconds:520,steps:[
+  {id:'prepare',title:'Get ready',seconds:15,cue:'Find your space. Incline push-ups are first.',tip:'Have a fixed raised support, your kettlebell and trampoline ready. Clear space around the equipment and put your phone where you can see and hear it. Pause for more preparation whenever needed.',kind:'prepare',station:'Before you start'},
   {id:'incline-pushup',title:'Incline push-ups',seconds:20,cue:'Hands on a fixed, raised surface. Keep your body in one line.',tip:'Use a fixed counter or stable raised support that cannot slide or tip. Keep feet on the floor and your body straight. Bend your elbows comfortably back, lower a little, then press away. A higher surface makes it easier. Stop before straining.',kind:'move',station:'Fixed, raised support'},
   {...rest},
   {id:'kettlebell-swing',title:'Kettlebell swings',seconds:20,cue:'Hips back, then stand tall. Let your hips drive the bell.',tip:'Use a light bell and a clear space away from people. Learn a controlled hip hinge first. Hold the handle with both hands, hinge at the hips with slightly bent knees and a neutral back, then extend your hips to let the bell float no higher than chest height. Keep arms long; don’t lift with your shoulders or lean back. Guide it back between your thighs, then set it down in control when finished. Stop if your grip or form slips.',kind:'move',station:'Kettlebell · clear swing space'},
-  {...rest,cue:'Set the kettlebell down in control. One last breather.'}
+  {...rest},
+  {id:'trampoline',title:'Trampoline',seconds:120,cue:'Easy, low bounces. Stay in the centre and go at your own pace.',tip:'Use your trampoline according to its instructions, on a stable surface with clear space around and above it. Start gently with soft knees and small controlled bounces. Use its support handle if supplied and needed. One person at a time; no high jumps or tricks. Pause and step off carefully when you need a break.',kind:'move',station:'Trampoline · easy bounces'},
+  {...rest},
+  {id:'packing-squats',title:'Packing with squats',seconds:300,cue:'Pack for five minutes. Use a comfortable squat whenever you pick something up from the floor.',tip:'Keep packing at your normal pace. Squat only for floor pickups; this is not a continuous squat set. Bend your hips and knees comfortably, keep light items close and stand smoothly. No need for a deep squat. Turn with your feet rather than twisting with a load, and get help with heavy or awkward items.',kind:'move',station:'Squat for floor pickups'}
  ]};
 }
 

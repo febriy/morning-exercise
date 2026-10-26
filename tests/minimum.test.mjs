@@ -26,14 +26,14 @@ test('Bare minimum is available from every session, completes without saving, an
    app.elapse(5);assert.equal(app.node('#clock').textContent,'0:20');
    app.elapse(20);assert.equal(app.root.innerHTML,original);
    app.click('#start');
-   assert.equal(app.node('#remaining').textContent,session==='morning'?'2 min 40 sec remaining':session==='home'?'2 min 5 sec remaining':'1 min 25 sec remaining');
+   assert.equal(app.node('#remaining').textContent,session==='morning'?'2 min 40 sec remaining':session==='home'?'8 min 40 sec remaining':'1 min 25 sec remaining');
    assert.deepEqual(app.writes,[]);
   }finally{app.restore();}
  }
 });
 
 test('Bare minimum preserves custom timing and exercises, including after pause or End',async()=>{
- const saved={[SESSION_STORAGE]:JSON.stringify({version:1,home:[{id:'kettlebell-swing',seconds:42}]})};
+ const saved={[SESSION_STORAGE]:JSON.stringify({version:3,home:[{id:'kettlebell-swing',seconds:42}]})};
  const app=await mount({saved});try{
   app.click('#session-home');const original=app.root.innerHTML;
   app.click('#minimum');app.elapse(8);app.click('#pause');app.elapse(10);

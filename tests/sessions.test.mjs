@@ -118,7 +118,7 @@ test('restoring and saving defaults affects only the selected session',async()=>
   assert.equal(app.root.querySelector('#tiny'),null);assert.equal(app.root.querySelector('#edit'),null);
   app.click('#session-kids');app.click('#edit-session');app.click('#restore-session');app.submitSession();
   assert.match(app.root.innerHTML,/1 min 25 sec/);
-  assert.deepEqual(JSON.parse(app.storage.get(SESSION_STORAGE)),{version:2,morning:[{id:'squat',seconds:9}]});
+  assert.deepEqual(JSON.parse(app.storage.get(SESSION_STORAGE)),{version:3,morning:[{id:'squat',seconds:9}]});
   app.click('#session-morning');app.click('#start');assert.equal(app.node('#clock').textContent,'0:09');
  }finally{app.restore();}
 });

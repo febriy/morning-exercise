@@ -8,7 +8,7 @@ export function createTrainer(host=window) {
   const tones=new Set();
   const speech=host.speechSynthesis;
   const clips=new Map([['Get ready','ready'],['Start','start'],['Rest','rest'],['Workout complete','complete'],...['5','4','3','2','1'].map(n=>[n,n])]);
-  for(const [id,title] of Object.entries({'platform-pushup':'Platform push-ups','hanging-knee-raise':'Knee raises','bar-hang':'Pull-up bar hang','support-hold':'Parallel-bar hold','squat':'Squats','jumping-jacks':'Jumping jacks','kettlebell-squat':'Kettlebell squats','incline-pushup':'Incline push-ups','kettlebell-swing':'Kettlebell swings'}))clips.set(`Next exercise. ${title}.`,`next-${id}`);
+  for(const [id,title] of Object.entries({'platform-pushup':'Platform push-ups','hanging-knee-raise':'Knee raises','bar-hang':'Pull-up bar hang','support-hold':'Parallel-bar hold','squat':'Squats','jumping-jacks':'Jumping jacks','kettlebell-squat':'Kettlebell squats','incline-pushup':'Incline push-ups','kettlebell-swing':'Kettlebell swings','trampoline':'Trampoline','packing-squats':'Packing with squats'}))clips.set(`Next exercise. ${title}.`,`next-${id}`);
   const files=new Map(),buffers=new Map();
   // Prefetch tiny same-origin clips without playing anything or using a voice service.
   const downloads=host.fetch?Promise.all([...clips].map(async([text,file])=>{

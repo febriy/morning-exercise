@@ -17,7 +17,7 @@ test('repetition demos cycle eight times in 24 seconds while both holds stay sti
 });
 
 test('every demo has a transparent, aligned four-frame strip and an accessible description',async()=>{
-  for(const id of ['platform-pushup','hanging-knee-raise','support-hold','squat','jumping-jacks','kettlebell-squat','kettlebell-swing']){
+  for(const id of ['platform-pushup','hanging-knee-raise','support-hold','squat','jumping-jacks','kettlebell-squat','kettlebell-swing','trampoline']){
     const bytes=await readFile(new URL(`../dist/sprites/${id}.png`,import.meta.url));
     assert.equal(bytes.readUInt32BE(16),800);
     assert.equal(bytes.readUInt32BE(20),200);
