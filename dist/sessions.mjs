@@ -1,4 +1,4 @@
-import {recipe,kidsRecipe} from './model.mjs?v=session-editor-1';
+import {recipe,kidsRecipe,homeRecipe} from './model.mjs?v=at-home-1';
 
 export const SESSION_STORAGE='on-the-way.sessions.v1';
 export const MAX_STEPS=20;
@@ -7,6 +7,9 @@ export const EXERCISES=[
  {id:'prepare',title:'Get ready'},
  {id:'jumping-jacks',title:'Jumping jacks'},
  {id:'squat',title:'Squats'},
+ {id:'kettlebell-squat',title:'Kettlebell squats'},
+ {id:'incline-pushup',title:'Incline push-ups'},
+ {id:'kettlebell-swing',title:'Kettlebell swings'},
  {id:'platform-pushup',title:'Platform push-ups'},
  {id:'hanging-knee-raise',title:'Knee raises'},
  {id:'bar-hang',title:'Pull-up bar hang'},
@@ -15,7 +18,7 @@ export const EXERCISES=[
 ];
 const ids=new Set(EXERCISES.map(step=>step.id));
 
-export function defaultPlan(session,preferences){return session==='kids'?kidsRecipe():recipe(preferences);}
+export function defaultPlan(session,preferences){return session==='home'?homeRecipe():session==='kids'?kidsRecipe():recipe(preferences);}
 export function editableSteps(plan){return plan.steps.map(({id,seconds})=>({id,seconds}));}
 
 export function sessionError(steps){
@@ -35,7 +38,7 @@ export function loadSessions(raw){
  try{
   const parsed=JSON.parse(raw);
   if(parsed?.version!==1)return result;
-  for(const session of ['morning','kids']){
+  for(const session of ['morning','kids','home']){
    if(Array.isArray(parsed[session])&&!sessionError(parsed[session]))result[session]=parsed[session].map(({id,seconds})=>({id,seconds}));
   }
  }catch{}
@@ -46,11 +49,14 @@ export function sessionPlan(session,preferences,overrides={}){
  const custom=overrides[session];
  if(!custom||sessionError(custom))return defaultPlan(session,preferences);
  const defaults=defaultPlan(session,preferences);
- const templates=new Map([...recipe().steps,...kidsRecipe().steps,...defaults.steps].map(step=>[step.id,step]));
+ const templates=new Map([...recipe().steps,...kidsRecipe().steps,...homeRecipe().steps,...defaults.steps].map(step=>[step.id,step]));
  const cues={
   'platform-pushup':'Hands on the platform, feet on the ground. Move at your own pace.',
   'hanging-knee-raise':'Lift bent knees gently, then lower with control. Feet down when you need a rest.',
   'squat':'Hips back, then stand tall. Go at your own pace.',
+  'kettlebell-squat':'Bell close to your chest. Squat comfortably, then stand tall.',
+  'incline-pushup':'Hands on a fixed, raised surface. Keep your body in one line.',
+  'kettlebell-swing':'Hips back, then stand tall. Let your hips drive the bell.',
   'jumping-jacks':'Arms up, feet out. Arms down, feet in. Go at your own pace.'
  };
  const steps=custom.map(({id,seconds},index)=>{

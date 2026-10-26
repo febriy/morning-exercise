@@ -27,6 +27,16 @@ function soundBrowser({suspended=false,clips=false,deferred=false,silentPhone=fa
   return {host,spoken,tones,contexts,played,sources,requests,audible,audioSession,release(){releaseFiles?.();},get cancelled(){return cancelled;},resume(){resumeAudio?.();}};
 }
 
+test('At home speaks prep, three starts, three rests and completion through the existing trainer',async()=>{
+ const browser=soundBrowser(),app=await mount({host:browser.host});try{
+  app.click('#session-home');app.click('#start');app.elapse(125);
+  const cues=browser.spoken.filter(text=>!/^\d$/.test(text));
+  assert.deepEqual(cues,['Get ready','Start','Rest','Start','Rest','Start','Rest','Workout complete']);
+  assert.equal(browser.spoken.filter(text=>text==='5').length,6);
+  assert.match(app.root.innerHTML,/At<br>home\./);
+ }finally{app.restore();}
+});
+
 test('iPhone Silent Mode uses a playback session so the actual Start tap produces audible bells and voice',async()=>{
   const browser=soundBrowser({silentPhone:true,clips:true}),app=await mount({host:browser.host});try{
     assert.equal(browser.audioSession.type,'auto','visiting the page must not take over audio');

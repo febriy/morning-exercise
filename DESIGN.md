@@ -99,7 +99,7 @@ components:
     backgroundColor: "transparent"
     textColor: "{colors.muted}"
     rounded: "{rounded.text-control}"
-    padding: "10px 12px"
+    padding: "10px 8px"
     height: "44px"
   session-picker-selected:
     backgroundColor: "{colors.energy}"
@@ -163,7 +163,7 @@ components:
 
 Ninja Arena gives a small personal workout the presence of an athlete’s arena entrance. Midnight navy, signal red, ice cyan and oversized condensed type carry the energy; clear instructions and familiar controls keep the operation calm and direct.
 
-Cropped course rails move at the edge of the view. The foreground is a disciplined reading and action layer: aligned numbered stations, exact quantities, one primary action, and unchanged pixel-art movement demos. The identity is athletic without competition, scores or extra tasks.
+Cropped course rails move at the edge of the view. The foreground is a disciplined reading and action layer: aligned numbered stations, exact quantities, one primary action, and matching pixel-art movement demos. The identity is athletic without competition, scores or extra tasks.
 
 **Key Characteristics:**
 - Midnight navy with white reading text, red actions and cyan station markers.
@@ -198,15 +198,15 @@ The palette is a dark arena with high-contrast reading and deliberately separate
 
 **Body Font:** the system stack recorded in frontmatter. Supporting text remains upright and readable outdoors.
 
-The hero is uppercase, tightly tracked and deliberately oversized. Its default responsive scale is the frontmatter `display`; the home heading grows to 6rem on desktop. Setup uses 3.75rem; the player uses 3.5rem. Compact phone height reduces home headings to 3.5rem and player headings to 2.75rem. The wordmark is 1.375rem italic.
+The hero is uppercase, tightly tracked and deliberately oversized. Its default responsive scale is the frontmatter `display`; the overview heading grows to 6rem on desktop. Setup uses 3.75rem; the player uses 3.5rem. Compact phone height reduces overview headings to 3.5rem and player headings to 2.75rem. The wordmark is 1.375rem italic.
 
 The upright hierarchy uses the recorded headline, button, duration, dose and countdown roles. A countdown beside a demo is 4.5rem, reducing to 3.75rem on narrow phones. All quantities and timers use tabular numerals. Body cues are 1rem; supporting copy ranges from .75rem to .9375rem. Movement station labels are .75rem, dose units .6875rem; narrow phones reduce movement labels to .8125rem and station labels to .6875rem. Preserve the distinction between expressive titles and plain instructions.
 
 ## Layout
 
-Phone first: a centered shell (maximum 520px) uses 24px side gutters, at least 100svh height and bottom safe-area padding. The header is at least 76px high. The overview flows from hero to metadata, default five-row morning circuit or five-row kids sequence, or every step of a custom routine, and Start area. Normal rows are at least 68px high with 10px vertical padding; the Start area uses remaining vertical space without overlapping content.
+Phone first: a centered shell (maximum 520px) uses 24px side gutters, at least 100svh height and bottom safe-area padding. The header is at least 76px high. The overview flows from hero to metadata, the default five-row Morning circuit, three-row At home circuit or five-row kids sequence, or every step of a custom routine, and Start area. Normal rows are at least 68px high with 10px vertical padding; the Start area uses remaining vertical space without overlapping content.
 
-At widths below 375px, gutters become 20px, row gaps 8px, static previews 32px and time choices switch from four columns to two. At heights up to 720px and widths below 900px, the header becomes 56px, rows at least 52px with 6px vertical padding, surrounding gaps tighten and primary controls become at least 58px high. Allow vertical scrolling: the 320×568 view requires it, with no horizontal overflow. The 390×844 and 375×667 home views fit all five movements and Start.
+At widths below 375px, gutters become 20px, row gaps 8px, static previews 32px and time choices switch from four columns to two. At heights up to 720px and widths below 900px, the header becomes 56px, rows at least 52px with 6px vertical padding, surrounding gaps tighten and primary controls become at least 58px high. Allow vertical scrolling: the 320×568 view requires it, with no horizontal overflow. The 390×844 At home overview fits its three movements, timing note and Start; compact and short phones keep lower controls reachable by scrolling.
 
 At 900px and wider, only the overview expands into two work areas within a maximum 1180px shell, with 48px side padding and an 80px column gap. The hero and action occupy the left; duration, circuit and note occupy the right. Rows become at least 86px high and previews 48px. Setup, session editor and player retain their narrow, centered shells.
 
@@ -228,17 +228,17 @@ The brand mark is two red diagonal strokes. Course geometry uses a triple oval r
 
 Primary controls are full-width red with white uppercase upright condensed labels, a trailing 24px SVG icon, at least 64px height and standard control corners. Hover darkens red; press also scales to .985. The transition is 160ms ease-out. Compact phone height lowers the minimum height to 58px. Disabled buttons use .45 opacity.
 
-Text, Time and icon actions are transparent with tinted secondary text; hover uses the soft arena surface and white text. Text and icon targets are at least 44px. The overview header carries the Morning / With kids selector and background-motion toggle. Time appears only for the default Morning routine; custom Morning routines hide Time and the one-minute shortcut. Time editing and session editing replace the selector with Back. The player carries the italic wordmark or With kids label. Below 375px, the Time text is hidden while its icon and accessible name remain.
+Text, Time and icon actions are transparent with tinted secondary text; hover uses the soft arena surface and white text. Text and icon targets are at least 44px. The overview header carries the Morning / At home / With kids selector and background-motion toggle. Time appears beside Edit session in the metadata row only for the default Morning routine; custom Morning routines hide Time. Every overview, including custom routines, retains the secondary Bare minimum action below Start. Time editing and session editing replace the selector with Back. The player carries the italic wordmark or the At home, With kids or Bare minimum label. Below 375px, the Time text is hidden while its icon and accessible name remain.
 
 Keyboard focus is a 3px cyan outline offset by 4px. Selection is cyan with navy text; the caret is cyan. Keep these native interaction treatments on future controls.
 
 ### Session Selector
 
-A native button group uses Morning and With kids, with full accessible names and `aria-pressed` on each button. The selected choice uses cyan with navy text; the other choice is transparent with tinted text and a soft hover surface. Buttons use 800 upright condensed 1.125rem type, 10px corners, 10px by 12px padding, 4px gap and at least 44px height. Selection changes the visible workout directly without setup and keeps one Start action.
+A native three-button group uses Morning, At home and With kids, with full accessible names and `aria-pressed` on each button. The selected choice uses cyan with navy text; the other choices are transparent with tinted text and a soft hover surface. Buttons use 800 upright condensed 1.125rem type, 10px corners, 10px vertical by 8px horizontal padding, 4px gap and the existing minimum 44px height. Each button shares the available width without wrapping its label. Selection changes the visible workout directly without setup and keeps one Start action.
 
 ### Circuit Rows
 
-A continuous transparent list uses numbered cyan stations, a pale square static sprite, a two-line label and a right-aligned condensed dose. A cyan 3px rule separates metadata from the first row; thin arena lines divide every movement. Static previews are 38px normally. Preserve the exact five default morning movements and dose order. The default kids overview shows the five-second preparation followed by all four timed intervals, including both rests; never deduplicate them. Custom routines show every step in order, including duplicate rests. The duration row carries a 44px Edit session action; both overviews keep one primary Start below.
+A continuous transparent list uses numbered cyan stations, a pale square static sprite, a two-line label and a right-aligned condensed dose. A cyan 3px rule separates metadata from the first row; thin arena lines divide every movement. Static previews are 38px normally. Preserve the exact five default morning movements and dose order. The default At home overview shows three 20-second movements in order: kettlebell squats, incline push-ups and kettlebell swings. Its note explicitly states “5 sec prep · 20 sec rest after each exercise.” The default kids overview shows the five-second preparation followed by all four timed intervals, including both rests; never deduplicate them. Custom routines show every step in order, including duplicate rests. The duration row carries a 44px Edit session action, with Time beside it for default Morning; all three overviews keep one primary Start below.
 
 ### Time Choices
 
@@ -248,19 +248,21 @@ Time choices are native radio inputs inside visible labels, with four equal colu
 
 The editor inherits the narrow shell, Back header and arena colors. A fixed 3.5rem title identifies the task; the selected session appears below. Each numbered fieldset pairs a native exercise select with a numeric Seconds input and a 48px remove action. Inputs use system 1rem type to remain readable and avoid phone focus zoom, 48px height, 12px corners, arena surface and line border. The default grid is flexible exercise / 76px seconds / 44px removal, with 8px gaps. Below 375px, the exercise spans the full width and seconds/removal form the next row, keeping long exercise names readable.
 
-A full-width secondary Add step follows the list. The live total, browser-storage explanation, red Save changes action and quiet Restore original routine action complete the flow. Empty drafts explain how to add a movement. Validation uses the existing warm notice colors, points to the invalid step, marks invalid numeric fields and focuses the error; controls retain the cyan focus ring. Back discards without writing. Restore only changes the draft until saved. Session editing never adds a completion or history screen.
+A full-width secondary Add step follows the list. The live total, browser-storage explanation, red Save changes action and quiet Restore original routine action complete the flow. Empty drafts explain how to add a movement. Validation uses the existing warm notice colors, points to the invalid step, marks invalid numeric fields and focuses the error; controls retain the cyan focus ring. Back discards without writing. Restore only changes the draft until saved. All seven default At home phases are editable: five seconds prep, then 20 seconds each of kettlebell squats, rest, incline push-ups, rest, kettlebell swings and rest, totaling 125 seconds. Morning, At home and With kids settings persist independently in the existing version-1 session configuration; the optional home entry preserves compatibility with earlier configurations. Session editing never adds a completion or history screen.
 
 ### Countdown, Guidance and Sprites
 
 Preparation and rest use the teal `rest-canvas` across the background and `rest-surface` on the timer panel. Explicit Get ready / Rest headings and Prep time left / Rest time left labels distinguish the phase without relying on color. A 2rem upright condensed Next heading (1.75rem on compact-height phones) names the upcoming exercise; its station is cyan 0.875rem below. The Next prefix is a small inline system label, not a separate eyebrow. The existing 168px demo sits beside the current phase countdown; its animation follows the break clock, freezes on pause, and is static with Reduce Motion. Starting the actual movement resets its demonstration and retains its complete exercise time. Look ahead to the next movement/hold even across intervening prep/rest steps. Final rest shows All movements done, a full-width timer and no preview. Finishing or ending restores the original navy background.
 
-The timer is a surface-colored panel with centered upright countdown and supporting status. Its bottom cyan strip shows active progress; rest uses tinted secondary and paused status turns cyan. Demo steps place the existing square sprite beside it (168px, or 128px below 375px); narrow demo timers are at least 152px high, other panels at least 176px. Sprites remain pixelated and square, using transparent four-frame strips on a pale ground. Frame selection follows exercise time; it stops when the workout is paused.
+The timer is a surface-colored panel with centered upright countdown and supporting status. Its bottom cyan strip shows active progress; rest uses tinted secondary and paused status turns cyan. Demo steps place the existing square sprite beside it (168px, or 128px below 375px); narrow demo timers are at least 152px high, other panels at least 176px. Sprites remain pixelated and square, using transparent four-frame strips on a pale ground. Frame selection follows exercise time; it stops when the workout is paused. The new kettlebell squat and swing strips match the existing pixel character, palette and four-frame format. Incline push-ups reuse the platform push-up sprite; Bare minimum uses the bodyweight squat sprite.
 
 The guidance disclosure has a 44px summary target and a simple chevron. Opening it reveals a soft arena panel and pauses the workout. The single red Pause/Resume action follows cue and next-step text; End workout remains secondary.
 
 ### Returning to the workout and Motion
 
-Finishing or ending returns directly to the same selected session’s overview with **Start workout** ready. No completion page, saved-visit state, effort feedback or recovery substitution interrupts the loop. The completion bell and voice remain, with a visually hidden status announcement. Morning time choice and edited session configurations are remembered; session selection lasts for the current page visit. The default kids sequence starts with five seconds of preparation followed by four 20-second intervals, totaling 85 seconds. Its jumping-jacks demo loops every two seconds; the squat demo retains its three-second cycle.
+Finishing or ending returns directly to the same selected session’s overview with **Start workout** ready, including its saved custom routine. No completion page, saved-visit state, effort feedback or recovery substitution interrupts the loop. The completion bell and voice remain, with a visually hidden status announcement. Morning time choice and all three independently edited session configurations are remembered; session selection lasts for the current page visit. The default kids sequence starts with five seconds of preparation followed by four 20-second intervals, totaling 85 seconds. Its jumping-jacks demo loops every two seconds; squat and kettlebell squat demos retain the three-second cycle, while kettlebell swings loop every two seconds.
+
+**Bare minimum · 20s squats** is a quiet text action on every overview, including custom routines. It replaces the former one-minute shortcut and starts a separate 25-second run: five seconds of preparation followed by 20 seconds of bodyweight squats, without rest or a rep target. It never changes the selected session or any saved settings. Completion and End return to the selected overview; Bare minimum never becomes its replacement.
 
 Three bounded background elements share one course-drift animation: 24 seconds, ease-in-out, alternating between small opposing translations. This creates one slow peripheral drift. The background toggle controls it; Reduce Motion removes transitions and animations and hides the motion toggle. Hidden tabs stop the background and pause an active workout. Screen changes focus the main landmark; countdown updates do not move focus.
 

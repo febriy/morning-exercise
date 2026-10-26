@@ -16,7 +16,7 @@ test('Exercise with kids starts with five seconds of prep before one 80-second r
  assert.equal(recipe().seconds,120,'the morning routine remains two minutes');
 });
 
-test('kids overview includes prep and all four intervals, with a fixed time and no setup or shortcut',async()=>{
+test('kids overview includes prep and all four intervals, with a fixed time and no setup or Time preset',async()=>{
  const app=await mount();try{
   app.click('#session-kids');
   assert.match(app.root.innerHTML,/Exercise<br>with kids\./);

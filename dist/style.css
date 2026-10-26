@@ -56,8 +56,8 @@ svg { flex-shrink: 0; }
 .wordmark { font: italic 900 1.375rem/1 var(--display); text-transform: uppercase; display: inline-flex; align-items: center; gap: 10px; }
 .wordmark::before { content: ''; width: 8px; height: 20px; border-left: 5px solid var(--action); border-right: 5px solid var(--action); transform: skew(-23deg); }
 .header-actions { display: flex; align-items: center; gap: 4px; }
-.session-picker { display: flex; flex-shrink: 0; gap: 4px; }
-.session-picker button { min-height: 44px; border: 0; border-radius: 10px; padding: 10px 12px; background: transparent; color: var(--muted); font: 800 1.125rem/1 var(--display); text-transform: uppercase; }
+.session-picker { display: flex; flex: 0 1 320px; min-width: 0; gap: 4px; }
+.session-picker button { flex: 1; white-space: nowrap; min-height: 44px; border: 0; border-radius: 10px; padding: 10px 8px; background: transparent; color: var(--muted); font: 800 1.125rem/1 var(--display); text-transform: uppercase; }
 .session-picker button[aria-pressed='true'] { background: var(--energy); color: var(--canvas); }
 .icon-button, .time-button { border: 0; background: transparent; border-radius: 12px; color: var(--muted); min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; }
 .icon-button { min-width: 44px; }
@@ -69,7 +69,9 @@ svg { flex-shrink: 0; }
 .today-main { flex: 1; display: flex; flex-direction: column; padding-top: 12px; }
 .workout-heading h1 { text-wrap: initial; }
 .workout-heading > p { margin-top: 14px; color: var(--muted); font-size: .9375rem; }
-.workout-meta { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 22px 0 0; padding-bottom: 10px; border-bottom: 3px solid var(--energy); font-size: .8125rem; color: var(--muted); }
+.workout-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 22px 0 0; padding-bottom: 10px; border-bottom: 3px solid var(--energy); font-size: .8125rem; color: var(--muted); }
+.workout-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.workout-actions .time-button { margin-right: 0; }
 .duration { font: 800 1.875rem/1 var(--display); color: var(--ink); text-transform: uppercase; font-variant-numeric: tabular-nums; }
 .edit-session { border: 0; border-radius: 10px; color: var(--muted); background: transparent; min-height: 44px; padding: 10px; margin: -7px -10px -7px 0; display: inline-flex; align-items: center; gap: 8px; font-size: .8125rem; }
 .edit-session svg { width: 18px; height: 18px; }

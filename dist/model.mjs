@@ -32,6 +32,28 @@ export function recipe({timeBudget=DEFAULT_TIME}={},{tiny=false}={}){
 }
 export function duration(seconds){return seconds<60?`${seconds} sec`:seconds%60?`${Math.floor(seconds/60)} min ${seconds%60} sec`:`${seconds/60} min`;}
 
+export function minimumRecipe(){
+ const squat=recipe().steps.find(step=>step.id==='squat');
+ const {reps,...movement}=squat;
+ return {seconds:25,steps:[
+  {id:'prepare',title:'Get ready',seconds:5,cue:'Find a clear space. Just 20 seconds of squats.',tip:'Put your phone where you can see and hear it. Stand on a dry, level surface and take more time with Pause if needed.',kind:'prepare',station:'Before you start'},
+  {...movement,seconds:20,station:'Clear, level floor',cue:'Just 20 seconds. Squat comfortably, then stand tall. No weights needed.'}
+ ]};
+}
+
+export function homeRecipe(){
+ const rest={id:'rest',title:'Rest',seconds:20,cue:'Put the kettlebell down in control. Relax and catch your breath.',tip:'Leave the kettlebell on the floor during the break. Pause if you need more time to rest or get into position.',kind:'rest',station:'Take a breather'};
+ return {seconds:125,steps:[
+  {id:'prepare',title:'Get ready',seconds:5,cue:'Find your space. Kettlebell squats are first.',tip:'Have a light kettlebell and a fixed, stable surface ready. Clear the space around you and put your phone where you can see it. Pause for more preparation whenever needed.',kind:'prepare',station:'Before you start'},
+  {id:'kettlebell-squat',title:'Kettlebell squats',seconds:20,cue:'Bell close to your chest. Squat comfortably, then stand tall.',tip:'Hold one light kettlebell securely at chest height with both hands. Keep your chest upright, heels down and knees in line with your toes. Lower only as far as comfortable, then stand. Keep the bell close throughout. Stop before straining; the timer is not a rep target.',kind:'move',station:'Kettlebell · clear floor'},
+  {...rest},
+  {id:'incline-pushup',title:'Incline push-ups',seconds:20,cue:'Hands on a fixed, raised surface. Keep your body in one line.',tip:'Use a fixed counter or stable raised support that cannot slide or tip. Keep feet on the floor and your body straight. Bend your elbows comfortably back, lower a little, then press away. A higher surface makes it easier. Stop before straining.',kind:'move',station:'Fixed, raised support'},
+  {...rest},
+  {id:'kettlebell-swing',title:'Kettlebell swings',seconds:20,cue:'Hips back, then stand tall. Let your hips drive the bell.',tip:'Use a light bell and a clear space away from people. Learn a controlled hip hinge first. Hold the handle with both hands, hinge at the hips with slightly bent knees and a neutral back, then extend your hips to let the bell float no higher than chest height. Keep arms long; don’t lift with your shoulders or lean back. Guide it back between your thighs, then set it down in control when finished. Stop if your grip or form slips.',kind:'move',station:'Kettlebell · clear swing space'},
+  {...rest,cue:'Set the kettlebell down in control. One last breather.'}
+ ]};
+}
+
 export function kidsRecipe(){
  return {seconds:85,steps:[
   {id:'prepare',title:'Get ready',seconds:5,cue:'Find your space. Jumping jacks are first.',tip:'Put your phone somewhere you can see and hear it, then get ready to move.',kind:'prepare',station:'Before you start'},

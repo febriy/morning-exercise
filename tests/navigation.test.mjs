@@ -55,11 +55,11 @@ test('old saved visits and unfinished feedback drafts never change or block the 
  }finally{app.restore();}
  const reopened=await mount({saved});try{assert.match(reopened.root.innerHTML,/Start workout/);assert.match(reopened.root.innerHTML,/Squats/);}finally{reopened.restore();}
 });
-test('finishing the one-minute shortcut returns to the chosen two-minute workout',async()=>{
+test('finishing Bare minimum returns to the chosen two-minute workout',async()=>{
  const app=await mount();try{
   const home=app.root.innerHTML;
-  app.click('#tiny');assert.equal(app.node('#remaining').textContent,'1 min remaining');
-  app.elapse(60);assert.equal(app.root.innerHTML,home);
+  app.click('#minimum');assert.equal(app.node('#remaining').textContent,'25 sec remaining');
+  app.elapse(25);assert.equal(app.root.innerHTML,home);
   app.click('#start');assert.equal(app.node('#remaining').textContent,'2 min remaining');
   assert.deepEqual(app.writes,[]);
  }finally{app.restore();}
