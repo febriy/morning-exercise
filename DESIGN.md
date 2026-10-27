@@ -210,7 +210,7 @@ No box shadows or backdrop blur. Depth comes from navy tonal separation, pale de
 
 Rectangular controls with modest curved corners define the foreground. Preview frames use the smallest radius, controls the standard radius, and timer panels the panel radius. Rows remain unboxed. The countdown is a broad rectangle with a 6px bottom progress strip, despite the legacy timer name in source.
 
-The brand mark is two red diagonal strokes. Course geometry uses a triple oval rail (1080×600px, 2px strokes), red bar and thick lower loop, rotated across the margins. These are background course markings, not component borders or floating cards. The icon repeats the navy/red diagonal-stroke identity.
+The brand mark is two red diagonal strokes. Course geometry uses a triple oval rail (1080×600px, 2px strokes), red bar and thick lower loop, rotated across the margins. These are background course markings, not component borders or floating cards. The app favicon and iPhone Home Screen icon use the user-selected 💪 emoji on midnight navy; the in-app diagonal-stroke mark remains unchanged.
 
 ## Components
 
