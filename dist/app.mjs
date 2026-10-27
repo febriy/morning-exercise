@@ -96,6 +96,16 @@ function tick(){
   if(active)trainer.countdown(active.steps[active.index].seconds-active.stepSpent);
   updateClock();
 }
+function skipStep(){
+  if(!active)return;
+  const step=active.steps[active.index];
+  active.spent+=Math.max(0,step.seconds-active.stepSpent);
+  active.index++;active.stepSpent=0;active.tick=Date.now();
+  if(active.index===active.steps.length){finish(true);return;}
+  if(!active.paused)beginStep();
+  renderPlayer();
+  root.querySelector('#skip-step')?.focus({preventScroll:true});
+}
 function beginStep(){const step=active.steps[active.index];trainer.begin(step,step.seconds-active.stepSpent,upcomingMovement());}
 function upcomingMovement(){return active?.steps.slice(active.index+1).find(step=>step.kind==='move'||step.kind==='hold');}
 function demoMovement(){const step=active?.steps[active.index];return step&&(step.kind==='prepare'||step.kind==='rest'?upcomingMovement():step);}
@@ -121,9 +131,10 @@ function renderPlayer(){
   const title=step.kind==='rest'?'Rest':step.kind==='prepare'?'Get ready':step.title;
   const status=step.kind==='rest'?'Rest time left':step.kind==='prepare'?'Prep time left':'Keep it easy';
   const cue=upcoming?(step.kind==='rest'?'Feet down and rest. Watch what’s next.':'Get into position. Start after this countdown.'):step.cue;
-  root.innerHTML=`<div class="app-shell player-shell${isBreak?' is-break':''}${step.kind==='rest'?' is-rest':''}${active.paused?' is-paused':''}"><header class="header"><span class="wordmark">${active.minimum?'Bare minimum':session==='home'?'At home':session==='kids'?'With kids':'On the Way'}</span><span class="step-count">${active.index+1} of ${active.steps.length}</span></header><main id="main" tabindex="-1"><div class="player-heading"><h1>${escape(title)}</h1>${!isBreak?`<p class="player-station">${escape(step.station)}</p>`:''}</div>${upcoming?`<div class="upcoming-heading"><h2><span>Next:</span> ${escape(upcoming.title)}</h2><p id="upcoming-station">${escape(upcoming.station)}</p></div>`:isBreak?'<p class="player-station">All movements done.</p>':''}<div class="movement-stage${demo?' has-demo':''}">${demo}<div class="timer-ring" id="ring"><div><span id="clock" class="clock" role="timer" aria-label="${step.kind==='rest'?'Rest time remaining':step.kind==='prepare'?'Preparation time remaining':'Time remaining in this movement'}"></span><span class="player-status" role="status">${active.paused?'Paused':status}</span></div></div></div><p class="cue">${active.paused?'Feet down. Rest, and resume only when ready.':escape(cue)}</p><details class="form-cue"><summary>A little guidance</summary><p>${escape(upcoming?upcoming.tip:step.tip)}</p></details>${!upcoming?`<p class="next-step">${next?`Next: ${escape(next.title)}`:'Then you’re done.'}</p>`:''}<div class="player-controls"><button class="primary" id="pause">${active.paused?'Resume':'Pause'} ${icon(active.paused?'play':'pause')}</button><button class="text-button" id="stop">End workout</button><p id="remaining" class="remaining"></p></div></main></div>`;
+  root.innerHTML=`<div class="app-shell player-shell${isBreak?' is-break':''}${step.kind==='rest'?' is-rest':''}${active.paused?' is-paused':''}"><header class="header"><span class="wordmark">${active.minimum?'Bare minimum':session==='home'?'At home':session==='kids'?'With kids':'On the Way'}</span><span class="step-count">${active.index+1} of ${active.steps.length}</span></header><main id="main" tabindex="-1"><div class="player-heading"><h1>${escape(title)}</h1>${!isBreak?`<p class="player-station">${escape(step.station)}</p>`:''}</div>${upcoming?`<div class="upcoming-heading"><h2><span>Next:</span> ${escape(upcoming.title)}</h2><p id="upcoming-station">${escape(upcoming.station)}</p></div>`:isBreak?'<p class="player-station">All movements done.</p>':''}<div class="movement-stage${demo?' has-demo':''}">${demo}<div class="timer-ring" id="ring"><div><span id="clock" class="clock" role="timer" aria-label="${step.kind==='rest'?'Rest time remaining':step.kind==='prepare'?'Preparation time remaining':'Time remaining in this movement'}"></span><span class="player-status" role="status">${active.paused?'Paused':status}</span></div></div></div><p class="cue">${active.paused?'Feet down. Rest, and resume only when ready.':escape(cue)}</p><details class="form-cue"><summary>A little guidance</summary><p>${escape(upcoming?upcoming.tip:step.tip)}</p></details>${!upcoming?`<p class="next-step">${next?`Next: ${escape(next.title)}`:'Then you’re done.'}</p>`:''}<div class="player-controls"><button class="primary" id="pause">${active.paused?'Resume':'Pause'} ${icon(active.paused?'play':'pause')}</button><div class="player-secondary"><button class="text-button" id="stop">End workout</button><button class="text-button" id="skip-step" aria-label="Skip current step">Skip</button></div><p id="remaining" class="remaining"></p></div></main></div>`;
   root.querySelector('#pause').onclick=()=>{if(!active.paused){pause();return;}trainer.unlock();active.paused=false;active.tick=Date.now();beginStep();renderPlayer();};
   root.querySelector('#stop').onclick=()=>finish(false);
+  root.querySelector('#skip-step').onclick=skipStep;
   root.querySelector('details').ontoggle=e=>{if(e.currentTarget.open&&active&&!active.paused){active.paused=true;trainer.stop();root.querySelector('#pause').innerHTML=`Resume ${icon('play')}`;root.querySelector('.player-status').textContent='Paused';root.querySelector('.cue').textContent='Feet down. Rest, and resume only when ready.';}};
   updateClock();
 }
