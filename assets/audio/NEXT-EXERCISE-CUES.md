@@ -1,6 +1,6 @@
 # Next exercise announcements
 
-Eleven same-origin AAC files in `dist/audio/next-<exercise-id>.m4a`, generated locally with macOS Samantha at 190 words per minute. Each says “Next exercise.” followed by the exercise name. Hyphens in push-up/pull-up/parallel-bar names are read as normal word spaces.
+Thirteen same-origin AAC files in `dist/audio/next-<exercise-id>.m4a`, generated locally with macOS Samantha at 190 words per minute. Each says “Next exercise.” followed by the exercise name. Hyphens in push-up/pull-up/parallel-bar names are read as normal word spaces.
 
 Generation: `/usr/bin/say -v Samantha -r 190 -o <source.aiff> <phrase>`, then FFmpeg mono, 22,050 Hz, AAC 48 kbps. Temporary AIFF sources are ignored under `.openai/audio/`. No remote speech service is used.
 
@@ -16,3 +16,8 @@ Generation: `/usr/bin/say -v Samantha -r 190 -o <source.aiff> <phrase>`, then FF
 
 - `next-trampoline.m4a`: Next exercise. Trampoline.
 - `next-packing-squats.m4a`: Next exercise. Packing with squats.
+
+- `next-goblet-reverse-lunge.m4a`: Next exercise. Goblet reverse lunges.
+- `next-shadowboxing.m4a`: Next exercise. Shadow boxing.
+
+Direct transitions between two exercises announce the new exercise at its start, so Shadowboxing → Packing with squats has a named cue even without a rest.

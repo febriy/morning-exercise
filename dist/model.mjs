@@ -32,7 +32,7 @@ export function kettlebellSquat(){return {id:'kettlebell-squat',title:'Kettlebel
 
 export function homeRecipe(){
  const rest={id:'rest',title:'Rest',seconds:15,cue:'Relax and catch your breath. Get ready for the next activity.',tip:'Pause if you need more time to rest or get into position. Set the kettlebell down in control and leave it on the floor during breaks.',kind:'rest',station:'Take a breather'};
- return {seconds:520,steps:[
+ return {seconds:585,steps:[
   {id:'prepare',title:'Get ready',seconds:15,cue:'Find your space. Incline push-ups are first.',tip:'Have a fixed raised support, your kettlebell and trampoline ready. Clear space around the equipment and put your phone where you can see and hear it. Pause for more preparation whenever needed.',kind:'prepare',station:'Before you start'},
   {id:'incline-pushup',title:'Incline push-ups',seconds:20,cue:'Hands on a fixed, raised surface. Keep your body in one line.',tip:'Use a fixed counter or stable raised support that cannot slide or tip. Keep feet on the floor and your body straight. Bend your elbows comfortably back, lower a little, then press away. A higher surface makes it easier. Stop before straining.',kind:'move',station:'Fixed, raised support'},
   {...rest},
@@ -40,6 +40,9 @@ export function homeRecipe(){
   {...rest},
   {id:'trampoline',title:'Trampoline',seconds:120,cue:'Easy, low bounces. Stay in the centre and go at your own pace.',tip:'Use your trampoline according to its instructions, on a stable surface with clear space around and above it. Start gently with soft knees and small controlled bounces. Use its support handle if supplied and needed. One person at a time; no high jumps or tricks. Pause and step off carefully when you need a break.',kind:'move',station:'Trampoline · easy bounces'},
   {...rest},
+  {id:'goblet-reverse-lunge',title:'Goblet reverse lunges',seconds:20,cue:'Bell close to your chest. Step back, lower comfortably, then stand. Alternate legs.',tip:'Hold a light kettlebell close to your chest with both hands. Keep your torso upright and front foot flat. Step one foot back, bend both knees only as far as comfortable, then press through the front foot to return. Alternate legs at your own pace. Set the bell down and try without weight if balance is difficult. Stop for pain or loss of control.',kind:'move',station:'Kettlebell · clear, level floor'},
+  {...rest},
+  {id:'shadowboxing',title:'Shadowboxing',seconds:30,cue:'Hands up. Throw light, relaxed punches into clear space, then return to guard.',tip:'Set the kettlebell down first. Stand comfortably with soft knees and a little space between your feet. Keep your hands near your face, extend one arm into clear space, then bring it back before changing hands. Use light, controlled punches without locking your elbows, holding weights or making contact with anyone. Go at your own pace.',kind:'move',station:'Clear space · no weights'},
   {id:'packing-squats',title:'Packing with squats',seconds:300,cue:'Pack for five minutes. Use a comfortable squat whenever you pick something up from the floor.',tip:'Keep packing at your normal pace. Squat only for floor pickups; this is not a continuous squat set. Bend your hips and knees comfortably, keep light items close and stand smoothly. No need for a deep squat. Turn with your feet rather than twisting with a load, and get help with heavy or awkward items.',kind:'move',station:'Squat for floor pickups'}
  ]};
 }

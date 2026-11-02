@@ -8,6 +8,8 @@ const DESCRIPTIONS={
   'kettlebell-squat':'Kettlebell squat: hold the bell close to your chest, squat with heels down, then stand tall.',
   'incline-pushup':'Incline push-up: hands on a fixed raised support, feet on the floor, body straight.',
   'trampoline':'Gentle, low trampoline bounces with soft knees and a steady body.',
+  'goblet-reverse-lunge':'Goblet reverse lunge: hold the bell at chest height, step back and lower comfortably, then return to standing. Alternate legs at your own pace.',
+  'shadowboxing':'Relaxed shadowboxing: hands return to guard between light punches into clear space, without weights or contact.',
   'packing-squats':'Packing with squats: use a comfortable squat for floor pickups. The demo shows the pickup movement, not a continuous pace.',
   'kettlebell-swing':'Two-handed kettlebell swing: hinge at the hips, then stand tall as the bell floats to chest height.'
 };
@@ -22,7 +24,7 @@ export function movementSprite(id,{preview=false,upNext=false}={}){
 // Morning repetition demos match a three-second cycle; both holds remain still.
 export function movementFrame(id,seconds,{reduce=false}={}){
   if(reduce||!Number.isFinite(seconds)||seconds<0)return 0;
-  if(['jumping-jacks','kettlebell-swing','trampoline'].includes(id))return Math.floor(((seconds+.001)%2)/.5);
-  if(['platform-pushup','incline-pushup','hanging-knee-raise','squat','kettlebell-squat','packing-squats'].includes(id))return Math.floor(((seconds+.001)%3)/.75);
+  if(['jumping-jacks','kettlebell-swing','trampoline','shadowboxing'].includes(id))return Math.floor(((seconds+.001)%2)/.5);
+  if(['platform-pushup','incline-pushup','hanging-knee-raise','squat','kettlebell-squat','packing-squats','goblet-reverse-lunge'].includes(id))return Math.floor(((seconds+.001)%3)/.75);
   return 0;
 }

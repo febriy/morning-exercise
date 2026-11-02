@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {SESSION_STORAGE,sessionError,loadSessions,sessionPlan} from '../dist/sessions.mjs';
+import {SESSION_STORAGE,SESSION_VERSION,sessionError,loadSessions,sessionPlan} from '../dist/sessions.mjs';
 import {recipe,kidsRecipe} from '../dist/model.mjs';
 import {mount} from './helpers/app.mjs';
 
@@ -118,7 +118,7 @@ test('restoring and saving defaults affects only the selected session',async()=>
   assert.equal(app.root.querySelector('#tiny'),null);assert.equal(app.root.querySelector('#edit'),null);
   app.click('#session-kids');app.click('#edit-session');app.click('#restore-session');app.submitSession();
   assert.match(app.root.innerHTML,/1 min 25 sec/);
-  assert.deepEqual(JSON.parse(app.storage.get(SESSION_STORAGE)),{version:3,morning:[{id:'squat',seconds:9}]});
+  assert.deepEqual(JSON.parse(app.storage.get(SESSION_STORAGE)),{version:SESSION_VERSION,morning:[{id:'squat',seconds:9}]});
   app.click('#session-morning');app.click('#start');assert.equal(app.node('#clock').textContent,'0:09');
  }finally{app.restore();}
 });

@@ -36,7 +36,7 @@ test('skip keeps paused phases silent and frozen until Resume',async()=>{
 
 test('skipping every phase returns each session, custom session and Bare minimum to its own overview',async()=>{
  const saved={'on-the-way.sessions.v1':JSON.stringify({version:3,kids:[{id:'squat',seconds:10},{id:'rest',seconds:15}]})};
- for(const [session,steps,minimum] of [['morning',10,false],['home',8,false],['kids',2,false],['home',2,true]]){
+ for(const [session,steps,minimum] of [['morning',10,false],['home',11,false],['kids',2,false],['home',2,true]]){
   const app=await mount({saved});try{
    app.click(`#session-${session}`);const overview=app.root.innerHTML;
    app.click(minimum?'#minimum':'#start');

@@ -1,7 +1,7 @@
-import {recipe,kidsRecipe,homeRecipe,kettlebellSquat} from './model.mjs?v=home-packing-1';
+import {recipe,kidsRecipe,homeRecipe,kettlebellSquat} from './model.mjs?v=home-lunge-boxing-1';
 
 export const SESSION_STORAGE='on-the-way.sessions.v1';
-export const SESSION_VERSION=3;
+export const SESSION_VERSION=4;
 export const MAX_STEPS=20;
 export const MAX_SECONDS=600;
 export const EXERCISES=[
@@ -12,6 +12,8 @@ export const EXERCISES=[
  {id:'incline-pushup',title:'Incline push-ups'},
  {id:'kettlebell-swing',title:'Kettlebell swings'},
  {id:'trampoline',title:'Trampoline'},
+ {id:'goblet-reverse-lunge',title:'Goblet reverse lunges'},
+ {id:'shadowboxing',title:'Shadowboxing'},
  {id:'packing-squats',title:'Packing with squats'},
  {id:'platform-pushup',title:'Platform push-ups'},
  {id:'hanging-knee-raise',title:'Knee raises'},
@@ -40,12 +42,19 @@ export function loadSessions(raw){
  const result={};
  try{
   const parsed=JSON.parse(raw);
-  if(![1,2,SESSION_VERSION].includes(parsed?.version))return result;
+  if(![1,2,3,SESSION_VERSION].includes(parsed?.version))return result;
   for(const session of ['morning','kids','home']){
    if(session==='home'&&parsed.version<3)continue; // Replace the previous At home routine with the newly requested session.
    if(Array.isArray(parsed[session])&&!sessionError(parsed[session])){
     const steps=parsed[session].map(({id,seconds})=>({id,seconds}));
-    const updated=parsed.version===1&&session==='morning'?steps.map(step=>step.id==='rest'?{...step,seconds:15}:step):steps;
+    let updated=parsed.version===1&&session==='morning'?steps.map(step=>step.id==='rest'?{...step,seconds:15}:step):steps;
+    // Extend the previous default-shaped home tail once, preserving explicit timing edits.
+    if(session==='home'&&parsed.version===3){
+     const tail=updated.slice(-3);
+     if(tail.map(step=>step.id).join(',')==='trampoline,rest,packing-squats'){
+      updated=[...updated.slice(0,-1),{id:'goblet-reverse-lunge',seconds:20},{id:'rest',seconds:15},{id:'shadowboxing',seconds:30},updated.at(-1)];
+     }
+    }
     // Preserve an unusually long existing routine if migration would exceed the editor limit.
     result[session]=sessionError(updated)?steps:updated;
    }
@@ -67,6 +76,8 @@ export function sessionPlan(session,preferences,overrides={}){
   'incline-pushup':'Hands on a fixed, raised surface. Keep your body in one line.',
   'kettlebell-swing':'Hips back, then stand tall. Let your hips drive the bell.',
   'trampoline':'Easy, low bounces. Stay in the centre and go at your own pace.',
+  'goblet-reverse-lunge':'Bell close to your chest. Step back, lower comfortably, then stand. Alternate legs.',
+  'shadowboxing':'Hands up. Throw light, relaxed punches into clear space, then return to guard.',
   'packing-squats':'Pack at your normal pace. Use a comfortable squat for floor pickups.',
   'jumping-jacks':'Arms up, feet out. Arms down, feet in. Go at your own pace.'
  };

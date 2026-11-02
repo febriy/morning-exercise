@@ -24,22 +24,22 @@ function soundBrowser({suspended=false,clips=false,deferred=false,silentPhone=fa
     cancel(){cancelled++;},getVoices(){return [{lang:'en-SG',localService:true,name:'English'}];},speak(u){spoken.push(u.text);u.onend?.();}
   }};
   if(silentPhone)host.navigator={audioSession};
-  if(clips)host.fetch=async url=>{requests.push(String(url));await fileGate;const file=String(url).split('/').at(-1).replace('.m4a','');const id=['ready','start','rest','complete','5','4','3','2','1','next-platform-pushup','next-hanging-knee-raise','next-bar-hang','next-support-hold','next-squat','next-jumping-jacks','next-kettlebell-squat','next-incline-pushup','next-kettlebell-swing','next-trampoline','next-packing-squats'].indexOf(file);return {ok:true,arrayBuffer:async()=>new Uint8Array([id]).buffer};};
+  if(clips)host.fetch=async url=>{requests.push(String(url));await fileGate;const file=String(url).split('/').at(-1).replace('.m4a','');const id=['ready','start','rest','complete','5','4','3','2','1','next-platform-pushup','next-hanging-knee-raise','next-bar-hang','next-support-hold','next-squat','next-jumping-jacks','next-kettlebell-squat','next-incline-pushup','next-kettlebell-swing','next-trampoline','next-packing-squats','next-goblet-reverse-lunge','next-shadowboxing'].indexOf(file);return {ok:true,arrayBuffer:async()=>new Uint8Array([id]).buffer};};
   return {host,spoken,tones,contexts,played,sources,requests,audible,audioSession,release(){releaseFiles?.();},get cancelled(){return cancelled;},resume(){resumeAudio?.();}};
 }
 
-test('At home speaks prep, four activities and three rests and completion through the existing trainer',async()=>{
+test('At home speaks prep, six activities and four rests and completion through the existing trainer',async()=>{
  const browser=soundBrowser(),app=await mount({host:browser.host});try{
-  app.click('#session-home');app.click('#start');app.elapse(520);
+  app.click('#session-home');app.click('#start');app.elapse(585);
   const cues=browser.spoken.filter(text=>!/^\d$/.test(text));
-  assert.deepEqual(cues,['Next exercise. Incline push-ups.','Start','Next exercise. Kettlebell swings.','Start','Next exercise. Trampoline.','Start','Next exercise. Packing with squats.','Start','Workout complete']);
-  assert.equal(browser.spoken.filter(text=>text==='5').length,8);
+  assert.deepEqual(cues,['Next exercise. Incline push-ups.','Start','Next exercise. Kettlebell swings.','Start','Next exercise. Trampoline.','Start','Next exercise. Goblet reverse lunges.','Start','Next exercise. Shadowboxing.','Start','Next exercise. Packing with squats.','Workout complete']);
+  assert.equal(browser.spoken.filter(text=>text==='5').length,11);
   assert.match(app.root.innerHTML,/At<br>home\./);
  }finally{app.restore();}
 });
 
 test('all movement names have bundled AAC announcements and play without system speech',async()=>{
- const ids=['platform-pushup','hanging-knee-raise','bar-hang','support-hold','squat','jumping-jacks','kettlebell-squat','incline-pushup','kettlebell-swing','trampoline','packing-squats'];
+ const ids=['platform-pushup','hanging-knee-raise','bar-hang','support-hold','squat','jumping-jacks','kettlebell-squat','incline-pushup','kettlebell-swing','trampoline','packing-squats','goblet-reverse-lunge','shadowboxing'];
  for(const id of ids){
   const bytes=await readFile(new URL(`../dist/audio/next-${id}.m4a`,import.meta.url));
   assert.equal(bytes.toString('ascii',4,8),'ftyp');assert.ok(bytes.length>2000);
@@ -218,7 +218,7 @@ test('bundled clips play through Web Audio without any system speech voices',asy
   const browser=soundBrowser({clips:true});delete browser.host.speechSynthesis;delete browser.host.SpeechSynthesisUtterance;
   const coach=createTrainer(browser.host);coach.unlock();coach.begin({kind:'prepare',seconds:20});
   await new Promise(resolve=>setImmediate(resolve));
-  assert.equal(browser.requests.length,20);assert.ok(browser.requests.every(x=>x.endsWith('.m4a')));
+  assert.equal(browser.requests.length,22);assert.ok(browser.requests.every(x=>x.endsWith('.m4a')));
   assert.deepEqual(browser.played,[0]);
   coach.begin({kind:'move',seconds:15});coach.countdown(5);coach.countdown(4);coach.countdown(3);coach.countdown(2);coach.countdown(1);
   coach.begin({kind:'rest',seconds:25});coach.complete();
@@ -255,4 +255,15 @@ test('starting fresh immediately after completion cancels the old finish cue wit
     assert.equal(app.node('#clock').textContent,'0:08');
     app.click('#stop');assert.equal(browser.audioSession.type,'auto');
   }finally{app.restore();}
+});
+
+test('new home names use bundled clips, including packing directly after shadowboxing',async()=>{
+ const browser=soundBrowser({clips:true}),coach=createTrainer(browser.host);
+ coach.unlock();coach.begin({kind:'rest',seconds:15},15,{id:'goblet-reverse-lunge',title:'Goblet reverse lunges'});
+ await new Promise(resolve=>setImmediate(resolve));assert.equal(browser.played.at(-1),21);
+ coach.begin({kind:'rest',seconds:15},15,{id:'shadowboxing',title:'Shadowboxing'});
+ assert.equal(browser.played.at(-1),22);
+ coach.begin({kind:'move',id:'packing-squats',title:'Packing with squats',seconds:300},300,null,{announceCurrent:true});
+ assert.equal(browser.played.at(-1),20);assert.deepEqual(browser.spoken,[]);
+ coach.stop();
 });
