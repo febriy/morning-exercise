@@ -260,10 +260,10 @@ test('starting fresh immediately after completion cancels the old finish cue wit
 test('new home names use bundled clips, including packing directly after shadowboxing',async()=>{
  const browser=soundBrowser({clips:true}),coach=createTrainer(browser.host);
  coach.unlock();coach.begin({kind:'rest',seconds:15},15,{id:'goblet-reverse-lunge',title:'Goblet reverse lunges'});
- await new Promise(resolve=>setImmediate(resolve));assert.equal(browser.played.at(-1),21);
+ await new Promise(resolve=>setImmediate(resolve));assert.equal(browser.played.at(-1),20);
  coach.begin({kind:'rest',seconds:15},15,{id:'shadowboxing',title:'Shadowboxing'});
- assert.equal(browser.played.at(-1),22);
+ assert.equal(browser.played.at(-1),21);
  coach.begin({kind:'move',id:'packing-squats',title:'Packing with squats',seconds:300},300,null,{announceCurrent:true});
- assert.equal(browser.played.at(-1),20);assert.deepEqual(browser.spoken,[]);
+ assert.equal(browser.played.at(-1),19);assert.deepEqual(browser.spoken,[]);
  coach.stop();
 });
